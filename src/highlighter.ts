@@ -1,4 +1,4 @@
-import { createHighlighter, type Highlighter } from 'shiki';
+import { createHighlighter, bundledLanguages, type Highlighter } from 'shiki';
 import type { TokenizedLine } from './types.js';
 
 let highlighterInstance: Highlighter | null = null;
@@ -21,18 +21,37 @@ async function getHighlighter(lang: string): Promise<Highlighter> {
   return highlighterInstance;
 }
 
+function isLanguageSupported(lang: string): boolean {
+  return lang in bundledLanguages;
+}
+
+// Fallback: split code into lines of plain tokens (no syntax coloring)
+function plainTokenize(code: string): TokenizedLine[] {
+  return code.split('\n').map(line => [{ text: line, color: DEFAULT_COLOR }]);
+}
+
 export async function tokenizeCode(code: string, lang: string): Promise<TokenizedLine[]> {
-  const highlighter = await getHighlighter(lang);
+  // If the language is not supported by Shiki, fall back to plain text
+  if (!isLanguageSupported(lang)) {
+    return plainTokenize(code);
+  }
 
-  const result = highlighter.codeToTokensBase(code, {
-    lang: lang as any,
-    theme: THEME,
-  });
+  try {
+    const highlighter = await getHighlighter(lang);
 
-  return result.map(line =>
-    line.map(token => ({
-      text: token.content,
-      color: token.color || DEFAULT_COLOR,
-    }))
-  );
+    const result = highlighter.codeToTokensBase(code, {
+      lang: lang as any,
+      theme: THEME,
+    });
+
+    return result.map(line =>
+      line.map(token => ({
+        text: token.content,
+        color: token.color || DEFAULT_COLOR,
+      }))
+    );
+  } catch {
+    // If tokenization fails for any reason, fall back to plain text
+    return plainTokenize(code);
+  }
 }
