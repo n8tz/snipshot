@@ -10,7 +10,7 @@ async function getHighlighter(lang: string): Promise<Highlighter> {
   if (!highlighterInstance) {
     highlighterInstance = await createHighlighter({
       themes: [THEME],
-      langs: [lang],
+      langs: [lang as any],
     });
   } else {
     const loaded = highlighterInstance.getLoadedLanguages();
@@ -25,7 +25,7 @@ export async function tokenizeCode(code: string, lang: string): Promise<Tokenize
   const highlighter = await getHighlighter(lang);
 
   const result = highlighter.codeToTokensBase(code, {
-    lang,
+    lang: lang as any,
     theme: THEME,
   });
 
