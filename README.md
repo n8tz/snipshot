@@ -1,5 +1,11 @@
 <h1 align="center">snipshot</h1>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/snipshot"><img src="https://img.shields.io/npm/v/snipshot.svg" alt="npm version" /></a>
+  <a href="https://github.com/n8tz/snipshot/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/snipshot.svg" alt="license" /></a>
+  <a href="https://www.npmjs.com/package/snipshot"><img src="https://img.shields.io/npm/dm/snipshot.svg" alt="downloads" /></a>
+</p>
+
 ---
 <p align="center">
   <strong>Generate beautiful PNG screenshots of code snippets from the command line.</strong><br>
@@ -149,7 +155,7 @@ The font used is [JetBrains Mono](https://www.jetbrains.com/lp/mono/) (bundled).
 ## Development
 
 ```bash
-git clone <repo>
+git clone https://github.com/n8tz/snipshot.git
 cd snipshot
 npm install
 

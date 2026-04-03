@@ -43,11 +43,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git+https://github.com/n8tz/snipshot.git"
   },
-  "homepage": "",
+  "homepage": "https://github.com/n8tz/snipshot#readme",
   "bugs": {
-    "url": ""
+    "url": "https://github.com/n8tz/snipshot/issues"
   },
   "engines": {
     "node": ">=18"
