@@ -7,19 +7,28 @@
   "bin": {
     "codeshot": "dist/index.js"
   },
+  "files": [
+    "dist",
+    "assets"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
     "test:watch": "vitest",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "code",
     "screenshot",
     "syntax-highlighting",
-    "cli"
+    "cli",
+    "png"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "@napi-rs/canvas": "^0.1.97",
     "commander": "^14.0.3",
