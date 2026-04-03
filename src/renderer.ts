@@ -1,13 +1,24 @@
 import { createCanvas, GlobalFonts } from '@napi-rs/canvas';
 import type { TokenizedLine, HighlightSpec, TokenInfo } from './types.js';
+import { existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// Support both ESM (import.meta.url) and CJS (__dirname) for standalone bundle
+let __dname: string;
+try {
+  __dname = dirname(fileURLToPath(import.meta.url));
+} catch {
+  __dname = __dirname;
+}
 
-// Register font
-const fontPath = join(__dirname, '..', 'assets', 'JetBrainsMono-Regular.ttf');
+// Register font — check multiple locations (dev vs standalone bundle)
+const fontCandidates = [
+  join(__dname, '..', 'assets', 'JetBrainsMono-Regular.ttf'),
+  join(__dname, 'assets', 'JetBrainsMono-Regular.ttf'),
+  join(__dname, 'JetBrainsMono-Regular.ttf'),
+];
+const fontPath = fontCandidates.find(p => existsSync(p)) || fontCandidates[0];
 GlobalFonts.registerFromPath(fontPath, 'JetBrains Mono');
 
 // Constants
@@ -50,18 +61,22 @@ interface RenderInput {
 // A visual row produced by wrapping a source line
 interface VisualRow {
   tokens: TokenInfo[];
-  sourceLineIndex: number; // index within visibleLines
-  sourceLineNum: number;   // actual line number in file
-  isFirstRow: boolean;     // true = show line number, false = continuation
+  sourceLineIndex: number;
+  sourceLineNum: number;
+  isFirstRow: boolean;
+  charStart: number; // 0-based start position in original expanded line text
+  charEnd: number;   // 0-based end position (exclusive)
 }
+
+type MeasureCtx = ReturnType<ReturnType<typeof createCanvas>['getContext']>;
 
 function wrapTokens(
   tokens: TokenInfo[],
   availableWidth: number,
   wrapIndentWidth: number,
-  measureCtx: ReturnType<ReturnType<typeof createCanvas>['getContext']>,
-): TokenInfo[][] {
-  // Expand tabs in all tokens first
+  measureCtx: MeasureCtx,
+): { tokens: TokenInfo[]; charStart: number; charEnd: number }[] {
+  // Expand tabs
   const expanded: TokenInfo[] = tokens.map(t => ({
     text: t.text.replace(/\t/g, '    '),
     color: t.color,
@@ -69,13 +84,16 @@ function wrapTokens(
 
   const fullWidth = expanded.reduce((w, t) => w + measureCtx.measureText(t.text).width, 0);
   if (fullWidth <= availableWidth) {
-    return [expanded];
+    const totalChars = expanded.reduce((n, t) => n + t.text.length, 0);
+    return [{ tokens: expanded, charStart: 0, charEnd: totalChars }];
   }
 
-  const rows: TokenInfo[][] = [];
+  const rows: { tokens: TokenInfo[]; charStart: number; charEnd: number }[] = [];
   let currentRow: TokenInfo[] = [];
   let currentWidth = 0;
   let isFirstRow = true;
+  let globalCharPos = 0;
+  let rowCharStart = 0;
 
   const remaining = [...expanded];
 
@@ -87,15 +105,14 @@ function wrapTokens(
     if (currentWidth + tokenWidth <= maxRowWidth) {
       currentRow.push(token);
       currentWidth += tokenWidth;
+      globalCharPos += token.text.length;
     } else {
-      // Need to split this token character by character
       let text = token.text;
 
       while (text.length > 0) {
         const rowMax = isFirstRow ? availableWidth : availableWidth - wrapIndentWidth;
         const spaceLeft = rowMax - currentWidth;
 
-        // Find how many chars fit
         let fitCount = 0;
         for (let i = 1; i <= text.length; i++) {
           if (measureCtx.measureText(text.substring(0, i)).width > spaceLeft) break;
@@ -105,20 +122,21 @@ function wrapTokens(
         if (fitCount > 0) {
           currentRow.push({ text: text.substring(0, fitCount), color: token.color });
           currentWidth += measureCtx.measureText(text.substring(0, fitCount)).width;
+          globalCharPos += fitCount;
           text = text.substring(fitCount);
         }
 
         if (text.length > 0) {
-          // Push current row, start new one
-          rows.push(currentRow);
+          rows.push({ tokens: currentRow, charStart: rowCharStart, charEnd: globalCharPos });
           isFirstRow = false;
           currentRow = [];
           currentWidth = 0;
+          rowCharStart = globalCharPos;
 
-          // Force at least 1 char if nothing fit (extremely narrow canvas)
           if (fitCount === 0) {
             currentRow.push({ text: text[0], color: token.color });
             currentWidth = measureCtx.measureText(text[0]).width;
+            globalCharPos += 1;
             text = text.substring(1);
           }
         }
@@ -127,22 +145,22 @@ function wrapTokens(
   }
 
   if (currentRow.length > 0) {
-    rows.push(currentRow);
+    rows.push({ tokens: currentRow, charStart: rowCharStart, charEnd: globalCharPos });
   }
 
-  return rows.length > 0 ? rows : [[]];
+  return rows.length > 0 ? rows : [{ tokens: [], charStart: 0, charEnd: 0 }];
 }
 
 export async function renderCode(input: RenderInput): Promise<Buffer> {
   const { tokenizedLines, startLine, endLine, relativePath, highlights, maxWidth } = input;
   const visibleLines = tokenizedLines.slice(startLine - 1, endLine);
 
-  // Measure text to calculate dimensions
+  // Measure context
   const measureCanvas = createCanvas(1, 1);
   const measureCtx = measureCanvas.getContext('2d');
   measureCtx.font = `${FONT_SIZE}px "JetBrains Mono"`;
 
-  // Gutter width based on max line number
+  // Gutter width
   const maxLineNumStr = `${endLine}`;
   const gutterTextWidth = measureCtx.measureText(maxLineNumStr).width;
   const gutterWidth = gutterTextWidth + GUTTER_PADDING * 2;
@@ -151,7 +169,7 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
   const wrapIndicatorWidth = measureCtx.measureText('\u21B3 ').width;
   const totalWrapIndent = wrapIndentWidth + wrapIndicatorWidth;
 
-  // Build visual rows (with wrapping if maxWidth is set)
+  // Build visual rows
   const visualRows: VisualRow[] = [];
 
   for (let i = 0; i < visibleLines.length; i++) {
@@ -163,18 +181,24 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
 
       for (let r = 0; r < wrappedRows.length; r++) {
         visualRows.push({
-          tokens: wrappedRows[r],
+          tokens: wrappedRows[r].tokens,
           sourceLineIndex: i,
           sourceLineNum: lineNum,
           isFirstRow: r === 0,
+          charStart: wrappedRows[r].charStart,
+          charEnd: wrappedRows[r].charEnd,
         });
       }
     } else {
+      const expanded = visibleLines[i].map(t => ({ text: t.text.replace(/\t/g, '    '), color: t.color }));
+      const totalChars = expanded.reduce((n, t) => n + t.text.length, 0);
       visualRows.push({
-        tokens: visibleLines[i].map(t => ({ text: t.text.replace(/\t/g, '    '), color: t.color })),
+        tokens: expanded,
         sourceLineIndex: i,
         sourceLineNum: lineNum,
         isFirstRow: true,
+        charStart: 0,
+        charEnd: totalChars,
       });
     }
   }
@@ -210,7 +234,7 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
   ctx.fillStyle = HEADER_BORDER;
   ctx.fillRect(0, HEADER_HEIGHT - 1, totalWidth, 1);
 
-  // Header text (truncate if needed)
+  // Header text (truncate if too long)
   ctx.font = `${FONT_SIZE}px "JetBrains Mono"`;
   ctx.fillStyle = HEADER_TEXT_COLOR;
   ctx.textBaseline = 'middle';
@@ -224,14 +248,14 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
   }
   ctx.fillText(headerText, PADDING_X, HEADER_HEIGHT / 2);
 
-  // Gutter separator line
+  // Gutter separator
   ctx.fillStyle = GUTTER_SEP_COLOR;
   ctx.fillRect(gutterWidth, HEADER_HEIGHT, GUTTER_SEPARATOR_WIDTH, totalHeight - HEADER_HEIGHT);
 
   const codeStartY = HEADER_HEIGHT;
   const codeStartX = gutterWidth + GUTTER_SEPARATOR_WIDTH + PADDING_X;
 
-  // Build a map: sourceLineIndex → list of visual row indices (for highlights)
+  // Map source line index → visual row indices
   const lineToVisualRows = new Map<number, number[]>();
   for (let r = 0; r < visualRows.length; r++) {
     const idx = visualRows[r].sourceLineIndex;
@@ -239,40 +263,52 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
     lineToVisualRows.get(idx)!.push(r);
   }
 
-  // Draw highlights (behind text)
+  // Draw highlights
   for (const hl of highlights) {
     const colors = HIGHLIGHT_COLORS[hl.color];
     for (let line = hl.lineStart; line <= hl.lineEnd; line++) {
       if (line < startLine || line > endLine) continue;
       const lineIndex = line - startLine;
-      const vRows = lineToVisualRows.get(lineIndex) || [];
+      const vRowIndices = lineToVisualRows.get(lineIndex) || [];
 
       if (hl.colStart !== undefined && hl.colEnd !== undefined) {
-        // Column range highlight — only on first visual row (simplification)
-        const firstVRow = vRows[0];
-        if (firstVRow === undefined) continue;
-        const y = codeStartY + firstVRow * LINE_HEIGHT;
+        // Column range highlight — find which visual rows intersect
+        const hlStart = hl.colStart - 1; // 0-based inclusive
+        const hlEnd = hl.colEnd;         // 0-based exclusive
 
-        const lineTokens = visibleLines[lineIndex] || [];
-        const fullText = lineTokens.map(t => t.text).join('').replace(/\t/g, '    ');
-        const beforeText = fullText.substring(0, hl.colStart - 1);
-        const highlightText = fullText.substring(hl.colStart - 1, hl.colEnd);
+        for (const vrIdx of vRowIndices) {
+          const vRow = visualRows[vrIdx];
 
-        const xStart = codeStartX + measureCtx.measureText(beforeText).width;
-        const hlWidth = measureCtx.measureText(highlightText).width;
+          // Check intersection with this visual row's character range
+          if (hlStart >= vRow.charEnd || hlEnd <= vRow.charStart) continue;
 
-        ctx.strokeStyle = colors.border;
-        ctx.lineWidth = 2;
-        ctx.strokeRect(xStart - 2, y + 1, hlWidth + 4, LINE_HEIGHT - 2);
+          // Visible portion within this row
+          const visStart = Math.max(hlStart, vRow.charStart) - vRow.charStart;
+          const visEnd = Math.min(hlEnd, vRow.charEnd) - vRow.charStart;
+
+          const rowText = vRow.tokens.map(t => t.text).join('');
+          const beforeText = rowText.substring(0, visStart);
+          const highlightText = rowText.substring(visStart, visEnd);
+
+          const y = codeStartY + vrIdx * LINE_HEIGHT;
+          let xOffset = codeStartX;
+          if (!vRow.isFirstRow) xOffset += totalWrapIndent;
+
+          const xStart = xOffset + measureCtx.measureText(beforeText).width;
+          const hlWidth = measureCtx.measureText(highlightText).width;
+
+          ctx.strokeStyle = colors.border;
+          ctx.lineWidth = 2;
+          ctx.strokeRect(xStart - 2, y + 1, hlWidth + 4, LINE_HEIGHT - 2);
+        }
       } else {
-        // Full line highlight — spans all visual rows of this source line
-        for (const vr of vRows) {
-          const y = codeStartY + vr * LINE_HEIGHT;
+        // Full line highlight — spans all visual rows
+        for (const vrIdx of vRowIndices) {
+          const y = codeStartY + vrIdx * LINE_HEIGHT;
           ctx.fillStyle = colors.bg;
           ctx.fillRect(0, y, totalWidth, LINE_HEIGHT);
 
-          // Left accent border only on first row
-          if (vr === vRows[0]) {
+          if (vrIdx === vRowIndices[0]) {
             ctx.fillStyle = colors.border;
             ctx.fillRect(0, y, 3, LINE_HEIGHT);
           }
@@ -290,19 +326,16 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
     const y = codeStartY + r * LINE_HEIGHT;
     const textY = y + (LINE_HEIGHT - FONT_SIZE) / 2;
 
-    // Line number (only on first visual row of a source line)
     if (vRow.isFirstRow) {
       ctx.fillStyle = LINE_NUM_COLOR;
       ctx.textAlign = 'right';
       ctx.fillText(`${vRow.sourceLineNum}`, gutterWidth - GUTTER_PADDING, textY);
     }
 
-    // Tokens
     ctx.textAlign = 'left';
     let x = codeStartX;
 
     if (!vRow.isFirstRow) {
-      // Continuation: add indent + wrap indicator
       x += wrapIndentWidth;
       ctx.fillStyle = WRAP_INDICATOR_COLOR;
       ctx.fillText('\u21B3 ', codeStartX, textY);
