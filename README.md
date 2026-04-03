@@ -1,10 +1,17 @@
-# snipshot
+<h1 align="center">snipshot</h1>
 
-Generate beautiful PNG screenshots of code snippets from the command line. Syntax highlighting, line numbers, and colored annotations — no browser required.
+<p align="center">
+  <strong>Generate beautiful PNG screenshots of code snippets from the command line.</strong><br>
+  Syntax highlighting, line numbers, and colored annotations — no browser required.
+</p>
+
+---
 
 <p align="center">
   <img src="examples/java-controller.png" alt="Java example" />
 </p>
+
+---
 
 ## Features
 
