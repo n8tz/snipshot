@@ -12,12 +12,13 @@ try {
   __dname = __dirname;
 }
 
-// Register font — check multiple locations (dev vs standalone bundle)
+// Register font — check env var (standalone), then multiple relative paths (dev/npm)
 const fontCandidates = [
+  process.env.SNIPSHOT_FONT_PATH,
   join(__dname, '..', 'assets', 'JetBrainsMono-Regular.ttf'),
   join(__dname, 'assets', 'JetBrainsMono-Regular.ttf'),
   join(__dname, 'JetBrainsMono-Regular.ttf'),
-];
+].filter(Boolean) as string[];
 const fontPath = fontCandidates.find(p => existsSync(p)) || fontCandidates[0];
 GlobalFonts.registerFromPath(fontPath, 'JetBrains Mono');
 
