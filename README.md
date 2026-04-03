@@ -2,7 +2,9 @@
 
 Generate beautiful PNG screenshots of code snippets from the command line. Syntax highlighting, line numbers, and colored annotations — no browser required.
 
-![Java example](examples/java-controller.png)
+<p align="center">
+  <img src="examples/java-controller.png" alt="Java example" />
+</p>
 
 ## Features
 
@@ -73,15 +75,21 @@ snipshot src/App.java --lines 42-56 --output screenshot.png
 
 **TypeScript with interface highlight and column annotation:**
 
-![TypeScript example](examples/typescript-interface.png)
+<p align="center">
+  <img src="examples/typescript-interface.png" alt="TypeScript example" />
+</p>
 
 **Word wrap with mixed highlights (--max-width 700):**
 
-![Wrapped example](examples/long-lines-wrapped.png)
+<p align="center">
+  <img src="examples/long-lines-wrapped.png" alt="Wrapped example" />
+</p>
 
 **Clean output without highlights:**
 
-![Clean example](examples/java-class-header.png)
+<p align="center">
+  <img src="examples/java-class-header.png" alt="Clean example" />
+</p>
 
 ## Standalone binaries
 
