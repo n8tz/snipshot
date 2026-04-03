@@ -68,13 +68,11 @@ interface VisualRow {
   charEnd: number;   // 0-based end position (exclusive)
 }
 
-type MeasureCtx = ReturnType<ReturnType<typeof createCanvas>['getContext']>;
-
 function wrapTokens(
   tokens: TokenInfo[],
   availableWidth: number,
   wrapIndentWidth: number,
-  measureCtx: MeasureCtx,
+  cw: number, // charWidth
 ): { tokens: TokenInfo[]; charStart: number; charEnd: number }[] {
   // Expand tabs
   const expanded: TokenInfo[] = tokens.map(t => ({
@@ -82,15 +80,14 @@ function wrapTokens(
     color: t.color,
   }));
 
-  const fullWidth = expanded.reduce((w, t) => w + measureCtx.measureText(t.text).width, 0);
-  if (fullWidth <= availableWidth) {
-    const totalChars = expanded.reduce((n, t) => n + t.text.length, 0);
+  const totalChars = expanded.reduce((n, t) => n + t.text.length, 0);
+  if (cw * totalChars <= availableWidth) {
     return [{ tokens: expanded, charStart: 0, charEnd: totalChars }];
   }
 
   const rows: { tokens: TokenInfo[]; charStart: number; charEnd: number }[] = [];
   let currentRow: TokenInfo[] = [];
-  let currentWidth = 0;
+  let currentChars = 0;
   let isFirstRow = true;
   let globalCharPos = 0;
   let rowCharStart = 0;
@@ -98,30 +95,25 @@ function wrapTokens(
   const remaining = [...expanded];
 
   while (remaining.length > 0) {
-    const maxRowWidth = isFirstRow ? availableWidth : availableWidth - wrapIndentWidth;
+    const maxChars = Math.floor((isFirstRow ? availableWidth : availableWidth - wrapIndentWidth) / cw);
     const token = remaining.shift()!;
-    const tokenWidth = measureCtx.measureText(token.text).width;
 
-    if (currentWidth + tokenWidth <= maxRowWidth) {
+    if (currentChars + token.text.length <= maxChars) {
       currentRow.push(token);
-      currentWidth += tokenWidth;
+      currentChars += token.text.length;
       globalCharPos += token.text.length;
     } else {
       let text = token.text;
 
       while (text.length > 0) {
-        const rowMax = isFirstRow ? availableWidth : availableWidth - wrapIndentWidth;
-        const spaceLeft = rowMax - currentWidth;
+        const rowMaxChars = Math.floor((isFirstRow ? availableWidth : availableWidth - wrapIndentWidth) / cw);
+        const spaceLeft = rowMaxChars - currentChars;
 
-        let fitCount = 0;
-        for (let i = 1; i <= text.length; i++) {
-          if (measureCtx.measureText(text.substring(0, i)).width > spaceLeft) break;
-          fitCount = i;
-        }
+        const fitCount = Math.max(0, Math.min(spaceLeft, text.length));
 
         if (fitCount > 0) {
           currentRow.push({ text: text.substring(0, fitCount), color: token.color });
-          currentWidth += measureCtx.measureText(text.substring(0, fitCount)).width;
+          currentChars += fitCount;
           globalCharPos += fitCount;
           text = text.substring(fitCount);
         }
@@ -130,12 +122,12 @@ function wrapTokens(
           rows.push({ tokens: currentRow, charStart: rowCharStart, charEnd: globalCharPos });
           isFirstRow = false;
           currentRow = [];
-          currentWidth = 0;
+          currentChars = 0;
           rowCharStart = globalCharPos;
 
           if (fitCount === 0) {
             currentRow.push({ text: text[0], color: token.color });
-            currentWidth = measureCtx.measureText(text[0]).width;
+            currentChars = 1;
             globalCharPos += 1;
             text = text.substring(1);
           }
@@ -160,12 +152,14 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
   const measureCtx = measureCanvas.getContext('2d');
   measureCtx.font = `${FONT_SIZE}px "JetBrains Mono"`;
 
+  // Monospace character width — single source of truth for all positioning
+  const charWidth = measureCtx.measureText('M').width;
+
   // Gutter width
   const maxLineNumStr = `${endLine}`;
-  const gutterTextWidth = measureCtx.measureText(maxLineNumStr).width;
-  const gutterWidth = gutterTextWidth + GUTTER_PADDING * 2;
+  const gutterWidth = charWidth * maxLineNumStr.length + GUTTER_PADDING * 2;
 
-  const wrapIndentWidth = measureCtx.measureText(' '.repeat(WRAP_INDENT_CHARS)).width;
+  const wrapIndentWidth = charWidth * WRAP_INDENT_CHARS;
   const wrapIndicatorWidth = measureCtx.measureText('\u21B3 ').width;
   const totalWrapIndent = wrapIndentWidth + wrapIndicatorWidth;
 
@@ -177,7 +171,7 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
 
     if (maxWidth) {
       const availableContentWidth = maxWidth - gutterWidth - GUTTER_SEPARATOR_WIDTH - PADDING_X * 2;
-      const wrappedRows = wrapTokens(visibleLines[i], availableContentWidth, totalWrapIndent, measureCtx);
+      const wrappedRows = wrapTokens(visibleLines[i], availableContentWidth, totalWrapIndent, charWidth);
 
       for (let r = 0; r < wrappedRows.length; r++) {
         visualRows.push({
@@ -208,12 +202,13 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
   if (maxWidth) {
     totalWidth = maxWidth;
   } else {
-    let maxLineWidth = 0;
+    let maxLineChars = 0;
     for (const line of visibleLines) {
       const lineText = line.map(t => t.text).join('').replace(/\t/g, '    ');
-      maxLineWidth = Math.max(maxLineWidth, measureCtx.measureText(lineText).width);
+      maxLineChars = Math.max(maxLineChars, lineText.length);
     }
-    const headerWidth = measureCtx.measureText(relativePath).width;
+    const maxLineWidth = charWidth * maxLineChars;
+    const headerWidth = charWidth * relativePath.length;
     const minContentWidth = Math.max(maxLineWidth, headerWidth);
     totalWidth = Math.ceil(gutterWidth + GUTTER_SEPARATOR_WIDTH + PADDING_X + minContentWidth + PADDING_X);
   }
@@ -282,20 +277,17 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
           // Check intersection with this visual row's character range
           if (hlStart >= vRow.charEnd || hlEnd <= vRow.charStart) continue;
 
-          // Visible portion within this row
+          // Visible portion within this row (character counts)
           const visStart = Math.max(hlStart, vRow.charStart) - vRow.charStart;
           const visEnd = Math.min(hlEnd, vRow.charEnd) - vRow.charStart;
-
-          const rowText = vRow.tokens.map(t => t.text).join('');
-          const beforeText = rowText.substring(0, visStart);
-          const highlightText = rowText.substring(visStart, visEnd);
 
           const y = codeStartY + vrIdx * LINE_HEIGHT;
           let xOffset = codeStartX;
           if (!vRow.isFirstRow) xOffset += totalWrapIndent;
 
-          const xStart = xOffset + measureCtx.measureText(beforeText).width;
-          const hlWidth = measureCtx.measureText(highlightText).width;
+          // Use charWidth * charCount for pixel-perfect alignment
+          const xStart = xOffset + charWidth * visStart;
+          const hlWidth = charWidth * (visEnd - visStart);
 
           ctx.strokeStyle = colors.border;
           ctx.lineWidth = 2;
@@ -345,7 +337,7 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
     for (const token of vRow.tokens) {
       ctx.fillStyle = token.color;
       ctx.fillText(token.text, x, textY);
-      x += measureCtx.measureText(token.text).width;
+      x += charWidth * token.text.length;
     }
   }
 
