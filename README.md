@@ -1,4 +1,4 @@
-# codeshot
+# snipshot
 
 Generate beautiful PNG screenshots of code snippets from the command line. Syntax highlighting, line numbers, and colored annotations — no browser required.
 
@@ -19,16 +19,16 @@ Generate beautiful PNG screenshots of code snippets from the command line. Synta
 
 ```bash
 # npm (requires Node.js >= 18)
-npm install -g codeshot
+npm install -g snipshot
 
 # or run directly
-npx codeshot <file> --lines <range>
+npx snipshot <file> --lines <range>
 ```
 
 ## Usage
 
 ```bash
-codeshot <file> --lines <start>-<end> [options]
+snipshot <file> --lines <start>-<end> [options]
 ```
 
 ### Options
@@ -54,19 +54,19 @@ codeshot <file> --lines <start>-<end> [options]
 
 ```bash
 # Basic screenshot
-codeshot src/App.java --lines 42-56
+snipshot src/App.java --lines 42-56
 
 # With highlights
-codeshot src/App.java --lines 42-56 --highlight-red 47 --highlight-green 50
+snipshot src/App.java --lines 42-56 --highlight-red 47 --highlight-green 50
 
 # Column-precise highlight
-codeshot src/App.java --lines 42-56 --highlight-red 47:12-38
+snipshot src/App.java --lines 42-56 --highlight-red 47:12-38
 
 # Word wrap for reports
-codeshot src/App.java --lines 1-20 --max-width 700
+snipshot src/App.java --lines 1-20 --max-width 700
 
 # Custom output path
-codeshot src/App.java --lines 42-56 --output screenshot.png
+snipshot src/App.java --lines 42-56 --output screenshot.png
 ```
 
 ## Examples
@@ -92,7 +92,7 @@ Pre-built binaries include the Bun runtime — no Node.js installation needed on
 Grab the archive for your platform from [Releases](../../releases), extract it, and run:
 
 ```bash
-./codeshot src/App.java --lines 10-30
+./snipshot src/App.java --lines 10-30
 ```
 
 ### Build from source
@@ -112,13 +112,13 @@ node scripts/build-standalone.mjs mac-arm
 node scripts/build-standalone.mjs linux,win
 ```
 
-Output goes to `standalone/codeshot-<platform>/`. Each directory is self-contained.
+Output goes to `standalone/snipshot-<platform>/`. Each directory is self-contained.
 
 **Install system-wide (Linux/macOS):**
 
 ```bash
-sudo cp -r standalone/codeshot-linux-x64 /opt/codeshot
-sudo ln -s /opt/codeshot/codeshot /usr/local/bin/codeshot
+sudo cp -r standalone/snipshot-linux-x64 /opt/snipshot
+sudo ln -s /opt/snipshot/snipshot /usr/local/bin/snipshot
 ```
 
 ## How it works
@@ -134,7 +134,7 @@ The font used is [JetBrains Mono](https://www.jetbrains.com/lp/mono/) (bundled).
 
 ```bash
 git clone <repo>
-cd codeshot
+cd snipshot
 npm install
 
 npm run build        # compile TypeScript

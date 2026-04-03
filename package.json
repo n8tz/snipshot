@@ -1,11 +1,11 @@
 {
-  "name": "codeshot",
+  "name": "snipshot",
   "version": "0.1.0",
   "description": "Generate PNG screenshots of code snippets with syntax highlighting, line numbers, and colored annotations from the CLI",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "codeshot": "dist/index.js"
+    "snipshot": "dist/index.js"
   },
   "files": [
     "dist",

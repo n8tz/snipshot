@@ -12,7 +12,7 @@ function collect(value: string, previous: string[]) {
 const program = new Command();
 
 program
-  .name('codeshot')
+  .name('snipshot')
   .description('Generate PNG screenshots of code snippets with syntax highlighting')
   .version('0.1.0')
   .argument('<file>', 'path to the source file')

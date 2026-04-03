@@ -4,8 +4,8 @@
  * Build standalone executables for Linux, Windows, and macOS using Bun compile.
  *
  * Each platform gets a self-contained directory:
- *   codeshot-<platform>/
- *     codeshot(.exe)                    — Bun-compiled binary
+ *   snipshot-<platform>/
+ *     snipshot(.exe)                    — Bun-compiled binary
  *     assets/JetBrainsMono-Regular.ttf  — embedded font
  *     node_modules/@napi-rs/canvas/     — native Skia binding (platform-specific)
  *
@@ -28,31 +28,31 @@ const distDir = join(root, 'standalone');
 const PLATFORMS = {
   linux: {
     bunTarget: 'bun-linux-x64',
-    binaryName: 'codeshot',
+    binaryName: 'snipshot',
     nativePackage: '@napi-rs/canvas-linux-x64-gnu',
     nodeFile: 'skia.linux-x64-gnu.node',
-    dirName: 'codeshot-linux-x64',
+    dirName: 'snipshot-linux-x64',
   },
   win: {
     bunTarget: 'bun-windows-x64',
-    binaryName: 'codeshot.exe',
+    binaryName: 'snipshot.exe',
     nativePackage: '@napi-rs/canvas-win32-x64-msvc',
     nodeFile: 'skia.win32-x64-msvc.node',
-    dirName: 'codeshot-windows-x64',
+    dirName: 'snipshot-windows-x64',
   },
   'mac-intel': {
     bunTarget: 'bun-darwin-x64',
-    binaryName: 'codeshot',
+    binaryName: 'snipshot',
     nativePackage: '@napi-rs/canvas-darwin-x64',
     nodeFile: 'skia.darwin-x64.node',
-    dirName: 'codeshot-macos-x64',
+    dirName: 'snipshot-macos-x64',
   },
   'mac-arm': {
     bunTarget: 'bun-darwin-arm64',
-    binaryName: 'codeshot',
+    binaryName: 'snipshot',
     nativePackage: '@napi-rs/canvas-darwin-arm64',
     nodeFile: 'skia.darwin-arm64.node',
-    dirName: 'codeshot-macos-arm64',
+    dirName: 'snipshot-macos-arm64',
   },
 };
 
