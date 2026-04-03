@@ -1,9 +1,16 @@
 {
   "name": "snipshot",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Generate PNG screenshots of code snippets with syntax highlighting, line numbers, and colored annotations from the CLI",
   "type": "module",
   "main": "dist/index.js",
+  "author": "N8tz <n8tz.js@gmail.com>",
+  "maintainers": [
+    "Nathan Braun <n8tz.js@gmail.com>"
+  ],
+  "contributors": [
+    "N8tz (https://github.com/N8tz)"
+  ],
   "bin": {
     "snipshot": "dist/index.js"
   },

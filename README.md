@@ -1,5 +1,6 @@
 <h1 align="center">snipshot</h1>
 
+---
 <p align="center">
   <strong>Generate beautiful PNG screenshots of code snippets from the command line.</strong><br>
   Syntax highlighting, line numbers, and colored annotations — no browser required.
