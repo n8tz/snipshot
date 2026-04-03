@@ -37,6 +37,7 @@ export async function generateCodeShot(options: CodeShotOptions): Promise<string
     endLine: lineRange.end,
     relativePath,
     highlights,
+    maxWidth: options.maxWidth,
   });
 
   // Save

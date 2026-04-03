@@ -21,12 +21,14 @@ program
   .option('--highlight-green <spec>', 'highlight in green (repeatable)', collect, [])
   .option('--output <path>', 'output file path')
   .option('--root <path>', 'project root for relative path display')
+  .option('--max-width <pixels>', 'max image width in pixels (enables word wrap)', parseInt)
   .action(async (file: string, opts: {
     lines: string;
     highlightRed: string[];
     highlightGreen: string[];
     output?: string;
     root?: string;
+    maxWidth?: number;
   }) => {
     try {
       const lineRange = parseLineRange(opts.lines);
@@ -42,6 +44,7 @@ program
         highlights,
         outputPath: opts.output || '',
         rootPath: opts.root,
+        maxWidth: opts.maxWidth,
       });
 
       console.log(`Screenshot saved to: ${outputPath}`);

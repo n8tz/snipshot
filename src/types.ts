@@ -24,4 +24,5 @@ export interface CodeShotOptions {
   highlights: HighlightSpec[];
   outputPath: string;
   rootPath?: string;
+  maxWidth?: number;
 }
