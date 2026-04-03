@@ -25,4 +25,5 @@ export interface CodeShotOptions {
   outputPath: string;
   rootPath?: string;
   maxWidth?: number;
+  folds?: LineRange[];
 }

@@ -22,6 +22,7 @@ program
   .option('--output <path>', 'output file path')
   .option('--root <path>', 'project root for relative path display')
   .option('--max-width <pixels>', 'max image width in pixels (enables word wrap)', parseInt)
+  .option('--fold <range>', 'fold/collapse a line range (repeatable)', collect, [])
   .action(async (file: string, opts: {
     lines: string;
     highlightRed: string[];
@@ -29,6 +30,7 @@ program
     output?: string;
     root?: string;
     maxWidth?: number;
+    fold: string[];
   }) => {
     try {
       const lineRange = parseLineRange(opts.lines);
@@ -45,6 +47,7 @@ program
         outputPath: opts.output || '',
         rootPath: opts.root,
         maxWidth: opts.maxWidth,
+        folds: opts.fold.map(s => parseLineRange(s)),
       });
 
       console.log(`Screenshot saved to: ${outputPath}`);

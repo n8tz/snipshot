@@ -38,6 +38,9 @@ const LINE_NUM_COLOR = '#636d83';
 const HEADER_TEXT_COLOR = '#9da5b4';
 const GUTTER_SEP_COLOR = '#3b4048';
 const WRAP_INDICATOR_COLOR = '#4b5263';
+const FOLD_BG = '#2c313a';
+const FOLD_TEXT_COLOR = '#5c6370';
+const FOLD_BORDER_COLOR = '#3b4048';
 
 const HIGHLIGHT_COLORS = {
   red: {
@@ -57,6 +60,7 @@ interface RenderInput {
   relativePath: string;
   highlights: HighlightSpec[];
   maxWidth?: number;
+  folds?: { start: number; end: number }[];
 }
 
 // A visual row produced by wrapping a source line
@@ -67,6 +71,8 @@ interface VisualRow {
   isFirstRow: boolean;
   charStart: number; // 0-based start position in original expanded line text
   charEnd: number;   // 0-based end position (exclusive)
+  isFold?: boolean;  // true = fold indicator row
+  foldCount?: number; // number of folded lines
 }
 
 function wrapTokens(
@@ -145,8 +151,23 @@ function wrapTokens(
 }
 
 export async function renderCode(input: RenderInput): Promise<Buffer> {
-  const { tokenizedLines, startLine, endLine, relativePath, highlights, maxWidth } = input;
+  const { tokenizedLines, startLine, endLine, relativePath, highlights, maxWidth, folds } = input;
   const visibleLines = tokenizedLines.slice(startLine - 1, endLine);
+
+  // Build a set of folded line numbers for fast lookup
+  const foldedLines = new Set<number>();
+  const foldStarts = new Map<number, number>(); // foldStartLine → count of folded lines
+  if (folds) {
+    for (const fold of folds) {
+      const fStart = Math.max(fold.start, startLine);
+      const fEnd = Math.min(fold.end, endLine);
+      if (fStart > fEnd) continue;
+      foldStarts.set(fStart, fEnd - fStart + 1);
+      for (let l = fStart; l <= fEnd; l++) {
+        foldedLines.add(l);
+      }
+    }
+  }
 
   // Measure context
   const measureCanvas = createCanvas(1, 1);
@@ -169,6 +190,23 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
 
   for (let i = 0; i < visibleLines.length; i++) {
     const lineNum = startLine + i;
+
+    // Skip folded lines, but insert a fold indicator at the fold start
+    if (foldedLines.has(lineNum)) {
+      if (foldStarts.has(lineNum)) {
+        visualRows.push({
+          tokens: [],
+          sourceLineIndex: i,
+          sourceLineNum: lineNum,
+          isFirstRow: true,
+          charStart: 0,
+          charEnd: 0,
+          isFold: true,
+          foldCount: foldStarts.get(lineNum),
+        });
+      }
+      continue;
+    }
 
     if (maxWidth) {
       const availableContentWidth = maxWidth - gutterWidth - GUTTER_SEPARATOR_WIDTH - PADDING_X * 2;
@@ -318,6 +356,26 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
     const vRow = visualRows[r];
     const y = codeStartY + r * LINE_HEIGHT;
     const textY = y + (LINE_HEIGHT - FONT_SIZE) / 2;
+
+    // Fold indicator row
+    if (vRow.isFold) {
+      // Background
+      ctx.fillStyle = FOLD_BG;
+      ctx.fillRect(0, y, totalWidth, LINE_HEIGHT);
+      // Top and bottom border lines
+      ctx.fillStyle = FOLD_BORDER_COLOR;
+      ctx.fillRect(gutterWidth + GUTTER_SEPARATOR_WIDTH, y, totalWidth - gutterWidth - GUTTER_SEPARATOR_WIDTH, 1);
+      ctx.fillRect(gutterWidth + GUTTER_SEPARATOR_WIDTH, y + LINE_HEIGHT - 1, totalWidth - gutterWidth - GUTTER_SEPARATOR_WIDTH, 1);
+      // Dots in gutter
+      ctx.fillStyle = FOLD_TEXT_COLOR;
+      ctx.textAlign = 'right';
+      ctx.fillText('\u22EE', gutterWidth - GUTTER_PADDING, textY);
+      // Fold label
+      ctx.textAlign = 'left';
+      const label = `\u2022\u2022\u2022  ${vRow.foldCount} lines folded  \u2022\u2022\u2022`;
+      ctx.fillText(label, codeStartX, textY);
+      continue;
+    }
 
     if (vRow.isFirstRow) {
       ctx.fillStyle = LINE_NUM_COLOR;

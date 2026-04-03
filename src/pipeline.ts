@@ -38,6 +38,7 @@ export async function generateCodeShot(options: CodeShotOptions): Promise<string
     relativePath,
     highlights,
     maxWidth: options.maxWidth,
+    folds: options.folds,
   });
 
   // Save
