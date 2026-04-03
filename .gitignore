@@ -1,4 +1,11 @@
 node_modules/
 dist/
 standalone/
-*.png
+.tmp-native/
+*.tgz
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

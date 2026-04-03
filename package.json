@@ -1,7 +1,7 @@
 {
   "name": "codeshot",
   "version": "0.1.0",
-  "description": "Generate PNG screenshots of code snippets with syntax highlighting",
+  "description": "Generate PNG screenshots of code snippets with syntax highlighting, line numbers, and colored annotations from the CLI",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -9,14 +9,16 @@
   },
   "files": [
     "dist",
-    "assets"
+    "assets",
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
     "test:watch": "vitest",
     "start": "node dist/index.js",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build && npm test",
     "build:standalone": "node scripts/build-standalone.mjs"
   },
   "keywords": [
@@ -24,9 +26,22 @@
     "screenshot",
     "syntax-highlighting",
     "cli",
-    "png"
+    "png",
+    "shiki",
+    "code-image",
+    "snippet",
+    "carbon",
+    "highlight"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "homepage": "",
+  "bugs": {
+    "url": ""
+  },
   "engines": {
     "node": ">=18"
   },

@@ -1,0 +1,15 @@
+src/
+tests/
+scripts/
+examples/
+docs/
+standalone/
+.tmp-native/
+.idea/
+.vscode/
+.gitignore
+.npmignore
+tsconfig.json
+vitest.config.ts
+image012.jpg
+*.tgz
