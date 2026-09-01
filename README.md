@@ -256,13 +256,15 @@ Its settings page can download the standalone binary for you, and chooses where
 images go: clipboard, a save dialog that remembers the last folder, `.snipshot/` in
 the project, the project root, or a fixed directory.
 
+Install `snipshot-intellij-plugin.zip` from [Releases](../../releases) through
+**Settings | Plugins | ⚙ | Install Plugin from Disk…**, or build it yourself:
+
 ```bash
 cd extra/intelij/snipshot-plugin
-./gradlew buildPlugin   # -> build/distributions/snipshot-plugin-0.1.0.zip
+./gradlew buildPlugin   # -> build/distributions/snipshot-plugin-<version>.zip
 ```
 
-It shells out to the `snipshot` binary, so install the CLI first. See the
-[plugin README](extra/intelij/snipshot-plugin/README.md) for the actions,
+See the [plugin README](extra/intelij/snipshot-plugin/README.md) for the actions,
 shortcuts and settings.
 
 ## How it works

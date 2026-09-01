@@ -25,3 +25,21 @@ jobs:
 
       - name: Test
         run: npm test
+
+  # The plugin is built at release time, so a compile break must not wait
+  # until then to surface.
+  plugin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build the IntelliJ plugin
+        working-directory: extra/intelij/snipshot-plugin
+        run: ./gradlew buildPlugin --no-daemon

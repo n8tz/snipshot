@@ -3,6 +3,7 @@ tests/
 scripts/
 examples/
 docs/
+extra/
 standalone/
 .tmp-native/
 .idea/

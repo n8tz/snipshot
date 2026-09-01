@@ -24,14 +24,21 @@ your own both work — the plugin uses the configured path, else a downloaded
 binary, else the first `snipshot` on your `PATH`. The **Check** button shows which
 one it resolved and what version answered.
 
-## Build & install
+## Install
+
+Grab **`snipshot-intellij-plugin.zip`** from the
+[releases](https://github.com/9pings/snipshot/releases) — every release builds it —
+then **Settings | Plugins | ⚙ | Install Plugin from Disk…**, pick the zip, restart.
+
+## Build from source
 
 ```bash
 ./gradlew buildPlugin
 ```
 
-The installable archive lands in `build/distributions/snipshot-plugin-0.1.0.zip`.
-Install it with **Settings | Plugins | ⚙ | Install Plugin from Disk…**, then restart.
+The installable archive lands in `build/distributions/snipshot-plugin-<version>.zip`
+and installs the same way. CI passes `-PpluginVersion=<release version>` so the
+published zip matches the release it ships in.
 
 To try it in a sandbox IDE instead:
 

@@ -5,7 +5,8 @@ plugins {
 }
 
 group = "com.snipshot"
-version = "0.1.0"
+// CI passes -PpluginVersion=<release version> so the published zip matches the tag.
+version = (findProperty("pluginVersion") as String?) ?: "0.1.0"
 
 repositories {
     mavenCentral()
