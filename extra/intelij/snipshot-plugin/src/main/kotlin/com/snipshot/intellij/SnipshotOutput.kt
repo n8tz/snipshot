@@ -8,6 +8,7 @@ import com.intellij.openapi.ide.CopyPasteManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import java.awt.Image
+import java.awt.Toolkit
 import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.Transferable
 import java.awt.datatransfer.UnsupportedFlavorException
@@ -44,15 +45,54 @@ object SnipshotOutput {
     fun sendToClipboard(project: Project, request: SnipshotRequest) {
         val temp = File.createTempFile("snipshot-", ".png").apply { deleteOnExit() }
         SnipshotRunner.run(project, request.copy(svg = false, outputPath = temp.path)) { file ->
-            val image = runCatching { ImageIO.read(file) }.getOrNull()
-            if (image == null) {
-                SnipshotRunner.notify(project, "Could not read the generated image.", NotificationType.ERROR)
-                return@run
-            }
-            ApplicationManager.getApplication().invokeLater {
-                CopyPasteManager.getInstance().setContents(ImageTransferable(image))
+            copyImageToClipboard(project, file)
+        }
+    }
+
+    private fun copyImageToClipboard(project: Project, file: File) {
+        val image = runCatching { ImageIO.read(file) }.getOrNull()
+        if (image == null) {
+            SnipshotRunner.notify(
+                project,
+                "Could not read the generated image (${file.length()} bytes at ${file.path}).",
+                NotificationType.ERROR,
+            )
+            return
+        }
+
+        ApplicationManager.getApplication().invokeLater {
+            val failure = putOnClipboard(ImageTransferable(image))
+            if (failure == null) {
                 SnipshotRunner.notify(project, "Snipshot copied to the clipboard.", NotificationType.INFORMATION)
+            } else {
+                SnipshotRunner.notify(project, failure, NotificationType.ERROR)
             }
+        }
+    }
+
+    /**
+     * Puts the image on the clipboard and checks it actually landed. Some
+     * desktops — WSLg and a few Wayland setups in particular — accept the call
+     * and keep nothing, so success is verified rather than assumed. Returns null
+     * on success, or a message explaining what went wrong.
+     */
+    private fun putOnClipboard(transferable: Transferable): String? {
+        val hint = "Set Destination to a folder in Settings | Tools | Snipshot to save images instead."
+        return try {
+            CopyPasteManager.getInstance().setContents(transferable)
+
+            val clipboard = Toolkit.getDefaultToolkit().systemClipboard
+            if (!clipboard.isDataFlavorAvailable(DataFlavor.imageFlavor)) {
+                // Second attempt, straight through AWT.
+                clipboard.setContents(transferable, null)
+            }
+            if (clipboard.isDataFlavorAvailable(DataFlavor.imageFlavor)) {
+                null
+            } else {
+                "The clipboard did not accept an image. $hint"
+            }
+        } catch (e: Exception) {
+            "Clipboard error: ${e.javaClass.simpleName}: ${e.message}. $hint"
         }
     }
 

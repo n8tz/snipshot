@@ -31,7 +31,8 @@ class SnipshotSettings : PersistentStateComponent<SnipshotSettings.State> {
         var maxWidth: Int = 800,
         /** 0 disables the row limit (--no-max-lines). */
         var maxLines: Int = 70,
-        var openAfterSave: Boolean = true,
+        /** Off by default: the save notification already offers to open it. */
+        var openAfterSave: Boolean = false,
     )
 
     private var state = State()
