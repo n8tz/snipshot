@@ -42,9 +42,10 @@ The installable zip lands in `standalone/intellij/snipshot-intellij-plugin.zip`,
 next to the standalone CLI binaries, versioned from `package.json` so a local build
 matches the release of the same version. This is the command CI runs too.
 
-Needs a **JDK 17 to 21** on `PATH` or in `JAVA_HOME` — the script checks and says so
-before Gradle gets a chance to fail obscurely. Gradle itself comes from the
-committed wrapper, so there is nothing else to install.
+Needs a **JDK 17 or newer** on `PATH` or in `JAVA_HOME` — the script checks and says
+so before Gradle gets a chance to fail obscurely. Gradle comes from the committed
+wrapper and the compile toolchain is downloaded if missing, so there is nothing else
+to install.
 
 Calling Gradle directly works as well:
 
@@ -72,19 +73,23 @@ sources are also checked against a newer SDK from time to time — they compile 
 against **2025.2.4** (build 252), which is the evidence behind dropping the upper
 bound.
 
-Redoing that check needs three edits in `build.gradle.kts`, because that platform
-ships Kotlin 2.2 metadata:
+Redoing that check takes one command — a newer platform ships Java 21 class files,
+hence the matching target:
 
 ```bash
-# kotlin.jvm -> 2.2.0, jvmToolchain -> 21, then:
-./gradlew buildPlugin -PplatformVersion=2025.2.4
+./gradlew buildPlugin -PplatformVersion=2025.2.4 -PjvmTarget=21
 ```
 
-The toolchain is otherwise pinned to a combination known to build: Gradle 8.10 (from
-the committed wrapper) with the IntelliJ Platform Gradle Plugin 2.1.0, compiling on
-JDK 17. The build warns that the platform plugin is outdated — 2.2 and later require
-Gradle 9, so moving up means bumping Gradle and Kotlin together. Building on JDK 25
-fails in the Kotlin plugin's version parsing; use JDK 17 to 21.
+Anything past 2025.2 is not resolvable through the IDE repositories yet, so that is
+as far forward as the check reaches.
+
+### Toolchain
+
+Gradle 9.7.1 (from the committed wrapper), the IntelliJ Platform Gradle Plugin
+2.18.1 and Kotlin 2.2.0. **Any JDK 17 or newer** runs the build, including 25 — the
+plugin itself is compiled for Java 17 through a Gradle toolchain, which Gradle
+downloads on the first build if your JDK is not one. That is also why the first
+build is slow: it pulls the IDE SDK and possibly a JDK.
 
 ## Usage
 

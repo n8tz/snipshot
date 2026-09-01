@@ -1,7 +1,7 @@
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "2.0.21"
-    id("org.jetbrains.intellij.platform") version "2.1.0"
+    id("org.jetbrains.kotlin.jvm") version "2.2.0"
+    id("org.jetbrains.intellij.platform") version "2.18.1"
 }
 
 group = "com.snipshot"
@@ -16,15 +16,16 @@ repositories {
 }
 
 // Building against an older platform is the supported direction: the plugin then
-// installs on that IDE and every newer one. Override to check the sources against
-// a newer SDK, e.g. -PplatformVersion=2025.2.4 (which also needs Kotlin 2.2 and
-// jvmToolchain(21) below, since that platform ships Kotlin 2.2 metadata).
+// installs on that IDE and every newer one. Both are overridable, so the sources
+// can be checked against a newer SDK without editing anything:
+//   ./gradlew buildPlugin -PplatformVersion=2025.2.4 -PjvmTarget=21
+// (a newer platform ships Java 21 class files, hence the matching target).
 val platformVersion = providers.gradleProperty("platformVersion").getOrElse("2024.1.7")
+val jvmTarget = providers.gradleProperty("jvmTarget").getOrElse("17").toInt()
 
 dependencies {
     intellijPlatform {
         intellijIdeaCommunity(platformVersion)
-        instrumentationTools()
     }
 }
 
@@ -40,7 +41,7 @@ intellijPlatform {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(jvmTarget)
 }
 
 tasks {

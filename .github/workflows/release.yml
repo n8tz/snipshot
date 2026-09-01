@@ -48,6 +48,7 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
+          # Runs Gradle and satisfies the plugin's Java 17 toolchain.
           distribution: temurin
           java-version: 17
 

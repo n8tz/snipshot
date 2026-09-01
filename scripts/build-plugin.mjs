@@ -26,9 +26,10 @@ const isWindows = process.platform === 'win32';
 const { version } = JSON.parse(readFileSync(join(root, 'package.json'), 'utf-8'));
 
 /**
- * The IntelliJ Platform plugin needs JDK 17+, and Gradle 8.10 refuses to run on
- * anything past 23 (the Kotlin plugin also trips over those version strings).
- * Check up front so the failure is a sentence rather than a stack trace.
+ * Gradle needs a JDK 17 or newer to run. The plugin itself is compiled for Java
+ * 17 through a Gradle toolchain, which Gradle downloads on the first build if
+ * this JDK is not one, so any recent JDK works here.
+ * Checked up front so the failure is a sentence rather than a stack trace.
  */
 function checkJava() {
   const javaCmd = process.env.JAVA_HOME
@@ -51,11 +52,11 @@ function checkJava() {
   }
 
   const major = Number(match[1]);
-  if (major < 17 || major > 23) {
+  if (major < 17) {
     fail(
-      `Java ${major} cannot build the plugin (needs 17 to 23).\n` +
-      '  Point JAVA_HOME at a JDK 17 or 21, e.g.\n' +
-      '    JAVA_HOME=/path/to/jdk-21 npm run build:plugin'
+      `Java ${major} is too old to build the plugin (needs 17 or newer).\n` +
+      '  Install a recent JDK, or point JAVA_HOME at one:\n' +
+      '    JAVA_HOME=/path/to/jdk npm run build:plugin'
     );
   }
   console.log(`  JDK ${major} — ok`);
@@ -71,6 +72,7 @@ if (!existsSync(pluginDir)) {
 }
 
 console.log(`Building the IntelliJ plugin (version ${version})...`);
+console.log('  The first build downloads the IDE SDK and, if needed, a JDK 17 toolchain.');
 checkJava();
 
 const gradlew = join(pluginDir, isWindows ? 'gradlew.bat' : 'gradlew');

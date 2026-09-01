@@ -263,7 +263,8 @@ Install `snipshot-intellij-plugin.zip` from [Releases](../../releases) through
 npm run build:plugin    # -> standalone/intellij/snipshot-intellij-plugin.zip
 ```
 
-Building it needs a JDK 17-21; Gradle comes from the committed wrapper.
+Building it needs a JDK 17 or newer; Gradle and the compile toolchain come from
+the committed wrapper.
 
 See the [plugin README](extra/intelij/snipshot-plugin/README.md) for the actions,
 shortcuts and settings.
