@@ -46,12 +46,12 @@ object SnipshotOutput {
     fun sendToClipboard(project: Project, request: SnipshotRequest) {
         val temp = File.createTempFile("snipshot-", ".png").apply { deleteOnExit() }
         SnipshotRunner.run(project, request.copy(svg = false, outputPath = temp.path)) { file ->
-            copyImageToClipboard(project, file)
+            deliver(project, request, file)
         }
     }
 
     /** Runs on a background thread: it may start a process. */
-    private fun copyImageToClipboard(project: Project, file: File) {
+    private fun deliver(project: Project, request: SnipshotRequest, file: File) {
         val bytes = runCatching { file.readBytes() }.getOrNull()
         val image = runCatching { ImageIO.read(file) }.getOrNull()
         if (bytes == null || image == null) {
@@ -63,25 +63,51 @@ object SnipshotOutput {
             return
         }
 
-        // Under WSL the Java clipboard never reaches Windows applications, so
-        // the image is handed to the Windows side as well. Done here rather
-        // than on the EDT because it spawns PowerShell.
+        // Under WSL the Java clipboard never reaches Windows applications, so the
+        // image is handed to the Windows side as well. Done here rather than on
+        // the EDT because it spawns PowerShell.
         val windowsFailure = if (WindowsClipboard.isWsl) WindowsClipboard.copyImage(file) else null
+
+        // A clipboard-only result that no Windows application can read is no
+        // result at all, so the shot is kept as a file instead of being lost.
+        val kept = if (windowsFailure != null) keepAsFile(project, request, file) else null
 
         ApplicationManager.getApplication().invokeLater {
             val localFailure = putOnClipboard(ImageTransferable(image, bytes))
-            report(project, localFailure, windowsFailure)
+            report(project, localFailure, windowsFailure, kept)
         }
     }
 
-    private fun report(project: Project, localFailure: String?, windowsFailure: String?) {
+    /** Copies the rendered image into the project, under .snipshot/. */
+    private fun keepAsFile(project: Project, request: SnipshotRequest, rendered: File): File? {
+        val base = project.basePath ?: return null
+        val directory = File(base, ".snipshot")
+        val target = File(directory, File(request.outputPath).name)
+        return try {
+            directory.mkdirs()
+            rendered.copyTo(target, overwrite = true)
+            LocalFileSystem.getInstance().refreshAndFindFileByIoFile(target)
+            target
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    private fun report(project: Project, localFailure: String?, windowsFailure: String?, kept: File?) {
         when {
+            kept != null -> SnipshotRunner.notifySaved(
+                project,
+                kept,
+                "The Windows clipboard is out of reach ($windowsFailure) — saved to ${kept.name} instead. " +
+                    "Set Destination in Settings | Tools | Snipshot to choose where these go.",
+                NotificationType.WARNING,
+            )
+
             WindowsClipboard.isWsl && windowsFailure != null -> SnipshotRunner.notify(
                 project,
                 "Copied inside the IDE only — the Windows clipboard could not be reached " +
-                    "($windowsFailure). Pasting into Windows apps needs WSL interop enabled; " +
-                    "otherwise set Destination to a folder in Settings | Tools | Snipshot.",
-                NotificationType.WARNING,
+                    "($windowsFailure), and the image could not be saved either.",
+                NotificationType.ERROR,
             )
 
             localFailure != null && !WindowsClipboard.isWsl ->

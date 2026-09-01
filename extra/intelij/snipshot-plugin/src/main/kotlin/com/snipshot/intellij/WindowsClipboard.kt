@@ -34,13 +34,23 @@ object WindowsClipboard {
         }
     }
 
+    /**
+     * Set once the bridge has failed. Interop does not come back mid-session,
+     * and retrying costs a PowerShell spawn on every single shot. Cleared by
+     * restarting the IDE.
+     */
+    @Volatile
+    private var unavailable: String? = null
+
     /** Copies [file] to the Windows clipboard. Returns null on success. */
     fun copyImage(file: File): String? {
+        unavailable?.let { return it }
+
         val powershell = findPowershell()
-            ?: return "powershell.exe not found — WSL interop looks disabled."
+            ?: return remember("powershell.exe not found — WSL interop looks disabled.")
 
         val windowsPath = toWindowsPath(file)
-            ?: return "could not translate ${file.path} to a Windows path."
+            ?: return remember("could not translate ${file.path} to a Windows path.")
 
         // One line on purpose: multi-line arguments do not survive the WSL
         // interop layer intact. SetDataObject(.., $true) is what keeps the image
@@ -59,6 +69,12 @@ object WindowsClipboard {
         ).joinToString(" ")
 
         return runProcess(powershell, "-NoProfile", "-NonInteractive", "-STA", "-Command", script)
+            ?.let { remember(it) }
+    }
+
+    private fun remember(reason: String): String {
+        unavailable = reason
+        return reason
     }
 
     private fun findPowershell(): String? {

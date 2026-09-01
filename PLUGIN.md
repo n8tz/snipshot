@@ -131,12 +131,31 @@ can be overridden per shot in the **Snipshot…** dialog.
 **Clipboard.** The image is offered both as an AWT image and as raw PNG bytes,
 because applications differ on which one they ask for.
 
-**Running the IDE inside WSL?** WSLg bridges only *text* between the Linux and
-Windows clipboards, so an image copied the normal way can be pasted inside the IDE
-but never reaches Word, Outlook or any other Windows application. The plugin detects
-WSL and additionally hands the file to the Windows clipboard through PowerShell.
-That needs WSL interop enabled (the default); if it is not, the copy says so rather
-than looking like it worked. Failing that, set **Destination** to a folder.
+### Running the IDE inside WSL
+
+WSLg bridges only *text* between the Linux and Windows clipboards. An image copied
+the normal way can be pasted inside the IDE, but never reaches Word, Outlook or any
+other Windows application — the boundary is below Java, so no plugin can paper over
+it from the Linux side.
+
+The plugin detects WSL and hands the file to the Windows clipboard through
+PowerShell instead, which does work. That needs **WSL interop** enabled (it is by
+default; `[interop] enabled = true` in `/etc/wsl.conf`).
+
+**If interop is off**, the copy cannot succeed. Rather than lose the shot, the
+plugin writes it to `.snipshot/` in the project and says so, with *Open* and *Show
+in files* on the notification. It stops retrying PowerShell for the rest of the
+session, since interop does not come back mid-run.
+
+In that situation, point **Destination** at a folder Windows can see and the round
+trip disappears — anything under `/mnt/c/…` is a normal Windows path:
+
+```
+Destination:       Custom directory
+Custom directory:  /mnt/c/Users/<you>/Pictures/snipshots
+```
+
+Word then inserts the file directly, with no clipboard involved.
 
 **Errors** come straight from the CLI. The one you will meet is the page-fit guard —
 *"would be 91 lines, over the 70-line limit"*. Narrow the selection, fold a section,

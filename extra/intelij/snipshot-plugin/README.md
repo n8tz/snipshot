@@ -68,7 +68,7 @@ as far forward as the check reaches.
 | `SnipshotRequest.kt` | The CLI invocation model, and reading the editor into one |
 | `SnipshotRunner.kt` | Runs the CLI off the UI thread, reports success or failure |
 | `SnipshotOutput.kt` | Delivers the result: clipboard, save dialog, or a folder |
-| `WindowsClipboard.kt` | Reaches the Windows clipboard when the IDE runs under WSL |
+| `WindowsClipboard.kt` | Reaches the Windows clipboard when the IDE runs under WSL, and remembers when it cannot |
 | `SnipshotDownloader.kt` | Fetches the standalone binary from GitHub releases |
 | `SnipshotOptionsDialog.kt` | The "Snipshot…" dialog |
 | `SnipshotConfigurable.kt` | The settings page |

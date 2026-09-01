@@ -70,10 +70,15 @@ object SnipshotRunner {
         }.queue()
     }
 
-    fun notifySaved(project: Project, file: File) {
+    fun notifySaved(
+        project: Project,
+        file: File,
+        message: String = "Snipshot saved to ${file.name}",
+        type: NotificationType = NotificationType.INFORMATION,
+    ) {
         val notification = NotificationGroupManager.getInstance()
             .getNotificationGroup(NOTIFICATION_GROUP)
-            .createNotification("Snipshot saved to ${file.name}", NotificationType.INFORMATION)
+            .createNotification(message, type)
             .addAction(NotificationAction.createSimple("Open") { openInIde(project, file) })
             .addAction(NotificationAction.createSimple("Show in files") { RevealFileAction.openFile(file) })
         notification.notify(project)
