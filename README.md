@@ -2,9 +2,9 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/snipshot"><img src="https://img.shields.io/npm/v/snipshot.svg" alt="npm version" /></a>
-  <a href="https://github.com/n8tz/snipshot/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/snipshot.svg" alt="license" /></a>
+  <a href="https://github.com/9pings/snipshot/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/snipshot.svg" alt="license" /></a>
   <a href="https://www.npmjs.com/package/snipshot"><img src="https://img.shields.io/npm/dm/snipshot.svg" alt="downloads" /></a>
-  <a href="https://github.com/n8tz/snipshot/actions/workflows/ci.yml"><img src="https://github.com/n8tz/snipshot/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://github.com/9pings/snipshot/actions/workflows/ci.yml"><img src="https://github.com/9pings/snipshot/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
 </p>
 
 ---
@@ -26,6 +26,7 @@
 - **Syntax highlighting** for 200+ languages via [Shiki](https://shiki.style) (VS Code-quality tokenization)
 - **Line numbers** with proper gutter alignment
 - **Red/green highlights** — full lines or precise column ranges
+- **Multiple ranges** — `--lines 10-14,42-56` captures several sections, folding the gaps automatically
 - **Fold/collapse** line ranges to hide boilerplate with `--fold`
 - **Context lines** — 3 lines around your selection by default (`--context` / `--no-context`)
 - **Page-fit guard** — errors past 70 rendered rows so snippets fit on a page (`--max-lines` / `--no-max-lines`)
@@ -44,20 +45,20 @@
 npm install -g snipshot
 
 # or run directly
-npx snipshot <file> --lines <range>
+npx snipshot <file> --lines <ranges>
 ```
 
 ## Usage
 
 ```bash
-snipshot <file> --lines <start>-<end> [options]
+snipshot <file> --lines <ranges> [options]
 ```
 
 ### Options
 
 | Option | Description |
 |---|---|
-| `--lines <range>` | Line range to capture, e.g. `42-56` **(required)** |
+| `--lines <ranges>` | Line range(s) to capture, e.g. `42-56` or `10-14,42-56` (gaps between ranges are folded) **(required)** |
 | `--highlight-red <specs>` | Red highlights — comma-separated and/or repeatable |
 | `--highlight-green <specs>` | Green highlights — comma-separated and/or repeatable |
 | `--fold <ranges>` | Collapse line ranges into a single indicator row — comma-separated and/or repeatable |
@@ -96,6 +97,9 @@ snipshot src/App.java --lines 42-56
 
 # Multiple highlights in one flag
 snipshot src/App.java --lines 42-56 --highlight-red 47,50-52 --highlight-green 55:12-38
+
+# Several line ranges at once — the gaps between them are folded automatically
+snipshot src/App.java --lines 10-14,42-56,80-95
 
 # Wider lines (override the default page-width wrap), or disable wrapping
 snipshot src/App.java --lines 1-20 --max-width 1100
@@ -143,10 +147,28 @@ snipshot src/App.java --lines 42-56 --highlight-red 47 --ansi
   <img src="examples/java-class-header.png" alt="Clean example" />
 </p>
 
-**SVG output (`--svg`) — same layout, scalable and ~4× smaller:**
+### SVG output (`--svg`)
+
+Same layout as the PNG, but scalable and a fraction of the size — these two are real `.svg` files rendered by your browser.
+
+**Several ranges at once (`--lines 3-5,39-42,84-91`) — the gaps are folded automatically:**
 
 <p align="center">
-  <img src="examples/svg-output.svg" alt="SVG example" />
+  <img src="examples/svg-multirange.svg" alt="Multi-range SVG example" />
+</p>
+
+**Light theme with red/green annotations:**
+
+<p align="center">
+  <img src="examples/svg-light-theme.svg" alt="Light theme SVG example" />
+</p>
+
+### Terminal output (`--ansi`)
+
+Printed straight to stdout in 24-bit color — same header, gutter, folds and highlights, no file written:
+
+<p align="center">
+  <img src="examples/cli-ansi-output.png" alt="ANSI terminal output" />
 </p>
 
 ### Light theme (`--theme light`)
@@ -234,12 +256,12 @@ The font used is [JetBrains Mono](https://www.jetbrains.com/lp/mono/) (bundled).
 ## Development
 
 ```bash
-git clone https://github.com/n8tz/snipshot.git
+git clone https://github.com/9pings/snipshot.git
 cd snipshot
 npm install
 
 npm run build        # compile TypeScript
-npm test             # run tests (52 tests)
+npm test             # run tests (58 tests)
 npm run test:watch   # watch mode
 ```
 

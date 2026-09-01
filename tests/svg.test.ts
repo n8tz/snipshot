@@ -130,7 +130,7 @@ describe('generateCodeShotSvg', () => {
 
     const result = await generateCodeShotSvg({
       filePath: FIXTURE_TS,
-      lineRange: { start: 1, end: 10 },
+      lineRanges: [{ start: 1, end: 10 }],
       highlights: [{ color: 'red', lineStart: 3, lineEnd: 3 }],
       outputPath: output,
     });

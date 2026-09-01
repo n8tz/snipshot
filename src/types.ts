@@ -20,7 +20,12 @@ export type TokenizedLine = TokenInfo[];
 
 export interface CodeShotOptions {
   filePath: string;
-  lineRange: LineRange;
+  /**
+   * Line ranges to capture (1-based, inclusive). With several ranges, the
+   * snippet spans from the first to the last; the gaps between ranges
+   * (beyond each range's context lines) are automatically folded.
+   */
+  lineRanges: LineRange[];
   highlights: HighlightSpec[];
   outputPath: string;
   rootPath?: string;

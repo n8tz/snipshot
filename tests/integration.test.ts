@@ -26,7 +26,7 @@ describe('generateCodeShot', () => {
 
     const result = await generateCodeShot({
       filePath: FIXTURE_JAVA,
-      lineRange: { start: 6, end: 14 },
+      lineRanges: [{ start: 6, end: 14 }],
       highlights: [],
       outputPath: output,
     });
@@ -43,7 +43,7 @@ describe('generateCodeShot', () => {
 
     const result = await generateCodeShot({
       filePath: FIXTURE_TS,
-      lineRange: { start: 1, end: 10 },
+      lineRanges: [{ start: 1, end: 10 }],
       highlights: [
         { color: 'red', lineStart: 3, lineEnd: 3 },
         { color: 'green', lineStart: 7, lineEnd: 7, colStart: 3, colEnd: 20 },
@@ -63,7 +63,7 @@ describe('generateCodeShot', () => {
     await expect(
       generateCodeShot({
         filePath: FIXTURE_JAVA,
-        lineRange: { start: 1, end: 9999 },
+        lineRanges: [{ start: 1, end: 9999 }],
         highlights: [],
         outputPath: output,
       })

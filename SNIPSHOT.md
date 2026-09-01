@@ -5,13 +5,13 @@
 ## Command
 
 ```
-snipshot <file> --lines <start>-<end> [options]
+snipshot <file> --lines <ranges> [options]
 ```
 
 ## Required
 
 - `<file>` — path to the source file (language auto-detected from extension)
-- `--lines <start>-<end>` — line range to capture (1-based, inclusive)
+- `--lines <ranges>` — line range(s) to capture (1-based, inclusive): a single line `42`, a range `42-56`, or several comma-separated ranges `10-14,42-56`. With several ranges the snippet spans from the first to the last, and the gaps between them (beyond each range's context lines) are folded automatically.
 
 ## Options
 
@@ -78,6 +78,11 @@ snipshot src/controller.java --lines 1-30 --max-width 700
 snipshot src/service.ts --lines 1-120 --fold 1-25 --fold 80-100 --highlight-red 55
 ```
 
+**Capture several separate sections at once (gaps folded automatically):**
+```bash
+snipshot src/service.ts --lines 10-14,42-56,80-95 --highlight-red 47
+```
+
 **Custom output path:**
 ```bash
 snipshot src/app.tsx --lines 50-80 --output docs/images/app-snippet.png
@@ -108,7 +113,8 @@ snipshot src/service.ts --lines 1-200 --no-max-lines        # allow a tall image
 
 - The full file is read and tokenized (not just the selected lines) so syntax highlighting is always accurate, even for mid-file extracts.
 - Line numbers in the output match the original file.
-- By default 3 lines of context are rendered before and after `--lines` (clamped to the file). Disable with `--no-context` or change with `--context <n>`. Context does not affect the output filename.
+- By default 3 lines of context are rendered before and after each `--lines` range (clamped to the file). Disable with `--no-context` or change with `--context <n>`. Context does not affect the output filename.
+- With several `--lines` ranges, overlapping/touching ranges are merged, and each gap between ranges is collapsed into a `••• N lines folded •••` row (unless it hides fewer than 2 lines, in which case it is simply shown). The default output filename joins the ranges with `+`, e.g. `service_L10-14+42-56.png`.
 - The command **errors** if the result would exceed 70 rendered rows, so screenshots fit on a single page. Folded ranges count as 1 row; wrapped lines count each row. Raise with `--max-lines <n>` or remove with `--no-max-lines`. To recover, narrow `--lines`, add `--fold`, or pass `--no-max-lines`.
 - Tabs are expanded to 4 spaces.
 - Long lines word-wrap at `--max-width` (default `800px` ≈ a page) with a `↳` continuation indicator; line numbers are only shown on the first visual row. Pass `--no-max-width` for a single wide line per source line.

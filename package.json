@@ -1,6 +1,6 @@
 {
   "name": "snipshot",
-  "version": "1.1.0",
+  "version": "1.2.0",
 
   "description": "Generate PNG screenshots (or ANSI terminal output) of code snippets with syntax highlighting, line numbers, and colored annotations from the CLI",
   "type": "module",
@@ -53,11 +53,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/n8tz/snipshot.git"
+    "url": "git+https://github.com/9pings/snipshot.git"
   },
-  "homepage": "https://github.com/n8tz/snipshot#readme",
+  "homepage": "https://github.com/9pings/snipshot#readme",
   "bugs": {
-    "url": "https://github.com/n8tz/snipshot/issues"
+    "url": "https://github.com/9pings/snipshot/issues"
   },
   "engines": {
     "node": ">=18"

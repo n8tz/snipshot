@@ -3,7 +3,7 @@
 import { Command, Option, InvalidArgumentError } from 'commander';
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
-import { parseLineRange, parseHighlightSpecs, parseLineRanges } from './parser.js';
+import { parseHighlightSpecs, parseLineRanges } from './parser.js';
 import { generateCodeShot, generateCodeShotAnsi, generateCodeShotSvg } from './pipeline.js';
 import type { HighlightSpec } from './types.js';
 
@@ -33,9 +33,9 @@ const program = new Command();
 program
   .name('snipshot')
   .description('Generate a PNG screenshot of a code snippet, with syntax highlighting,\nline numbers, optional red/green annotations and folded regions.\nCan also output the same snippet as SVG (--svg) or ANSI-colored text (--ansi).')
-  .version('1.1.0')
+  .version('1.2.0')
   .argument('<file>', 'source file to screenshot (language auto-detected from its extension)')
-  .requiredOption('--lines <range>', 'lines to capture: a single line "42" or a range "42-56" (1-based, inclusive)')
+  .requiredOption('--lines <ranges>', 'lines to capture: a single line "42", a range "42-56", or several comma-separated ranges "10-14,42-56" (1-based, inclusive; the gaps between ranges are folded)')
   .option('--highlight-red <specs>', 'draw red highlights; comma-separate and/or repeat (e.g. 13,15-18,19:10-20)', collect, [])
   .option('--highlight-green <specs>', 'draw green highlights; comma-separate and/or repeat (e.g. 13,15-18,19:10-20)', collect, [])
   .option('--fold <ranges>', 'collapse line ranges into a "folded" marker; comma-separate and/or repeat (e.g. 1-20,90-110)', collect, [])
@@ -64,9 +64,14 @@ Highlight & fold specs:
   Every number is 1-based and inclusive.
 
 Context:
-  By default 3 lines are shown before and after the --lines range (clamped to the file)
+  By default 3 lines are shown before and after each --lines range (clamped to the file)
   so the snippet has surrounding context. Use --context <n> to change it, or --no-context
   to show exactly the requested lines.
+
+Multiple ranges:
+  --lines accepts several comma-separated ranges (e.g. --lines 10-14,42-56). The snippet
+  then spans from the first range to the last, and the gap between ranges (beyond each
+  range's context lines) is collapsed into a "N lines folded" row automatically.
 
 Page fit:
   Snipshot is tuned to fit a document page:
@@ -87,6 +92,7 @@ Output formats:
 Examples:
   snipshot src/app.ts --lines 42-56
   snipshot src/app.ts --lines 42-56 --highlight-red 47,50-52 --highlight-green 55:8-24
+  snipshot src/app.ts --lines 10-14,42-56
   snipshot src/app.ts --lines 1-120 --fold 1-20,90-110
   snipshot src/app.ts --lines 42-56 --theme light --no-context
   snipshot src/app.ts --lines 42-56 --max-width 700 --output docs/snippet.png
@@ -109,7 +115,10 @@ Examples:
     root?: string;
   }) => {
     try {
-      const lineRange = parseLineRange(opts.lines);
+      const lineRanges = parseLineRanges(opts.lines);
+      if (lineRanges.length === 0) {
+        throw new Error('--lines requires at least one line or range (e.g. 42, 42-56, or 10-14,42-56).');
+      }
 
       const highlights: HighlightSpec[] = [
         ...opts.highlightRed.flatMap(v => parseHighlightSpecs(v, 'red')),
@@ -125,7 +134,7 @@ Examples:
 
       const shotOptions = {
         filePath: file,
-        lineRange,
+        lineRanges,
         highlights,
         outputPath: opts.output || '',
         rootPath: opts.root,

@@ -140,7 +140,7 @@ describe('generateCodeShotAnsi', () => {
   it('renders a fixture file end-to-end with syntax colors', async () => {
     const out = await generateCodeShotAnsi({
       filePath: FIXTURE_TS,
-      lineRange: { start: 1, end: 10 },
+      lineRanges: [{ start: 1, end: 10 }],
       highlights: [{ color: 'red', lineStart: 3, lineEnd: 3 }],
       outputPath: '',
     });
@@ -153,7 +153,7 @@ describe('generateCodeShotAnsi', () => {
   it('throws on out-of-bounds line range', async () => {
     await expect(generateCodeShotAnsi({
       filePath: FIXTURE_TS,
-      lineRange: { start: 1, end: 99999 },
+      lineRanges: [{ start: 1, end: 99999 }],
       highlights: [],
       outputPath: '',
     })).rejects.toThrow(/out of bounds/);
