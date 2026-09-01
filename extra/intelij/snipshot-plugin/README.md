@@ -152,10 +152,18 @@ live for the session only and survive across shots until you clear them.
 | Project root | Straight into the project directory |
 | Custom directory | A fixed folder of your choosing |
 
-If your desktop cannot put images on the clipboard — WSLg and some Wayland setups
-cannot — the copy reports it instead of silently doing nothing; switch Destination
-to a folder in that case. Images are not opened in the IDE after saving; the
-notification offers it, and a setting makes it automatic.
+The image is offered both as an AWT image and as raw PNG bytes, because
+applications differ on which one they ask for.
+
+**Running the IDE inside WSL?** WSLg only bridges *text* between the Linux and
+Windows clipboards, so an image copied the normal way can be pasted inside the IDE
+but never reaches Word, Outlook or any other Windows application. The plugin
+detects WSL and additionally hands the file to the Windows clipboard through
+PowerShell, so pasting into Windows apps works. That needs WSL interop enabled
+(the default); if it is not, the copy says so rather than looking like it worked.
+
+Images are not opened in the IDE after saving; the notification offers it, and a
+setting makes it automatic.
 
 **Format** picks PNG or SVG for the plain actions; *Snipshot Selection as SVG* always
 wins over it. SVG cannot live on the clipboard, so an SVG shot under the clipboard

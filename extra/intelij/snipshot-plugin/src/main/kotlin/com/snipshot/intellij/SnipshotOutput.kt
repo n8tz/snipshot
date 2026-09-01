@@ -12,6 +12,7 @@ import java.awt.Toolkit
 import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.Transferable
 import java.awt.datatransfer.UnsupportedFlavorException
+import java.io.ByteArrayInputStream
 import java.io.File
 import javax.imageio.ImageIO
 
@@ -49,9 +50,11 @@ object SnipshotOutput {
         }
     }
 
+    /** Runs on a background thread: it may start a process. */
     private fun copyImageToClipboard(project: Project, file: File) {
+        val bytes = runCatching { file.readBytes() }.getOrNull()
         val image = runCatching { ImageIO.read(file) }.getOrNull()
-        if (image == null) {
+        if (bytes == null || image == null) {
             SnipshotRunner.notify(
                 project,
                 "Could not read the generated image (${file.length()} bytes at ${file.path}).",
@@ -60,21 +63,39 @@ object SnipshotOutput {
             return
         }
 
+        // Under WSL the Java clipboard never reaches Windows applications, so
+        // the image is handed to the Windows side as well. Done here rather
+        // than on the EDT because it spawns PowerShell.
+        val windowsFailure = if (WindowsClipboard.isWsl) WindowsClipboard.copyImage(file) else null
+
         ApplicationManager.getApplication().invokeLater {
-            val failure = putOnClipboard(ImageTransferable(image))
-            if (failure == null) {
+            val localFailure = putOnClipboard(ImageTransferable(image, bytes))
+            report(project, localFailure, windowsFailure)
+        }
+    }
+
+    private fun report(project: Project, localFailure: String?, windowsFailure: String?) {
+        when {
+            WindowsClipboard.isWsl && windowsFailure != null -> SnipshotRunner.notify(
+                project,
+                "Copied inside the IDE only — the Windows clipboard could not be reached " +
+                    "($windowsFailure). Pasting into Windows apps needs WSL interop enabled; " +
+                    "otherwise set Destination to a folder in Settings | Tools | Snipshot.",
+                NotificationType.WARNING,
+            )
+
+            localFailure != null && !WindowsClipboard.isWsl ->
+                SnipshotRunner.notify(project, localFailure, NotificationType.ERROR)
+
+            else ->
                 SnipshotRunner.notify(project, "Snipshot copied to the clipboard.", NotificationType.INFORMATION)
-            } else {
-                SnipshotRunner.notify(project, failure, NotificationType.ERROR)
-            }
         }
     }
 
     /**
      * Puts the image on the clipboard and checks it actually landed. Some
-     * desktops — WSLg and a few Wayland setups in particular — accept the call
-     * and keep nothing, so success is verified rather than assumed. Returns null
-     * on success, or a message explaining what went wrong.
+     * desktops accept the call and keep nothing, so success is verified rather
+     * than assumed. Returns null on success, or a message.
      */
     private fun putOnClipboard(transferable: Transferable): String? {
         val hint = "Set Destination to a folder in Settings | Tools | Snipshot to save images instead."
@@ -122,15 +143,28 @@ object SnipshotOutput {
         return request.copy(outputPath = file.path)
     }
 
-    /** Minimal image clipboard payload — Swing only needs the image flavor. */
-    private class ImageTransferable(private val image: Image) : Transferable {
-        override fun getTransferDataFlavors(): Array<DataFlavor> = arrayOf(DataFlavor.imageFlavor)
+    /**
+     * Offers the image both as an AWT image and as raw PNG bytes: applications
+     * differ on which one they ask for, and offering only the first leaves some
+     * of them with nothing to paste.
+     */
+    private class ImageTransferable(
+        private val image: Image,
+        private val pngBytes: ByteArray,
+    ) : Transferable {
 
-        override fun isDataFlavorSupported(flavor: DataFlavor): Boolean = DataFlavor.imageFlavor == flavor
+        private val pngFlavor = DataFlavor("image/png", "PNG image")
 
-        override fun getTransferData(flavor: DataFlavor): Any {
-            if (!isDataFlavorSupported(flavor)) throw UnsupportedFlavorException(flavor)
-            return image
+        override fun getTransferDataFlavors(): Array<DataFlavor> =
+            arrayOf(DataFlavor.imageFlavor, pngFlavor)
+
+        override fun isDataFlavorSupported(flavor: DataFlavor): Boolean =
+            DataFlavor.imageFlavor == flavor || pngFlavor.isMimeTypeEqual(flavor)
+
+        override fun getTransferData(flavor: DataFlavor): Any = when {
+            DataFlavor.imageFlavor == flavor -> image
+            pngFlavor.isMimeTypeEqual(flavor) -> ByteArrayInputStream(pngBytes)
+            else -> throw UnsupportedFlavorException(flavor)
         }
     }
 }
