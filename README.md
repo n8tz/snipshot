@@ -260,9 +260,10 @@ Install `snipshot-intellij-plugin.zip` from [Releases](../../releases) through
 **Settings | Plugins | ⚙ | Install Plugin from Disk…**, or build it yourself:
 
 ```bash
-cd extra/intelij/snipshot-plugin
-./gradlew buildPlugin   # -> build/distributions/snipshot-plugin-<version>.zip
+npm run build:plugin    # -> standalone/intellij/snipshot-intellij-plugin.zip
 ```
+
+Building it needs a JDK 17-21; Gradle comes from the committed wrapper.
 
 See the [plugin README](extra/intelij/snipshot-plugin/README.md) for the actions,
 shortcuts and settings.
@@ -286,6 +287,7 @@ npm install
 npm run build        # compile TypeScript
 npm test             # run tests (58 tests)
 npm run test:watch   # watch mode
+npm run build:plugin # build the IntelliJ plugin zip
 ```
 
 ### Releasing

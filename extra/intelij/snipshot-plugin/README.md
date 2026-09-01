@@ -32,13 +32,26 @@ then **Settings | Plugins | ⚙ | Install Plugin from Disk…**, pick the zip, r
 
 ## Build from source
 
+From the repository root:
+
 ```bash
-./gradlew buildPlugin
+npm run build:plugin
 ```
 
-The installable archive lands in `build/distributions/snipshot-plugin-<version>.zip`
-and installs the same way. CI passes `-PpluginVersion=<release version>` so the
-published zip matches the release it ships in.
+The installable zip lands in `standalone/intellij/snipshot-intellij-plugin.zip`,
+next to the standalone CLI binaries, versioned from `package.json` so a local build
+matches the release of the same version. This is the command CI runs too.
+
+Needs a **JDK 17 to 21** on `PATH` or in `JAVA_HOME` — the script checks and says so
+before Gradle gets a chance to fail obscurely. Gradle itself comes from the
+committed wrapper, so there is nothing else to install.
+
+Calling Gradle directly works as well:
+
+```bash
+cd extra/intelij/snipshot-plugin
+./gradlew buildPlugin
+```
 
 To try it in a sandbox IDE instead:
 

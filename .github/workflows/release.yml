@@ -16,8 +16,6 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.package.outputs.version }}
     steps:
       - uses: actions/checkout@v4
 
@@ -34,10 +32,6 @@ jobs:
 
       - name: Test
         run: npm test
-
-      - name: Read the package version
-        id: package
-        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
   build-and-release:
     needs: test
@@ -70,15 +64,11 @@ jobs:
       # The plugin zip installs straight from disk in the IDE, so it ships
       # with the same version as the release it belongs to.
       - name: Build the IntelliJ plugin
-        working-directory: extra/intelij/snipshot-plugin
-        run: ./gradlew buildPlugin -PpluginVersion="${VERSION}" --no-daemon
-        env:
-          VERSION: ${{ needs.test.outputs.version }}
+        run: npm run build:plugin
 
       - name: Package archives
         run: |
           set -euo pipefail
-          VERSION=$(node -p "require('./package.json').version")
           mkdir -p release
 
           # Archive names carry no version on purpose: it keeps
@@ -95,8 +85,7 @@ jobs:
           (cd standalone/win && zip -9 ../../release/snipshot-windows-x64.zip snipshot.exe)
 
           # IntelliJ plugin, installable through Plugins | Install Plugin from Disk
-          cp "extra/intelij/snipshot-plugin/build/distributions/snipshot-plugin-${VERSION}.zip" \
-             release/snipshot-intellij-plugin.zip
+          cp standalone/intellij/snipshot-intellij-plugin.zip release/
 
           ls -lh release/
 

@@ -28,6 +28,7 @@
     "test:watch": "vitest",
     "start": "node dist/index.js",
     "prepublishOnly": "npm run build && npm test",
+    "build:plugin": "node scripts/build-plugin.mjs",
     "build:standalone": "node scripts/build-standalone.mjs",
     "build:standalone:linux": "node scripts/build-standalone.mjs linux",
     "build:standalone:win": "node scripts/build-standalone.mjs win",
