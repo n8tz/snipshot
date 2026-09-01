@@ -1,6 +1,11 @@
 import { createCanvas, GlobalFonts } from '@napi-rs/canvas';
-import type { TokenizedLine, HighlightSpec, TokenInfo } from './types.js';
+import type { TokenizedLine, HighlightSpec } from './types.js';
 import { THEMES, type Theme } from './themes.js';
+import {
+  FONT_SIZE, LINE_HEIGHT, PADDING_X, PADDING_Y, HEADER_HEIGHT,
+  GUTTER_PADDING, GUTTER_SEPARATOR_WIDTH, WRAP_INDENT_CHARS,
+  buildFoldMaps, buildVisualRows, type VisualRow,
+} from './layout.js';
 import { existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -23,16 +28,6 @@ const fontCandidates = [
 const fontPath = fontCandidates.find(p => existsSync(p)) || fontCandidates[0];
 GlobalFonts.registerFromPath(fontPath, 'JetBrains Mono');
 
-// Constants
-const FONT_SIZE = 14;
-const LINE_HEIGHT = 22;
-const PADDING_X = 16;
-const PADDING_Y = 12;
-const HEADER_HEIGHT = 36;
-const GUTTER_PADDING = 12;
-const GUTTER_SEPARATOR_WIDTH = 1;
-const WRAP_INDENT_CHARS = 4;
-
 interface RenderInput {
   tokenizedLines: TokenizedLine[];
   startLine: number;
@@ -44,93 +39,6 @@ interface RenderInput {
   theme?: Theme;
   /** Max rendered rows allowed; `null`/undefined disables the check. */
   maxLines?: number | null;
-}
-
-// A visual row produced by wrapping a source line
-interface VisualRow {
-  tokens: TokenInfo[];
-  sourceLineIndex: number;
-  sourceLineNum: number;
-  isFirstRow: boolean;
-  charStart: number; // 0-based start position in original expanded line text
-  charEnd: number;   // 0-based end position (exclusive)
-  isFold?: boolean;  // true = fold indicator row
-  foldCount?: number; // number of folded lines
-}
-
-function wrapTokens(
-  tokens: TokenInfo[],
-  availableWidth: number,
-  wrapIndentWidth: number,
-  cw: number, // charWidth
-): { tokens: TokenInfo[]; charStart: number; charEnd: number }[] {
-  // Expand tabs
-  const expanded: TokenInfo[] = tokens.map(t => ({
-    text: t.text.replace(/\t/g, '    '),
-    color: t.color,
-  }));
-
-  const totalChars = expanded.reduce((n, t) => n + t.text.length, 0);
-  if (cw * totalChars <= availableWidth) {
-    return [{ tokens: expanded, charStart: 0, charEnd: totalChars }];
-  }
-
-  const rows: { tokens: TokenInfo[]; charStart: number; charEnd: number }[] = [];
-  let currentRow: TokenInfo[] = [];
-  let currentChars = 0;
-  let isFirstRow = true;
-  let globalCharPos = 0;
-  let rowCharStart = 0;
-
-  const remaining = [...expanded];
-
-  while (remaining.length > 0) {
-    const maxChars = Math.floor((isFirstRow ? availableWidth : availableWidth - wrapIndentWidth) / cw);
-    const token = remaining.shift()!;
-
-    if (currentChars + token.text.length <= maxChars) {
-      currentRow.push(token);
-      currentChars += token.text.length;
-      globalCharPos += token.text.length;
-    } else {
-      let text = token.text;
-
-      while (text.length > 0) {
-        const rowMaxChars = Math.floor((isFirstRow ? availableWidth : availableWidth - wrapIndentWidth) / cw);
-        const spaceLeft = rowMaxChars - currentChars;
-
-        const fitCount = Math.max(0, Math.min(spaceLeft, text.length));
-
-        if (fitCount > 0) {
-          currentRow.push({ text: text.substring(0, fitCount), color: token.color });
-          currentChars += fitCount;
-          globalCharPos += fitCount;
-          text = text.substring(fitCount);
-        }
-
-        if (text.length > 0) {
-          rows.push({ tokens: currentRow, charStart: rowCharStart, charEnd: globalCharPos });
-          isFirstRow = false;
-          currentRow = [];
-          currentChars = 0;
-          rowCharStart = globalCharPos;
-
-          if (fitCount === 0) {
-            currentRow.push({ text: text[0], color: token.color });
-            currentChars = 1;
-            globalCharPos += 1;
-            text = text.substring(1);
-          }
-        }
-      }
-    }
-  }
-
-  if (currentRow.length > 0) {
-    rows.push({ tokens: currentRow, charStart: rowCharStart, charEnd: globalCharPos });
-  }
-
-  return rows.length > 0 ? rows : [{ tokens: [], charStart: 0, charEnd: 0 }];
 }
 
 export async function renderCode(input: RenderInput): Promise<Buffer> {
@@ -152,19 +60,7 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
   const HIGHLIGHT_COLORS = theme.highlight;
 
   // Build a set of folded line numbers for fast lookup
-  const foldedLines = new Set<number>();
-  const foldStarts = new Map<number, number>(); // foldStartLine → count of folded lines
-  if (folds) {
-    for (const fold of folds) {
-      const fStart = Math.max(fold.start, startLine);
-      const fEnd = Math.min(fold.end, endLine);
-      if (fStart > fEnd) continue;
-      foldStarts.set(fStart, fEnd - fStart + 1);
-      for (let l = fStart; l <= fEnd; l++) {
-        foldedLines.add(l);
-      }
-    }
-  }
+  const { foldedLines, foldStarts } = buildFoldMaps(folds, startLine, endLine);
 
   // Measure context
   const measureCanvas = createCanvas(1, 1);
@@ -179,59 +75,20 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
   const gutterWidth = charWidth * maxLineNumStr.length + GUTTER_PADDING * 2;
 
   const wrapIndentWidth = charWidth * WRAP_INDENT_CHARS;
-  const wrapIndicatorWidth = measureCtx.measureText('\u21B3 ').width;
+  const wrapIndicatorWidth = measureCtx.measureText('↳ ').width;
   const totalWrapIndent = wrapIndentWidth + wrapIndicatorWidth;
 
   // Build visual rows
-  const visualRows: VisualRow[] = [];
-
-  for (let i = 0; i < visibleLines.length; i++) {
-    const lineNum = startLine + i;
-
-    // Skip folded lines, but insert a fold indicator at the fold start
-    if (foldedLines.has(lineNum)) {
-      if (foldStarts.has(lineNum)) {
-        visualRows.push({
-          tokens: [],
-          sourceLineIndex: i,
-          sourceLineNum: lineNum,
-          isFirstRow: true,
-          charStart: 0,
-          charEnd: 0,
-          isFold: true,
-          foldCount: foldStarts.get(lineNum),
-        });
-      }
-      continue;
-    }
-
-    if (maxWidth) {
-      const availableContentWidth = maxWidth - gutterWidth - GUTTER_SEPARATOR_WIDTH - PADDING_X * 2;
-      const wrappedRows = wrapTokens(visibleLines[i], availableContentWidth, totalWrapIndent, charWidth);
-
-      for (let r = 0; r < wrappedRows.length; r++) {
-        visualRows.push({
-          tokens: wrappedRows[r].tokens,
-          sourceLineIndex: i,
-          sourceLineNum: lineNum,
-          isFirstRow: r === 0,
-          charStart: wrappedRows[r].charStart,
-          charEnd: wrappedRows[r].charEnd,
-        });
-      }
-    } else {
-      const expanded = visibleLines[i].map(t => ({ text: t.text.replace(/\t/g, '    '), color: t.color }));
-      const totalChars = expanded.reduce((n, t) => n + t.text.length, 0);
-      visualRows.push({
-        tokens: expanded,
-        sourceLineIndex: i,
-        sourceLineNum: lineNum,
-        isFirstRow: true,
-        charStart: 0,
-        charEnd: totalChars,
-      });
-    }
-  }
+  const visualRows: VisualRow[] = buildVisualRows({
+    visibleLines,
+    startLine,
+    foldedLines,
+    foldStarts,
+    maxWidth,
+    gutterWidth,
+    totalWrapIndent,
+    charWidth,
+  });
 
   // Enforce the max rendered-rows limit (folds already collapsed to one row,
   // wrapped lines already counted as separate rows). Keeps the image short
@@ -377,10 +234,10 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
       // Dots in gutter
       ctx.fillStyle = FOLD_TEXT_COLOR;
       ctx.textAlign = 'right';
-      ctx.fillText('\u22EE', gutterWidth - GUTTER_PADDING, textY);
+      ctx.fillText('⋮', gutterWidth - GUTTER_PADDING, textY);
       // Fold label
       ctx.textAlign = 'left';
-      const label = `\u2022\u2022\u2022  ${vRow.foldCount} lines folded  \u2022\u2022\u2022`;
+      const label = `•••  ${vRow.foldCount} lines folded  •••`;
       ctx.fillText(label, codeStartX, textY);
       continue;
     }
@@ -397,7 +254,7 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
     if (!vRow.isFirstRow) {
       x += wrapIndentWidth;
       ctx.fillStyle = WRAP_INDICATOR_COLOR;
-      ctx.fillText('\u21B3 ', codeStartX, textY);
+      ctx.fillText('↳ ', codeStartX, textY);
       x += wrapIndicatorWidth;
     }
 

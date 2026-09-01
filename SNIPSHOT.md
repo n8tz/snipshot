@@ -1,6 +1,6 @@
 # snipshot — CLI reference for AI agents
 
-`snipshot` generates PNG screenshots of code with syntax highlighting. Use it to produce visual code snippets for reports, documentation, or reviews.
+`snipshot` generates PNG screenshots of code with syntax highlighting (or SVG documents with `--svg`, or ANSI-colored terminal text with `--ansi`). Use it to produce visual code snippets for reports, documentation, or reviews.
 
 ## Command
 
@@ -25,7 +25,9 @@ snipshot <file> --lines <start>-<end> [options]
 - `--theme <name>` — color theme: `dark` (default, One Dark Pro) or `light` (One Light).
 - `--max-width <pixels>` — cap image width with word wrap. Default: `800` (≈ a page width, so it fits a document). Increase for wider code.
 - `--no-max-width` — disable word wrap; the image grows as wide as the longest line.
-- `--output <path>` — output PNG path. Default: `<filename>_L<start>-<end>.png` in cwd.
+- `--svg` — write an SVG document instead of a PNG. Default name: `<filename>_L<start>-<end>.svg`. Same layout as the PNG (header, gutter, folds, wrapping, highlights); scalable and much smaller. Conflicts with `--ansi`.
+- `--ansi` — print the snippet to stdout as ANSI-colored text (24-bit truecolor) instead of writing a file: same header, line numbers, folds and red/green highlights. Lines are not wrapped (`--max-width` is ignored). With `--output <path>`, the colored text is saved to that file instead of printed. Conflicts with `--svg`.
+- `--output <path>` — output PNG (or SVG) path. Default: `<filename>_L<start>-<end>.png` (or `.svg`) in cwd.
 - `--root <path>` — project root for the relative path shown in the header. Default: the nearest `.git` directory above the file; if none is found, the current working directory.
 
 ## Highlight / fold spec format
@@ -86,6 +88,16 @@ snipshot src/app.tsx --lines 50-80 --output docs/images/app-snippet.png
 snipshot src/app.tsx --lines 50-80 --theme light
 ```
 
+**SVG output (scalable, small — good for docs/web):**
+```bash
+snipshot src/app.tsx --lines 50-80 --svg
+```
+
+**Show the snippet directly in the terminal (no file written):**
+```bash
+snipshot src/app.tsx --lines 50-80 --highlight-red 55 --ansi
+```
+
 **Large extract that won't fit a page — fold the noise or lift the limit:**
 ```bash
 snipshot src/service.ts --lines 1-200 --fold 1-30,120-180   # collapse to fit
@@ -104,7 +116,9 @@ snipshot src/service.ts --lines 1-200 --no-max-lines        # allow a tall image
 - Column highlights (`--highlight-red 47:12-38`) draw a colored rectangle around the specified characters. They work correctly across wrapped lines.
 - `--fold` ranges are clipped to the `--lines` window, so you can safely fold beyond the captured range. Folded lines render as a single `••• N lines folded •••` row with a dotted gutter marker. Highlights that fall inside a folded range are hidden.
 - Language is auto-detected from 150+ file extensions (and common filenames like `Dockerfile`, `Makefile`). Unknown or unsupported types fall back to plaintext rendering — the screenshot still succeeds, just without syntax colors.
-- Output is always PNG (not JPG).
+- Output is PNG by default (never JPG). `--svg` writes an SVG with the identical layout; `--ansi` prints ANSI-colored text to stdout (or to `--output` if given) and exits without creating an image.
+- In `--ansi` mode, full-line highlights render as a tinted background band with a `▎` left bar; column highlights render underlined with a stronger tint (terminals can't draw boxes). Requires a truecolor (24-bit) terminal — standard in modern terminals.
+- SVG output does not embed the font: it declares JetBrains Mono with a monospace fallback stack, and per-token `textLength` keeps alignment exact whatever font actually renders.
 - The header displays the file path relative to the project root (see `--root`). Without a `.git` ancestor and without `--root`, the root is the current working directory, so a file outside it shows a `../`-prefixed path — run from the right directory or pass `--root` to control this.
 - The `--theme` flag switches both the syntax colors and the editor chrome (background, gutter, header). Default is `dark`.
 - Running `snipshot` with no arguments prints the help text (exit 0) instead of an error.

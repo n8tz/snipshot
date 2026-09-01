@@ -4,12 +4,13 @@
   <a href="https://www.npmjs.com/package/snipshot"><img src="https://img.shields.io/npm/v/snipshot.svg" alt="npm version" /></a>
   <a href="https://github.com/n8tz/snipshot/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/snipshot.svg" alt="license" /></a>
   <a href="https://www.npmjs.com/package/snipshot"><img src="https://img.shields.io/npm/dm/snipshot.svg" alt="downloads" /></a>
+  <a href="https://github.com/n8tz/snipshot/actions/workflows/ci.yml"><img src="https://github.com/n8tz/snipshot/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
 </p>
 
 ---
 <p align="center">
-  <strong>Generate beautiful PNG screenshots of code snippets from the command line.</strong><br>
-  Syntax highlighting, line numbers, and colored annotations — no browser required.
+  <strong>Generate beautiful screenshots of code snippets from the command line.</strong><br>
+  PNG, SVG, or ANSI terminal output — syntax highlighting, line numbers, and colored annotations, no browser required.
 </p>
 
 ---
@@ -31,8 +32,10 @@
 - **Page-width word wrap** — long lines wrap to fit a document by default (`--max-width` / `--no-max-width`)
 - **Automatic language detection** from 150+ file extensions, with graceful plaintext fallback for unknown types
 - **Dark & light themes** — One Dark Pro (default) or One Light via `--theme`
+- **SVG output** — same layout as a crisp, scalable vector file via `--svg`
+- **Terminal output** — print the snippet as ANSI-colored text (24-bit color) via `--ansi`
 - **Offline** — everything runs locally, no network needed
-- **Standalone binaries** for Linux, Windows, and macOS (via Bun compile)
+- **Standalone binaries** for Linux, Windows, and macOS (via Bun compile), built and attached to [Releases](../../releases) automatically
 
 ## Install
 
@@ -65,7 +68,9 @@ snipshot <file> --lines <start>-<end> [options]
 | `--theme <name>` | Color theme: `dark` (default) or `light` |
 | `--max-width <pixels>` | Max image width with word wrap (default: `800` ≈ a page width) |
 | `--no-max-width` | Disable word wrap (image grows to the longest line) |
-| `--output <path>` | Output file path (default: `<name>_L<start>-<end>.png`) |
+| `--svg` | Write an SVG document instead of a PNG (default name: `<name>_L<start>-<end>.svg`) |
+| `--ansi` | Print the snippet to stdout as ANSI-colored text (24-bit color) instead of writing a file; with `--output`, saves the colored text there |
+| `--output <path>` | Output file path (default: `<name>_L<start>-<end>.png` or `.svg`) |
 | `--root <path>` | Project root for the header path (default: nearest `.git` above the file, else the current directory) |
 
 Running `snipshot` with no arguments prints this help.
@@ -110,6 +115,12 @@ snipshot src/App.java --lines 42-56 --theme light
 
 # Custom output path
 snipshot src/App.java --lines 42-56 --output screenshot.png
+
+# SVG instead of PNG (scalable, small file)
+snipshot src/App.java --lines 42-56 --svg
+
+# ANSI-colored output straight to the terminal
+snipshot src/App.java --lines 42-56 --highlight-red 47 --ansi
 ```
 
 ## Examples
@@ -130,6 +141,12 @@ snipshot src/App.java --lines 42-56 --output screenshot.png
 
 <p align="center">
   <img src="examples/java-class-header.png" alt="Clean example" />
+</p>
+
+**SVG output (`--svg`) — same layout, scalable and ~4× smaller:**
+
+<p align="center">
+  <img src="examples/svg-output.svg" alt="SVG example" />
 </p>
 
 ### Light theme (`--theme light`)
@@ -158,11 +175,14 @@ Pre-built binaries include the Bun runtime — no Node.js installation needed on
 
 ### Download
 
-Grab the archive for your platform from [Releases](../../releases), extract it, and run:
+Grab the archive for your platform from [Releases](../../releases) (`.tar.gz` for Linux/macOS, `.zip` for Windows), extract it, and run:
 
 ```bash
+tar xzf snipshot-v*-linux-x64.tar.gz
 ./snipshot src/App.java --lines 10-30
 ```
+
+Releases are built automatically by GitHub Actions: pushing a `v*` tag runs the tests, cross-compiles all four platform binaries, and attaches the archives to a GitHub Release.
 
 ### Build from source
 
@@ -206,8 +226,8 @@ sudo ln -s /opt/snipshot /usr/local/bin/snipshot
 
 1. Reads the **full source file** (not just the requested lines) to ensure accurate syntax highlighting
 2. Tokenizes with [Shiki](https://shiki.style) using the One Dark Pro theme (or One Light with `--theme light`)
-3. Renders to a canvas with [@napi-rs/canvas](https://github.com/nickel-rs/canvas) (Skia-based, no browser needed)
-4. Exports as PNG
+3. Renders to a canvas with [@napi-rs/canvas](https://github.com/Brooooooklyn/canvas) (Skia-based, no browser needed)
+4. Exports as PNG — or, from the same layout engine, as an SVG document (`--svg`) or ANSI-colored terminal text (`--ansi`)
 
 The font used is [JetBrains Mono](https://www.jetbrains.com/lp/mono/) (bundled).
 
@@ -219,9 +239,19 @@ cd snipshot
 npm install
 
 npm run build        # compile TypeScript
-npm test             # run tests (34 tests)
+npm test             # run tests (52 tests)
 npm run test:watch   # watch mode
 ```
+
+### Releasing
+
+CI (`.github/workflows/ci.yml`) builds and tests every push and PR on `master`. Publishing a release is one tag away:
+
+```bash
+git tag v1.1.0 && git push origin v1.1.0
+```
+
+The release workflow (`.github/workflows/release.yml`) then runs the tests, cross-compiles the standalone binaries for all four platforms, and attaches them to a GitHub Release as `.tar.gz` (Linux/macOS, executable bit preserved) and `.zip` (Windows) archives.
 
 ## License
 

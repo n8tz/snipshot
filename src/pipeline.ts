@@ -1,16 +1,25 @@
 import { readSourceFile, detectLanguage, findProjectRoot, getRelativePath } from './reader.js';
 import { tokenizeCode } from './highlighter.js';
 import { renderCode } from './renderer.js';
-import { resolveTheme } from './themes.js';
-import type { CodeShotOptions } from './types.js';
+import { renderAnsi } from './ansi.js';
+import { renderSvg } from './svg.js';
+import { resolveTheme, type Theme } from './themes.js';
+import type { CodeShotOptions, TokenizedLine } from './types.js';
 import { writeFileSync } from 'fs';
 import { resolve, basename, extname } from 'path';
 
-export async function generateCodeShot(options: CodeShotOptions): Promise<string> {
-  const { filePath, lineRange, highlights, rootPath } = options;
+interface PreparedSnippet {
+  tokenizedLines: TokenizedLine[];
+  theme: Theme;
+  relativePath: string;
+  startLine: number;
+  endLine: number;
+  maxLines: number | null;
+}
 
-  // Resolve output path
-  const outputPath = options.outputPath || defaultOutputPath(filePath, lineRange.start, lineRange.end);
+/** Shared front half of both outputs: read, tokenize, validate, expand context. */
+async function prepareSnippet(options: CodeShotOptions): Promise<PreparedSnippet> {
+  const { filePath, lineRange, rootPath } = options;
 
   // Resolve theme (defaults to dark)
   const theme = resolveTheme(options.theme);
@@ -42,17 +51,28 @@ export async function generateCodeShot(options: CodeShotOptions): Promise<string
   // Row limit (folds excluded, wraps included). null disables it; default 70.
   const maxLines = options.maxLines === undefined ? 70 : options.maxLines;
 
+  return { tokenizedLines, theme, relativePath, startLine, endLine, maxLines };
+}
+
+export async function generateCodeShot(options: CodeShotOptions): Promise<string> {
+  const { filePath, lineRange, highlights } = options;
+
+  // Resolve output path
+  const outputPath = options.outputPath || defaultOutputPath(filePath, lineRange.start, lineRange.end);
+
+  const prep = await prepareSnippet(options);
+
   // Render
   const pngBuffer = await renderCode({
-    tokenizedLines,
-    startLine,
-    endLine,
-    relativePath,
+    tokenizedLines: prep.tokenizedLines,
+    startLine: prep.startLine,
+    endLine: prep.endLine,
+    relativePath: prep.relativePath,
     highlights,
     maxWidth: options.maxWidth,
     folds: options.folds,
-    theme,
-    maxLines,
+    theme: prep.theme,
+    maxLines: prep.maxLines,
   });
 
   // Save
@@ -62,7 +82,56 @@ export async function generateCodeShot(options: CodeShotOptions): Promise<string
   return resolvedOutput;
 }
 
-function defaultOutputPath(filePath: string, start: number, end: number): string {
+/**
+ * Same pipeline as {@link generateCodeShot}, but renders the snippet as
+ * ANSI-colored text (for terminal output) instead of a PNG. Returns the
+ * colored string; the caller decides where to print or save it.
+ */
+export async function generateCodeShotAnsi(options: CodeShotOptions): Promise<string> {
+  const prep = await prepareSnippet(options);
+
+  return renderAnsi({
+    tokenizedLines: prep.tokenizedLines,
+    startLine: prep.startLine,
+    endLine: prep.endLine,
+    relativePath: prep.relativePath,
+    highlights: options.highlights,
+    folds: options.folds,
+    theme: prep.theme,
+    maxLines: prep.maxLines,
+  });
+}
+
+/**
+ * Same pipeline as {@link generateCodeShot}, but renders the snippet as an
+ * SVG document instead of a PNG. Writes the file and returns its path.
+ */
+export async function generateCodeShotSvg(options: CodeShotOptions): Promise<string> {
+  const { filePath, lineRange } = options;
+
+  const outputPath = options.outputPath || defaultOutputPath(filePath, lineRange.start, lineRange.end, 'svg');
+
+  const prep = await prepareSnippet(options);
+
+  const svg = renderSvg({
+    tokenizedLines: prep.tokenizedLines,
+    startLine: prep.startLine,
+    endLine: prep.endLine,
+    relativePath: prep.relativePath,
+    highlights: options.highlights,
+    maxWidth: options.maxWidth,
+    folds: options.folds,
+    theme: prep.theme,
+    maxLines: prep.maxLines,
+  });
+
+  const resolvedOutput = resolve(outputPath);
+  writeFileSync(resolvedOutput, svg);
+
+  return resolvedOutput;
+}
+
+function defaultOutputPath(filePath: string, start: number, end: number, ext = 'png'): string {
   const name = basename(filePath, extname(filePath));
-  return `${name}_L${start}-${end}.png`;
+  return `${name}_L${start}-${end}.${ext}`;
 }

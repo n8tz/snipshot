@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
 import { Command, Option, InvalidArgumentError } from 'commander';
+import { writeFileSync } from 'fs';
+import { resolve } from 'path';
 import { parseLineRange, parseHighlightSpecs, parseLineRanges } from './parser.js';
-import { generateCodeShot } from './pipeline.js';
+import { generateCodeShot, generateCodeShotAnsi, generateCodeShotSvg } from './pipeline.js';
 import type { HighlightSpec } from './types.js';
 
 /** Accumulate repeated flags. Each value may itself be a comma-separated list. */
@@ -30,8 +32,8 @@ const program = new Command();
 
 program
   .name('snipshot')
-  .description('Generate a PNG screenshot of a code snippet, with syntax highlighting,\nline numbers, optional red/green annotations and folded regions.')
-  .version('1.0.4')
+  .description('Generate a PNG screenshot of a code snippet, with syntax highlighting,\nline numbers, optional red/green annotations and folded regions.\nCan also output the same snippet as SVG (--svg) or ANSI-colored text (--ansi).')
+  .version('1.1.0')
   .argument('<file>', 'source file to screenshot (language auto-detected from its extension)')
   .requiredOption('--lines <range>', 'lines to capture: a single line "42" or a range "42-56" (1-based, inclusive)')
   .option('--highlight-red <specs>', 'draw red highlights; comma-separate and/or repeat (e.g. 13,15-18,19:10-20)', collect, [])
@@ -47,7 +49,11 @@ program
   .addOption(new Option('--max-width <pixels>', 'cap image width and word-wrap long lines; default ~A4 page width so it fits a document')
     .argParser(parsePositiveInt).default(800))
   .addOption(new Option('--no-max-width', 'disable word wrap (image grows as wide as the longest line)'))
-  .option('--output <path>', 'output PNG path (default: <name>_L<start>-<end>.png in the current dir)')
+  .addOption(new Option('--ansi', 'print the snippet to stdout as ANSI-colored text instead of writing a PNG (24-bit color terminal)')
+    .conflicts('svg'))
+  .addOption(new Option('--svg', 'write an SVG document instead of a PNG (default: <name>_L<start>-<end>.svg)')
+    .conflicts('ansi'))
+  .option('--output <path>', 'output PNG/SVG path (default: <name>_L<start>-<end>.png or .svg in the current dir); with --ansi, saves the colored text there instead of printing it')
   .option('--root <path>', 'project root for the path shown in the header (default: nearest .git above the file, else the current directory)')
   .addHelpText('after', `
 Highlight & fold specs:
@@ -69,12 +75,23 @@ Page fit:
     - Height: it errors if the result exceeds 70 rendered rows (folded ranges count as 1 row;
       wrapped lines count each row). Raise with --max-lines <n> or remove with --no-max-lines.
 
+Output formats:
+  PNG (default)  a raster screenshot, written to --output or <name>_L<start>-<end>.png
+  --svg          the same layout as a scalable SVG document (crisp at any zoom,
+                 much smaller file); written to --output or <name>_L<start>-<end>.svg
+  --ansi         ANSI-colored text (24-bit color) printed to stdout: same header,
+                 line numbers, folds and red/green highlights. Lines are not
+                 wrapped (--max-width is ignored); combine with --output <path>
+                 to save the colored text to a file instead of printing it.
+
 Examples:
   snipshot src/app.ts --lines 42-56
   snipshot src/app.ts --lines 42-56 --highlight-red 47,50-52 --highlight-green 55:8-24
   snipshot src/app.ts --lines 1-120 --fold 1-20,90-110
   snipshot src/app.ts --lines 42-56 --theme light --no-context
   snipshot src/app.ts --lines 42-56 --max-width 700 --output docs/snippet.png
+  snipshot src/app.ts --lines 42-56 --svg
+  snipshot src/app.ts --lines 42-56 --ansi
 `)
   .showHelpAfterError('(run "snipshot --help" for usage and examples)')
   .action(async (file: string, opts: {
@@ -86,6 +103,8 @@ Examples:
     maxLines: number | boolean;
     theme: string;
     maxWidth: number | boolean;
+    ansi?: boolean;
+    svg?: boolean;
     output?: string;
     root?: string;
   }) => {
@@ -104,7 +123,7 @@ Examples:
       // --no-max-width sets maxWidth to `false`; map it to undefined (no wrap).
       const maxWidth = opts.maxWidth === false ? undefined : (opts.maxWidth as number);
 
-      const outputPath = await generateCodeShot({
+      const shotOptions = {
         filePath: file,
         lineRange,
         highlights,
@@ -115,7 +134,27 @@ Examples:
         theme: opts.theme,
         contextLines,
         maxLines,
-      });
+      };
+
+      if (opts.ansi) {
+        const text = await generateCodeShotAnsi(shotOptions);
+        if (opts.output) {
+          const resolved = resolve(opts.output);
+          writeFileSync(resolved, text);
+          console.log(`ANSI snippet saved to: ${resolved}`);
+        } else {
+          process.stdout.write(text);
+        }
+        return;
+      }
+
+      if (opts.svg) {
+        const outputPath = await generateCodeShotSvg(shotOptions);
+        console.log(`SVG saved to: ${outputPath}`);
+        return;
+      }
+
+      const outputPath = await generateCodeShot(shotOptions);
 
       console.log(`Screenshot saved to: ${outputPath}`);
     } catch (err) {
