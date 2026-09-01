@@ -36,6 +36,7 @@ object SnipshotRunner {
         object : Task.Backgroundable(project, "Running snipshot", true) {
             override fun run(indicator: ProgressIndicator) {
                 indicator.isIndeterminate = true
+                File(request.outputPath).parentFile?.mkdirs()
 
                 val commandLine = GeneralCommandLine(executable.path)
                     .withParameters(request.toCommandArgs())

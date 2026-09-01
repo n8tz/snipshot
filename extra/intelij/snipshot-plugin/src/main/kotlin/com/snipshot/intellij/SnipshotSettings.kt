@@ -16,8 +16,14 @@ class SnipshotSettings : PersistentStateComponent<SnipshotSettings.State> {
     data class State(
         /** Empty = look the binary up on PATH. */
         var executablePath: String = "",
-        /** Empty = write into the project root. */
+        /** Where images go: see the OUTPUT_* constants. */
+        var outputMode: String = OUTPUT_CLIPBOARD,
+        /** Only used when outputMode is OUTPUT_CUSTOM. */
         var outputDirectory: String = "",
+        /** Folder the last image was saved into, reused by the save dialog. */
+        var lastSaveDirectory: String = "",
+        /** Default format of the plain "Snipshot" actions: "png" or "svg". */
+        var defaultFormat: String = FORMAT_PNG,
         /** "auto" follows the IDE look and feel. */
         var theme: String = THEME_AUTO,
         var contextLines: Int = 3,
@@ -36,8 +42,23 @@ class SnipshotSettings : PersistentStateComponent<SnipshotSettings.State> {
         state = newState
     }
 
+    val isSvgByDefault: Boolean
+        get() = state.defaultFormat == FORMAT_SVG
+
     companion object {
         const val THEME_AUTO = "auto"
+
+        const val FORMAT_PNG = "png"
+        const val FORMAT_SVG = "svg"
+
+        /** Straight onto the clipboard, no file. PNG only. */
+        const val OUTPUT_CLIPBOARD = "clipboard"
+        /** Show a save dialog, starting where the last image was saved. */
+        const val OUTPUT_ASK = "ask"
+        /** A .snipshot directory inside the project. */
+        const val OUTPUT_PROJECT_SNIPSHOT = "projectSnipshot"
+        const val OUTPUT_PROJECT_ROOT = "projectRoot"
+        const val OUTPUT_CUSTOM = "custom"
 
         fun getInstance(): SnipshotSettings =
             ApplicationManager.getApplication().getService(SnipshotSettings::class.java)
@@ -46,8 +67,9 @@ class SnipshotSettings : PersistentStateComponent<SnipshotSettings.State> {
         private val CANDIDATES = listOf("snipshot", "snipshot.cmd", "snipshot.exe", "snipshot.bat")
 
         /**
-         * The configured binary, or the first `snipshot` found on PATH.
-         * Returns null when snipshot cannot be located.
+         * The binary to run: whatever was configured, else one downloaded by
+         * the plugin, else the first `snipshot` found on PATH. Null when
+         * snipshot cannot be located at all.
          */
         fun resolveExecutable(): File? {
             val configured = getInstance().state.executablePath.trim()
@@ -55,6 +77,7 @@ class SnipshotSettings : PersistentStateComponent<SnipshotSettings.State> {
                 val file = File(configured)
                 return if (file.canExecute()) file else null
             }
+            SnipshotDownloader.downloadedBinary()?.let { return it }
             return CANDIDATES.firstNotNullOfOrNull { PathEnvironmentVariableUtil.findInPath(it) }
         }
     }

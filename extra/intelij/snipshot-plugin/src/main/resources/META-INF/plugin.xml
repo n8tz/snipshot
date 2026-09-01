@@ -10,7 +10,8 @@
 
     <ul>
       <li>The file path is drawn in the image header, relative to the project root.</li>
-      <li>Red and green annotations: mark lines in the editor, then shoot.</li>
+      <li>Red and green annotations: "Snipshot this (red)" outlines the selection
+          inside the surrounding window, or mark several regions and shoot once.</li>
       <li>Folded regions collapse to a single "N lines folded" row.</li>
       <li>Several selections (multiple carets) become several ranges in one image,
           with the gaps folded automatically.</li>
@@ -34,6 +35,17 @@
 
     <actions>
         <group id="Snipshot.Menu" text="Snipshot" popup="true">
+            <action id="Snipshot.ThisRed"
+                    class="com.snipshot.intellij.actions.SnipshotThisRedAction"
+                    text="Snipshot this (red)"
+                    description="Screenshot the visible window and outline the selection in red"/>
+            <action id="Snipshot.ThisGreen"
+                    class="com.snipshot.intellij.actions.SnipshotThisGreenAction"
+                    text="Snipshot this (green)"
+                    description="Screenshot the visible window and outline the selection in green"/>
+
+            <separator/>
+
             <action id="Snipshot.Save"
                     class="com.snipshot.intellij.actions.SnipshotSaveAction"
                     text="Snipshot Selection"

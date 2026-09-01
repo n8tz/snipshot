@@ -57,17 +57,20 @@ jobs:
       - name: Package archives
         run: |
           set -euo pipefail
-          VERSION=$(node -p "require('./package.json').version")
           mkdir -p release
+
+          # Archive names carry no version on purpose: it keeps
+          # /releases/latest/download/<name> a stable URL, which is what the
+          # IntelliJ plugin downloads from. The version is on the release itself.
 
           # Unix platforms: tar.gz preserving the executable bit
           chmod 755 standalone/linux/snipshot standalone/mac-intel/snipshot standalone/mac-arm/snipshot
-          tar -czf "release/snipshot-v${VERSION}-linux-x64.tar.gz"    -C standalone/linux     snipshot
-          tar -czf "release/snipshot-v${VERSION}-macos-x64.tar.gz"    -C standalone/mac-intel snipshot
-          tar -czf "release/snipshot-v${VERSION}-macos-arm64.tar.gz"  -C standalone/mac-arm   snipshot
+          tar -czf release/snipshot-linux-x64.tar.gz    -C standalone/linux     snipshot
+          tar -czf release/snipshot-macos-x64.tar.gz    -C standalone/mac-intel snipshot
+          tar -czf release/snipshot-macos-arm64.tar.gz  -C standalone/mac-arm   snipshot
 
           # Windows: zip
-          (cd standalone/win && zip -9 "../../release/snipshot-v${VERSION}-windows-x64.zip" snipshot.exe)
+          (cd standalone/win && zip -9 ../../release/snipshot-windows-x64.zip snipshot.exe)
 
           ls -lh release/
 

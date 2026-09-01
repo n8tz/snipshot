@@ -200,7 +200,7 @@ Pre-built binaries include the Bun runtime — no Node.js installation needed on
 Grab the archive for your platform from [Releases](../../releases) (`.tar.gz` for Linux/macOS, `.zip` for Windows), extract it, and run:
 
 ```bash
-tar xzf snipshot-v*-linux-x64.tar.gz
+tar xzf snipshot-linux-x64.tar.gz
 ./snipshot src/App.java --lines 10-30
 ```
 
@@ -247,9 +247,14 @@ sudo ln -s /opt/snipshot /usr/local/bin/snipshot
 ## IntelliJ plugin
 
 An IntelliJ IDEA plugin lives in [`extra/intelij/snipshot-plugin`](extra/intelij/snipshot-plugin):
-right-click a selection in the editor and get the same image the CLI produces —
-file path in the header, red/green annotations you mark in the editor, folds, and
-multi-caret selections captured as several ranges in one image.
+right-click a selection and get the same image the CLI produces — on the clipboard
+by default. *Snipshot this (red)* shoots the visible window with your selection
+outlined in it; you also get the file path in the header, marks for red/green/fold
+annotations, and multi-caret selections captured as several ranges in one image.
+
+Its settings page can download the standalone binary for you, and chooses where
+images go: clipboard, a save dialog that remembers the last folder, `.snipshot/` in
+the project, the project root, or a fixed directory.
 
 ```bash
 cd extra/intelij/snipshot-plugin

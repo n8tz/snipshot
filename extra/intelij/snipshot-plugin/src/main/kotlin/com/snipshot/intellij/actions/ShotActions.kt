@@ -1,77 +1,75 @@
 package com.snipshot.intellij.actions
 
-import com.intellij.notification.NotificationType
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.ide.CopyPasteManager
 import com.intellij.openapi.project.Project
+import com.snipshot.intellij.MarkKind
 import com.snipshot.intellij.SnipshotContext
 import com.snipshot.intellij.SnipshotOptionsDialog
+import com.snipshot.intellij.SnipshotOutput
 import com.snipshot.intellij.SnipshotRunner
-import java.awt.Image
-import java.awt.datatransfer.DataFlavor
-import java.awt.datatransfer.Transferable
-import java.awt.datatransfer.UnsupportedFlavorException
-import java.io.File
-import javax.imageio.ImageIO
+import com.snipshot.intellij.SnipshotSettings
 
-/** Shoots the current selection (or the visible area) straight to a PNG. */
+/**
+ * "Snipshot this" — shoot the visible window and outline the selection in it.
+ * The selection is not the subject of the image, it is what the image points
+ * at, so the surrounding code stays visible. A selection inside a single line
+ * is outlined character-precisely; anything wider is highlighted line by line.
+ */
+abstract class SnipshotThisAction(private val kind: MarkKind) : SnipshotActionBase() {
+
+    override fun isEnabled(editor: Editor?): Boolean = editor?.selectionModel?.hasSelection() == true
+
+    override fun perform(project: Project, editor: Editor, filePath: String) {
+        val selection = SnipshotContext.selectionRange(editor)
+        val window = SnipshotContext.windowRangeCovering(editor, selection)
+        val spec = SnipshotContext.selectionHighlightSpec(editor)
+        val request = SnipshotContext.buildRequest(
+            project = project,
+            editor = editor,
+            filePath = filePath,
+            svg = SnipshotSettings.getInstance().isSvgByDefault,
+            lines = window.toString(),
+            extraRed = if (kind == MarkKind.RED) spec else "",
+            extraGreen = if (kind == MarkKind.GREEN) spec else "",
+        )
+        SnipshotOutput.send(project, request)
+    }
+}
+
+class SnipshotThisRedAction : SnipshotThisAction(MarkKind.RED)
+
+class SnipshotThisGreenAction : SnipshotThisAction(MarkKind.GREEN)
+
+/** Shoots the current selection (or the visible area) to the default destination. */
 class SnipshotSaveAction : SnipshotActionBase() {
     override fun perform(project: Project, editor: Editor, filePath: String) {
-        val request = SnipshotContext.buildRequest(project, editor, filePath, svg = false)
-        SnipshotRunner.run(project, request)
+        val svg = SnipshotSettings.getInstance().isSvgByDefault
+        SnipshotOutput.send(project, SnipshotContext.buildRequest(project, editor, filePath, svg = svg))
     }
 }
 
-/** Same, as an SVG document. */
+/** Same, forced to SVG. */
 class SnipshotSvgAction : SnipshotActionBase() {
     override fun perform(project: Project, editor: Editor, filePath: String) {
-        val request = SnipshotContext.buildRequest(project, editor, filePath, svg = true)
-        SnipshotRunner.run(project, request)
+        SnipshotOutput.send(project, SnipshotContext.buildRequest(project, editor, filePath, svg = true))
     }
 }
 
-/** Renders to a temp file and puts the image on the clipboard, ready to paste. */
+/** Straight onto the clipboard, whatever the configured destination is. */
 class SnipshotCopyAction : SnipshotActionBase() {
     override fun perform(project: Project, editor: Editor, filePath: String) {
-        val temp = File.createTempFile("snipshot-", ".png").apply { deleteOnExit() }
-        val request = SnipshotContext
-            .buildRequest(project, editor, filePath, svg = false)
-            .copy(outputPath = temp.path)
-
-        SnipshotRunner.run(project, request) { file ->
-            val image = runCatching { ImageIO.read(file) }.getOrNull()
-            if (image == null) {
-                SnipshotRunner.notify(project, "Could not read the generated image.", NotificationType.ERROR)
-                return@run
-            }
-            ApplicationManager.getApplication().invokeLater {
-                CopyPasteManager.getInstance().setContents(ImageTransferable(image))
-                SnipshotRunner.notify(project, "Snipshot copied to the clipboard.", NotificationType.INFORMATION)
-            }
-        }
+        SnipshotOutput.sendToClipboard(project, SnipshotContext.buildRequest(project, editor, filePath, svg = false))
     }
 }
 
 /** Opens the full options dialog, pre-filled from the selection and the marks. */
 class SnipshotOptionsAction : SnipshotActionBase() {
     override fun perform(project: Project, editor: Editor, filePath: String) {
-        val request = SnipshotContext.buildRequest(project, editor, filePath, svg = false)
+        val svg = SnipshotSettings.getInstance().isSvgByDefault
+        val request = SnipshotContext.buildRequest(project, editor, filePath, svg = svg)
         val dialog = SnipshotOptionsDialog(project, request)
         if (dialog.showAndGet()) {
             SnipshotRunner.run(project, dialog.editedRequest())
         }
-    }
-}
-
-/** Minimal image clipboard payload — Swing only needs the image flavor. */
-private class ImageTransferable(private val image: Image) : Transferable {
-    override fun getTransferDataFlavors(): Array<DataFlavor> = arrayOf(DataFlavor.imageFlavor)
-
-    override fun isDataFlavorSupported(flavor: DataFlavor): Boolean = DataFlavor.imageFlavor == flavor
-
-    override fun getTransferData(flavor: DataFlavor): Any {
-        if (!isDataFlavorSupported(flavor)) throw UnsupportedFlavorException(flavor)
-        return image
     }
 }

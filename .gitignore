@@ -9,3 +9,6 @@ standalone/
 .vscode/
 *.swp
 *.swo
+
+# snipshots written by the IntelliJ plugin
+.snipshot/

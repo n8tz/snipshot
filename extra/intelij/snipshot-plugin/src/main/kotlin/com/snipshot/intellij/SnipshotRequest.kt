@@ -87,16 +87,60 @@ object SnipshotContext {
         return LineRange(start, maxOf(start, end))
     }
 
-    /** Builds a request from the editor, the stored marks and the settings. */
-    fun buildRequest(project: Project, editor: Editor, filePath: String, svg: Boolean): SnipshotRequest {
+    /**
+     * The visible area, widened if needed so [selection] is inside the shot.
+     * Keeps "shoot the window, point at this" from producing an image whose
+     * annotation is off-screen.
+     */
+    fun windowRangeCovering(editor: Editor, selection: LineRange): LineRange {
+        val visible = visibleRange(editor)
+        return LineRange(minOf(visible.start, selection.start), maxOf(visible.end, selection.end))
+    }
+
+    /**
+     * The selection as a snipshot highlight spec. A selection sitting inside a
+     * single line becomes a column box ("47:12-38") so only those characters
+     * are outlined; anything else becomes a line range.
+     */
+    fun selectionHighlightSpec(editor: Editor): String {
+        val model = editor.selectionModel
+        if (!model.hasSelection()) return ""
+
+        val range = selectionRange(editor)
+        val start = editor.offsetToLogicalPosition(model.selectionStart)
+        val end = editor.offsetToLogicalPosition(model.selectionEnd)
+        if (start.line != end.line || end.column <= start.column) return range.toString()
+
+        val document = editor.document
+        val coversWholeLine = model.selectionStart <= document.getLineStartOffset(start.line) &&
+            model.selectionEnd >= document.getLineEndOffset(start.line)
+        if (coversWholeLine) return range.toString()
+
+        // snipshot columns are 1-based and inclusive; the selection end is exclusive.
+        return "${range.start}:${start.column + 1}-${end.column}"
+    }
+
+    /**
+     * Builds a request from the editor, the stored marks and the settings.
+     * [lines] defaults to the selections (or the visible area), and the extra
+     * specs are merged on top of the marks for one-shot annotations.
+     */
+    fun buildRequest(
+        project: Project,
+        editor: Editor,
+        filePath: String,
+        svg: Boolean,
+        lines: String = captureRanges(editor).joinToString(",") { it.toString() },
+        extraRed: String = "",
+        extraGreen: String = "",
+    ): SnipshotRequest {
         val settings = SnipshotSettings.getInstance().state
         val marks = SnipshotMarks.getInstance(project)
-        val lines = captureRanges(editor).joinToString(",") { it.toString() }
         return SnipshotRequest(
             filePath = filePath,
             lines = lines,
-            red = marks.spec(editor, MarkKind.RED),
-            green = marks.spec(editor, MarkKind.GREEN),
+            red = mergeSpecs(marks.spec(editor, MarkKind.RED), extraRed),
+            green = mergeSpecs(marks.spec(editor, MarkKind.GREEN), extraGreen),
             folds = marks.spec(editor, MarkKind.FOLD),
             theme = resolveTheme(settings.theme),
             contextLines = settings.contextLines,
@@ -108,20 +152,36 @@ object SnipshotContext {
         )
     }
 
+    /** Joins non-empty CLI specs, e.g. marks plus a one-shot selection. */
+    private fun mergeSpecs(vararg specs: String): String =
+        specs.filter { it.isNotBlank() }.joinToString(",")
+
     /** "auto" resolves against the current IDE look and feel. */
     fun resolveTheme(configured: String): String = when (configured) {
         SnipshotSettings.THEME_AUTO -> if (JBColor.isBright()) "light" else "dark"
         else -> configured
     }
 
+    /** Where images are written, per the output-mode setting. */
+    fun outputDirectory(project: Project): File {
+        val settings = SnipshotSettings.getInstance().state
+        val base = project.basePath ?: System.getProperty("user.home")
+        return when (settings.outputMode) {
+            SnipshotSettings.OUTPUT_CUSTOM ->
+                File(settings.outputDirectory.trim().ifEmpty { base })
+            SnipshotSettings.OUTPUT_PROJECT_ROOT -> File(base)
+            SnipshotSettings.OUTPUT_PROJECT_SNIPSHOT -> File(base, ".snipshot")
+            // Ask mode: where the dialog will open, and what the options
+            // dialog pre-fills.
+            else -> File(settings.lastSaveDirectory.trim().ifEmpty { base })
+        }
+    }
+
     /** `<outputDir>/<name>_L<ranges>.<ext>`, with "+" between ranges like the CLI. */
     fun defaultOutput(project: Project, filePath: String, lines: String, svg: Boolean): File {
-        val settings = SnipshotSettings.getInstance().state
-        val directory = settings.outputDirectory.trim()
-            .ifEmpty { project.basePath ?: System.getProperty("user.home") }
         val baseName = File(filePath).nameWithoutExtension
         val label = lines.replace(",", "+")
         val extension = if (svg) "svg" else "png"
-        return File(directory, "${baseName}_L$label.$extension")
+        return File(outputDirectory(project), "${baseName}_L$label.$extension")
     }
 }

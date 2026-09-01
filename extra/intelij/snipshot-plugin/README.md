@@ -14,15 +14,15 @@ What the existing IDE screenshot plugins don't do, and this one does:
 
 ## Requirements
 
-The snipshot CLI must be installed:
+The snipshot CLI does the rendering. You do not have to install it by hand:
+**Settings | Tools | Snipshot** has a **Download binary** button that fetches the
+standalone build for your platform from the
+[releases](https://github.com/9pings/snipshot/releases) and wires it up.
 
-```bash
-npm install -g snipshot
-```
-
-or grab a standalone binary from the [releases](https://github.com/9pings/snipshot/releases)
-and point at it in **Settings | Tools | Snipshot**. The plugin finds `snipshot` on
-your `PATH` on its own when the setting is left empty.
+If you would rather manage it yourself, `npm install -g snipshot` or a binary of
+your own both work — the plugin uses the configured path, else a downloaded
+binary, else the first `snipshot` on your `PATH`. The **Check** button shows which
+one it resolved and what version answered.
 
 ## Build & install
 
@@ -54,9 +54,11 @@ Everything lives under **right-click → Snipshot** in the editor.
 
 | Action | Default shortcut | What it does |
 |---|---|---|
-| Snipshot Selection | `Alt+Shift+S` | PNG of the selected lines, saved to disk |
-| Copy Snipshot to Clipboard | `Alt+Shift+C` | Same, straight onto the clipboard |
-| Snipshot Selection as SVG | — | Scalable SVG instead of a PNG |
+| Snipshot this (red) | — | Shoots the **visible window** and outlines the selection in red |
+| Snipshot this (green) | — | Same, in green |
+| Snipshot Selection | `Alt+Shift+S` | Shoots the selected lines (or the visible area) |
+| Copy Snipshot to Clipboard | `Alt+Shift+C` | Same, forced onto the clipboard |
+| Snipshot Selection as SVG | — | Same, forced to SVG |
 | Snipshot… | — | Options dialog, pre-filled from the selection and marks |
 | Mark Selection Red | `Alt+Shift+R` | Annotate these lines in red on the next shot |
 | Mark Selection Green | `Alt+Shift+G` | Annotate these lines in green |
@@ -65,6 +67,15 @@ Everything lives under **right-click → Snipshot** in the editor.
 
 The shortcuts are only suggestions — rebind them under **Settings | Keymap** if they
 clash with yours.
+
+### Point at something in its context
+
+**Snipshot this (red)** is the one-gesture case: select what you want to talk about,
+right-click, and the image is the *window around it* with your selection outlined —
+not a screenshot of the selection alone. A selection sitting inside one line is
+outlined character by character (`--highlight-red 47:12-38`); a wider one is
+highlighted line by line. If the selection is scrolled partly out of view, the shot
+widens to keep it in frame.
 
 ### The quick flow
 
@@ -86,8 +97,24 @@ live for the session only and survive across shots until you clear them.
   the gaps between them automatically.
 - **No selection at all** → whatever is currently scrolled into view.
 
+### Where images go
+
+**Settings | Tools | Snipshot → Destination**, which defaults to the clipboard:
+
+| Destination | Behaviour |
+|---|---|
+| Clipboard (PNG) | *Default.* Nothing is written to disk; paste it wherever |
+| Ask every time | Save dialog, opening on the folder you used last |
+| `.snipshot` directory in the project | Created on demand, next to your code |
+| Project root | Straight into the project directory |
+| Custom directory | A fixed folder of your choosing |
+
+**Format** picks PNG or SVG for the plain actions; *Snipshot Selection as SVG* always
+wins over it. SVG cannot live on the clipboard, so an SVG shot under the clipboard
+default falls back to asking for a path.
+
 Context lines, page-fit limits and word wrap follow the CLI's defaults; change them
-in **Settings | Tools | Snipshot** or per-shot in the **Snipshot…** dialog.
+under **Rendering**, or per-shot in the **Snipshot…** dialog.
 
 ### Errors
 
@@ -103,6 +130,8 @@ section, or set **Max rows** to 0 in the settings to lift the limit.
 | `SnipshotMarks.kt` | Per-file red/green/fold marks and their editor tint |
 | `SnipshotRequest.kt` | The CLI invocation model, and reading the editor into one |
 | `SnipshotRunner.kt` | Runs the CLI off the UI thread, reports success or failure |
+| `SnipshotOutput.kt` | Delivers the result: clipboard, save dialog, or a folder |
+| `SnipshotDownloader.kt` | Fetches the standalone binary from GitHub releases |
 | `SnipshotOptionsDialog.kt` | The "Snipshot…" dialog |
 | `SnipshotConfigurable.kt` | The settings page |
 | `actions/` | The right-click actions |
