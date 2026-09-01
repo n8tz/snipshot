@@ -59,14 +59,32 @@ To try it in a sandbox IDE instead:
 ./gradlew runIde
 ```
 
-The IDE it builds against is set in `build.gradle.kts` (`intellijIdeaCommunity`),
-with the matching compatibility range in `ideaVersion`. Bump both together.
+## Compatibility
 
-The toolchain is pinned to a combination that is known to build: Gradle 8.10 with
-the IntelliJ Platform Gradle Plugin 2.1.0, compiling on JDK 17. The build warns
-that the platform plugin is outdated — 2.2 and later require Gradle 9, so moving up
-means bumping Gradle and Kotlin at the same time. Building on JDK 25 fails in the
-Kotlin plugin's version parsing; use JDK 17 or 21.
+The plugin declares `since-build="241"` and **no upper bound**, so it installs on
+IntelliJ 2024.1 and everything newer — IDEA, WebStorm, PyCharm and the rest, since
+it only depends on `com.intellij.modules.platform`. A stale `untilBuild` is what
+makes a plugin refuse to install on a fresh IDE, so there deliberately is none.
+
+It compiles against the 2024.1 SDK. Building against an older platform than you run
+is the supported direction: the risk is using an API that was later removed, so the
+sources are also checked against a newer SDK from time to time — they compile clean
+against **2025.2.4** (build 252), which is the evidence behind dropping the upper
+bound.
+
+Redoing that check needs three edits in `build.gradle.kts`, because that platform
+ships Kotlin 2.2 metadata:
+
+```bash
+# kotlin.jvm -> 2.2.0, jvmToolchain -> 21, then:
+./gradlew buildPlugin -PplatformVersion=2025.2.4
+```
+
+The toolchain is otherwise pinned to a combination known to build: Gradle 8.10 (from
+the committed wrapper) with the IntelliJ Platform Gradle Plugin 2.1.0, compiling on
+JDK 17. The build warns that the platform plugin is outdated — 2.2 and later require
+Gradle 9, so moving up means bumping Gradle and Kotlin together. Building on JDK 25
+fails in the Kotlin plugin's version parsing; use JDK 17 to 21.
 
 ## Usage
 

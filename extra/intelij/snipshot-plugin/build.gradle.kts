@@ -15,10 +15,15 @@ repositories {
     }
 }
 
+// Building against an older platform is the supported direction: the plugin then
+// installs on that IDE and every newer one. Override to check the sources against
+// a newer SDK, e.g. -PplatformVersion=2025.2.4 (which also needs Kotlin 2.2 and
+// jvmToolchain(21) below, since that platform ships Kotlin 2.2 metadata).
+val platformVersion = providers.gradleProperty("platformVersion").getOrElse("2024.1.7")
+
 dependencies {
     intellijPlatform {
-        // Bump this to build against a newer IDE; sinceBuild below must follow.
-        intellijIdeaCommunity("2024.1.7")
+        intellijIdeaCommunity(platformVersion)
         instrumentationTools()
     }
 }
@@ -27,7 +32,9 @@ intellijPlatform {
     pluginConfiguration {
         ideaVersion {
             sinceBuild = "241"
-            untilBuild = "252.*"
+            // No upper bound: the plugin uses long-stable platform APIs, and a
+            // stale untilBuild is what blocks installs on newer IDEs.
+            untilBuild = provider { null }
         }
     }
 }
