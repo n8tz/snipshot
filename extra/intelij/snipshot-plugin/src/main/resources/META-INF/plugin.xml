@@ -1,0 +1,86 @@
+<idea-plugin>
+    <id>com.snipshot.intellij</id>
+    <name>Snipshot</name>
+    <vendor url="https://github.com/9pings/snipshot">9pings</vendor>
+
+    <description><![CDATA[
+    Turns a selection into a syntax-highlighted code screenshot, using the
+    <a href="https://github.com/9pings/snipshot">snipshot</a> CLI, so the images
+    match the ones your docs and CI already produce.
+
+    <ul>
+      <li>The file path is drawn in the image header, relative to the project root.</li>
+      <li>Red and green annotations: mark lines in the editor, then shoot.</li>
+      <li>Folded regions collapse to a single "N lines folded" row.</li>
+      <li>Several selections (multiple carets) become several ranges in one image,
+          with the gaps folded automatically.</li>
+      <li>PNG or SVG, saved to disk or copied straight to the clipboard.</li>
+    </ul>
+
+    Requires the snipshot CLI: <code>npm install -g snipshot</code>, or a
+    standalone binary pointed at from Settings | Tools | Snipshot.
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup id="Snipshot" displayType="BALLOON"/>
+        <applicationConfigurable
+            parentId="tools"
+            id="com.snipshot.intellij.settings"
+            displayName="Snipshot"
+            instance="com.snipshot.intellij.SnipshotConfigurable"/>
+    </extensions>
+
+    <actions>
+        <group id="Snipshot.Menu" text="Snipshot" popup="true">
+            <action id="Snipshot.Save"
+                    class="com.snipshot.intellij.actions.SnipshotSaveAction"
+                    text="Snipshot Selection"
+                    description="Screenshot the selected lines (or the visible area) as a PNG">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt shift S"/>
+            </action>
+            <action id="Snipshot.Copy"
+                    class="com.snipshot.intellij.actions.SnipshotCopyAction"
+                    text="Copy Snipshot to Clipboard"
+                    description="Screenshot the selected lines and put the image on the clipboard">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt shift C"/>
+            </action>
+            <action id="Snipshot.Svg"
+                    class="com.snipshot.intellij.actions.SnipshotSvgAction"
+                    text="Snipshot Selection as SVG"
+                    description="Screenshot the selected lines as a scalable SVG document"/>
+            <action id="Snipshot.Options"
+                    class="com.snipshot.intellij.actions.SnipshotOptionsAction"
+                    text="Snipshot..."
+                    description="Open the snipshot options, pre-filled from the selection and marks"/>
+
+            <separator/>
+
+            <action id="Snipshot.MarkRed"
+                    class="com.snipshot.intellij.actions.MarkRedAction"
+                    text="Mark Selection Red"
+                    description="Annotate the selected lines in red on the next snipshot">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt shift R"/>
+            </action>
+            <action id="Snipshot.MarkGreen"
+                    class="com.snipshot.intellij.actions.MarkGreenAction"
+                    text="Mark Selection Green"
+                    description="Annotate the selected lines in green on the next snipshot">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt shift G"/>
+            </action>
+            <action id="Snipshot.MarkFold"
+                    class="com.snipshot.intellij.actions.MarkFoldAction"
+                    text="Mark Selection Folded"
+                    description="Collapse the selected lines into a folded row on the next snipshot">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt shift F"/>
+            </action>
+            <action id="Snipshot.ClearMarks"
+                    class="com.snipshot.intellij.actions.ClearMarksAction"
+                    text="Clear Snipshot Marks"
+                    description="Remove every snipshot mark from this file"/>
+
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </group>
+    </actions>
+</idea-plugin>

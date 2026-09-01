@@ -244,6 +244,22 @@ sudo cp standalone/linux/snipshot /opt/snipshot
 sudo ln -s /opt/snipshot /usr/local/bin/snipshot
 ```
 
+## IntelliJ plugin
+
+An IntelliJ IDEA plugin lives in [`extra/intelij/snipshot-plugin`](extra/intelij/snipshot-plugin):
+right-click a selection in the editor and get the same image the CLI produces —
+file path in the header, red/green annotations you mark in the editor, folds, and
+multi-caret selections captured as several ranges in one image.
+
+```bash
+cd extra/intelij/snipshot-plugin
+./gradlew buildPlugin   # -> build/distributions/snipshot-plugin-0.1.0.zip
+```
+
+It shells out to the `snipshot` binary, so install the CLI first. See the
+[plugin README](extra/intelij/snipshot-plugin/README.md) for the actions,
+shortcuts and settings.
+
 ## How it works
 
 1. Reads the **full source file** (not just the requested lines) to ensure accurate syntax highlighting
