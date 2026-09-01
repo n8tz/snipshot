@@ -35,6 +35,7 @@
 - **Dark & light themes** — One Dark Pro (default) or One Light via `--theme`
 - **SVG output** — same layout as a crisp, scalable vector file via `--svg`
 - **Terminal output** — print the snippet as ANSI-colored text (24-bit color) via `--ansi`
+- **IntelliJ plugin** — right-click a selection in any JetBrains IDE ([PLUGIN.md](PLUGIN.md))
 - **Offline** — everything runs locally, no network needed
 - **Standalone binaries** for Linux, Windows, and macOS (via Bun compile), built and attached to [Releases](../../releases) automatically
 
@@ -246,28 +247,34 @@ sudo ln -s /opt/snipshot /usr/local/bin/snipshot
 
 ## IntelliJ plugin
 
-An IntelliJ IDEA plugin lives in [`extra/intelij/snipshot-plugin`](extra/intelij/snipshot-plugin):
-right-click a selection and get the same image the CLI produces — on the clipboard
-by default. *Snipshot this (red)* shoots the visible window with your selection
-outlined in it; you also get the file path in the header, marks for red/green/fold
-annotations, and multi-caret selections captured as several ranges in one image.
+Right-click a selection in the editor and get the same image the CLI produces — on
+the clipboard by default, or as a PNG or SVG file. **[Full documentation →
+PLUGIN.md](PLUGIN.md)**
 
-Its settings page can download the standalone binary for you, and chooses where
-images go: clipboard, a save dialog that remembers the last folder, `.snipshot/` in
-the project, the project root, or a fixed directory.
+<p align="center">
+  <img src="examples/svg-multirange.svg" alt="What the plugin produces" />
+</p>
+
+- **Snipshot this (red)** / **(green)** shoots the visible window with your selection
+  outlined in it — the annotation keeps its context instead of being cropped to it.
+- **Mark Selection Red / Green / Folded** tints regions in the editor, then one shot
+  carries them all.
+- **Multi-caret selections** become several ranges in one image, gaps folded.
+- Destination is configurable: clipboard, a save dialog that remembers the last
+  folder, `.snipshot/` in the project, the project root, or a fixed directory.
 
 Install `snipshot-intellij-plugin.zip` from [Releases](../../releases) through
-**Settings | Plugins | ⚙ | Install Plugin from Disk…**, or build it yourself:
+**Settings | Plugins | ⚙ | Install Plugin from Disk…** — it works on IntelliJ 2024.1
+and newer, in any JetBrains IDE. Its settings page can download the CLI binary for
+you. To build it from source:
 
 ```bash
 npm run build:plugin    # -> standalone/intellij/snipshot-intellij-plugin.zip
 ```
 
 Building it needs a JDK 17 or newer; Gradle and the compile toolchain come from
-the committed wrapper.
-
-See the [plugin README](extra/intelij/snipshot-plugin/README.md) for the actions,
-shortcuts and settings.
+the committed wrapper. Development notes live in
+[`extra/intelij/snipshot-plugin`](extra/intelij/snipshot-plugin/README.md).
 
 ## How it works
 
