@@ -213,14 +213,16 @@ export async function renderCode(input: RenderInput): Promise<Buffer> {
     }
   }
 
-  // Draw visual rows
+  // Draw visual rows. Text is centred in its 22px row, on the same baseline
+  // the SVG renderer computes explicitly, so highlight bands wrap the glyphs
+  // evenly instead of sitting 2px above them.
   ctx.font = `${FONT_SIZE}px "JetBrains Mono"`;
-  ctx.textBaseline = 'top';
+  ctx.textBaseline = 'middle';
 
   for (let r = 0; r < visualRows.length; r++) {
     const vRow = visualRows[r];
     const y = codeStartY + r * LINE_HEIGHT;
-    const textY = y + (LINE_HEIGHT - FONT_SIZE) / 2;
+    const textY = y + LINE_HEIGHT / 2;
 
     // Fold indicator row
     if (vRow.isFold) {

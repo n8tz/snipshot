@@ -1,145 +1,145 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="554" viewBox="0 0 800 554" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" xml:space="preserve">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="554" viewBox="0 0 800 554" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14">
 <rect width="800" height="554" fill="#fafafa"/>
 <rect width="800" height="36" fill="#eaeaeb"/>
 <rect y="35" width="800" height="1" fill="#d3d3d6"/>
-<text x="16" y="18" fill="#696c77" dominant-baseline="central">src/highlighter.ts</text>
+<text x="16" y="23.04" fill="#696c77">src/highlighter.ts</text>
 <rect x="40.80" y="36" width="1" height="518" fill="#d3d3d6"/>
-<rect y="234" width="800" height="22" fill="rgba(228, 86, 73, 0.12)"/>
+<rect y="234" width="800" height="22" fill="#e45649" fill-opacity="0.12"/>
 <rect y="234" width="3" height="22" fill="#e45649"/>
-<rect y="256" width="800" height="22" fill="rgba(228, 86, 73, 0.12)"/>
+<rect y="256" width="800" height="22" fill="#e45649" fill-opacity="0.12"/>
 <rect y="256" width="3" height="22" fill="#e45649"/>
-<rect y="278" width="800" height="22" fill="rgba(228, 86, 73, 0.12)"/>
+<rect y="278" width="800" height="22" fill="#e45649" fill-opacity="0.12"/>
 <rect y="278" width="3" height="22" fill="#e45649"/>
-<rect y="344" width="800" height="22" fill="rgba(80, 161, 79, 0.14)"/>
+<rect y="344" width="800" height="22" fill="#50a14f" fill-opacity="0.14"/>
 <rect y="344" width="3" height="22" fill="#50a14f"/>
-<rect y="366" width="800" height="22" fill="rgba(80, 161, 79, 0.14)"/>
+<rect y="366" width="800" height="22" fill="#50a14f" fill-opacity="0.14"/>
 <rect y="366" width="3" height="22" fill="#50a14f"/>
-<rect y="388" width="800" height="22" fill="rgba(80, 161, 79, 0.14)"/>
+<rect y="388" width="800" height="22" fill="#50a14f" fill-opacity="0.14"/>
 <rect y="388" width="3" height="22" fill="#50a14f"/>
-<rect y="410" width="800" height="22" fill="rgba(80, 161, 79, 0.14)"/>
+<rect y="410" width="800" height="22" fill="#50a14f" fill-opacity="0.14"/>
 <rect y="410" width="3" height="22" fill="#50a14f"/>
-<rect y="432" width="800" height="22" fill="rgba(80, 161, 79, 0.14)"/>
+<rect y="432" width="800" height="22" fill="#50a14f" fill-opacity="0.14"/>
 <rect y="432" width="3" height="22" fill="#50a14f"/>
-<rect y="454" width="800" height="22" fill="rgba(80, 161, 79, 0.14)"/>
+<rect y="454" width="800" height="22" fill="#50a14f" fill-opacity="0.14"/>
 <rect y="454" width="3" height="22" fill="#50a14f"/>
-<text x="28.80" y="47" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">32</text>
-<text x="74.60" y="47" fill="#A626A4" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">return</text>
-<text x="133.40" y="47" fill="#383A42" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">code.</text>
-<text x="175.40" y="47" fill="#4078F2" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">split</text>
-<text x="217.40" y="47" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="225.80" y="47" fill="#50A14F" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">'</text>
-<text x="234.20" y="47" fill="#0184BC" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">\n</text>
-<text x="251.00" y="47" fill="#50A14F" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">'</text>
-<text x="259.40" y="47" fill="#383A42" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">).</text>
-<text x="276.20" y="47" fill="#4078F2" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">map</text>
-<text x="301.40" y="47" fill="#383A42" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">(line</text>
-<text x="351.80" y="47" fill="#A626A4" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">=&gt;</text>
-<text x="377.00" y="47" fill="#383A42" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">[{</text>
-<text x="402.20" y="47" fill="#E45649" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">text</text>
-<text x="435.80" y="47" fill="#0184BC" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="452.60" y="47" fill="#383A42" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">line,</text>
-<text x="503.00" y="47" fill="#E45649" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">color</text>
-<text x="545.00" y="47" fill="#0184BC" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="561.80" y="47" fill="#383A42" dominant-baseline="central" textLength="142.80" lengthAdjust="spacingAndGlyphs">defaultColor }]);</text>
-<text x="28.80" y="69" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">33</text>
-<text x="57.80" y="69" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
-<text x="28.80" y="91" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">34</text>
-<text x="28.80" y="113" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">35</text>
-<text x="57.80" y="113" fill="#A626A4" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">export</text>
-<text x="116.60" y="113" fill="#A626A4" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">async</text>
-<text x="167.00" y="113" fill="#A626A4" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">function</text>
-<text x="242.60" y="113" fill="#4078F2" dominant-baseline="central" textLength="100.80" lengthAdjust="spacingAndGlyphs">tokenizeCode</text>
-<text x="343.40" y="113" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="28.80" y="135" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">36</text>
-<text x="74.60" y="135" fill="#383A42" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">code</text>
-<text x="108.20" y="135" fill="#0184BC" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="125.00" y="135" fill="#0184BC" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
-<text x="175.40" y="135" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
-<text x="28.80" y="157" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">37</text>
-<text x="74.60" y="157" fill="#383A42" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">lang</text>
-<text x="108.20" y="157" fill="#0184BC" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="125.00" y="157" fill="#0184BC" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
-<text x="175.40" y="157" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
-<text x="28.80" y="179" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">38</text>
-<text x="74.60" y="179" fill="#383A42" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">theme</text>
-<text x="116.60" y="179" fill="#0184BC" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="133.40" y="179" fill="#C18401" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">Theme</text>
-<text x="183.80" y="179" fill="#0184BC" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
-<text x="200.60" y="179" fill="#986801" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">THEMES</text>
-<text x="251.00" y="179" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">.</text>
-<text x="259.40" y="179" fill="#E45649" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">dark</text>
-<text x="293.00" y="179" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
-<text x="28.80" y="201" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">39</text>
-<text x="57.80" y="201" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">)</text>
-<text x="66.20" y="201" fill="#0184BC" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="83.00" y="201" fill="#C18401" dominant-baseline="central" textLength="58.80" lengthAdjust="spacingAndGlyphs">Promise</text>
-<text x="141.80" y="201" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">&lt;</text>
-<text x="150.20" y="201" fill="#C18401" dominant-baseline="central" textLength="109.20" lengthAdjust="spacingAndGlyphs">TokenizedLine</text>
-<text x="259.40" y="201" fill="#383A42" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">[]&gt; {</text>
-<text x="28.80" y="223" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">40</text>
-<text x="74.60" y="223" fill="#A0A1A7" dominant-baseline="central" textLength="579.60" lengthAdjust="spacingAndGlyphs">// If the language is not supported by Shiki, fall back to plain text</text>
-<text x="28.80" y="245" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">41</text>
-<text x="74.60" y="245" fill="#A626A4" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">if</text>
-<text x="99.80" y="245" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="108.20" y="245" fill="#0184BC" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">!</text>
-<text x="116.60" y="245" fill="#4078F2" dominant-baseline="central" textLength="159.60" lengthAdjust="spacingAndGlyphs">isLanguageSupported</text>
-<text x="276.20" y="245" fill="#383A42" dominant-baseline="central" textLength="75.60" lengthAdjust="spacingAndGlyphs">(lang)) {</text>
-<text x="28.80" y="267" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">42</text>
-<text x="91.40" y="267" fill="#A626A4" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">return</text>
-<text x="150.20" y="267" fill="#4078F2" dominant-baseline="central" textLength="109.20" lengthAdjust="spacingAndGlyphs">plainTokenize</text>
-<text x="259.40" y="267" fill="#383A42" dominant-baseline="central" textLength="109.20" lengthAdjust="spacingAndGlyphs">(code, theme.</text>
-<text x="368.60" y="267" fill="#E45649" dominant-baseline="central" textLength="100.80" lengthAdjust="spacingAndGlyphs">defaultColor</text>
-<text x="469.40" y="267" fill="#383A42" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
-<text x="28.80" y="289" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">43</text>
-<text x="74.60" y="289" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
-<text x="28.80" y="311" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">44</text>
-<text x="28.80" y="333" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">45</text>
-<text x="74.60" y="333" fill="#A626A4" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">try</text>
-<text x="108.20" y="333" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">{</text>
-<text x="28.80" y="355" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">46</text>
-<text x="91.40" y="355" fill="#A626A4" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
-<text x="141.80" y="355" fill="#986801" dominant-baseline="central" textLength="92.40" lengthAdjust="spacingAndGlyphs">highlighter</text>
-<text x="242.60" y="355" fill="#0184BC" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
-<text x="259.40" y="355" fill="#A626A4" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">await</text>
-<text x="309.80" y="355" fill="#4078F2" dominant-baseline="central" textLength="117.60" lengthAdjust="spacingAndGlyphs">getHighlighter</text>
-<text x="427.40" y="355" fill="#383A42" dominant-baseline="central" textLength="109.20" lengthAdjust="spacingAndGlyphs">(lang, theme.</text>
-<text x="536.60" y="355" fill="#E45649" dominant-baseline="central" textLength="84" lengthAdjust="spacingAndGlyphs">shikiTheme</text>
-<text x="620.60" y="355" fill="#383A42" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
-<text x="28.80" y="377" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">47</text>
-<text x="28.80" y="399" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">48</text>
-<text x="91.40" y="399" fill="#A626A4" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
-<text x="141.80" y="399" fill="#986801" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">result</text>
-<text x="200.60" y="399" fill="#0184BC" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
-<text x="217.40" y="399" fill="#383A42" dominant-baseline="central" textLength="100.80" lengthAdjust="spacingAndGlyphs">highlighter.</text>
-<text x="318.20" y="399" fill="#4078F2" dominant-baseline="central" textLength="134.40" lengthAdjust="spacingAndGlyphs">codeToTokensBase</text>
-<text x="452.60" y="399" fill="#383A42" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">(code, {</text>
-<text x="28.80" y="421" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">49</text>
-<text x="108.20" y="421" fill="#E45649" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">lang</text>
-<text x="141.80" y="421" fill="#0184BC" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="158.60" y="421" fill="#383A42" dominant-baseline="central" textLength="58.80" lengthAdjust="spacingAndGlyphs">lang as</text>
-<text x="225.80" y="421" fill="#0184BC" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">any</text>
-<text x="251" y="421" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
-<text x="28.80" y="443" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">50</text>
-<text x="108.20" y="443" fill="#E45649" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">theme</text>
-<text x="150.20" y="443" fill="#0184BC" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="167" y="443" fill="#383A42" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">theme.</text>
-<text x="217.40" y="443" fill="#E45649" dominant-baseline="central" textLength="84" lengthAdjust="spacingAndGlyphs">shikiTheme</text>
-<text x="309.80" y="443" fill="#383A42" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">as</text>
-<text x="335" y="443" fill="#0184BC" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">any</text>
-<text x="360.20" y="443" fill="#383A42" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
-<text x="28.80" y="465" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">51</text>
-<text x="91.40" y="465" fill="#383A42" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">});</text>
-<text x="28.80" y="487" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">52</text>
-<text x="28.80" y="509" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">53</text>
-<text x="91.40" y="509" fill="#A626A4" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">return</text>
-<text x="150.20" y="509" fill="#383A42" dominant-baseline="central" textLength="58.80" lengthAdjust="spacingAndGlyphs">result.</text>
-<text x="209" y="509" fill="#4078F2" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">map</text>
-<text x="234.20" y="509" fill="#383A42" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">(line</text>
-<text x="284.60" y="509" fill="#A626A4" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">=&gt;</text>
-<text x="28.80" y="531" fill="#9d9d9f" text-anchor="end" dominant-baseline="central">54</text>
-<text x="108.20" y="531" fill="#383A42" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">line.</text>
-<text x="150.20" y="531" fill="#4078F2" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">map</text>
-<text x="175.40" y="531" fill="#383A42" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">(token</text>
-<text x="234.20" y="531" fill="#A626A4" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">=&gt;</text>
-<text x="259.40" y="531" fill="#383A42" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">({</text>
+<text x="12" y="52.04" fill="#9d9d9f">32</text>
+<text x="74.60" y="52.04" fill="#A626A4" textLength="50.40" lengthAdjust="spacingAndGlyphs">return</text>
+<text x="133.40" y="52.04" fill="#383A42" textLength="42" lengthAdjust="spacingAndGlyphs">code.</text>
+<text x="175.40" y="52.04" fill="#4078F2" textLength="42" lengthAdjust="spacingAndGlyphs">split</text>
+<text x="217.40" y="52.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="225.80" y="52.04" fill="#50A14F" textLength="8.40" lengthAdjust="spacingAndGlyphs">'</text>
+<text x="234.20" y="52.04" fill="#0184BC" textLength="16.80" lengthAdjust="spacingAndGlyphs">\n</text>
+<text x="251" y="52.04" fill="#50A14F" textLength="8.40" lengthAdjust="spacingAndGlyphs">'</text>
+<text x="259.40" y="52.04" fill="#383A42" textLength="16.80" lengthAdjust="spacingAndGlyphs">).</text>
+<text x="276.20" y="52.04" fill="#4078F2" textLength="25.20" lengthAdjust="spacingAndGlyphs">map</text>
+<text x="301.40" y="52.04" fill="#383A42" textLength="42" lengthAdjust="spacingAndGlyphs">(line</text>
+<text x="351.80" y="52.04" fill="#A626A4" textLength="16.80" lengthAdjust="spacingAndGlyphs">=&gt;</text>
+<text x="377" y="52.04" fill="#383A42" textLength="16.80" lengthAdjust="spacingAndGlyphs">[{</text>
+<text x="402.20" y="52.04" fill="#E45649" textLength="33.60" lengthAdjust="spacingAndGlyphs">text</text>
+<text x="435.80" y="52.04" fill="#0184BC" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="452.60" y="52.04" fill="#383A42" textLength="42" lengthAdjust="spacingAndGlyphs">line,</text>
+<text x="503" y="52.04" fill="#E45649" textLength="42" lengthAdjust="spacingAndGlyphs">color</text>
+<text x="545" y="52.04" fill="#0184BC" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="561.80" y="52.04" fill="#383A42" textLength="142.80" lengthAdjust="spacingAndGlyphs">defaultColor }]);</text>
+<text x="12" y="74.04" fill="#9d9d9f">33</text>
+<text x="57.80" y="74.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
+<text x="12" y="96.04" fill="#9d9d9f">34</text>
+<text x="12" y="118.04" fill="#9d9d9f">35</text>
+<text x="57.80" y="118.04" fill="#A626A4" textLength="50.40" lengthAdjust="spacingAndGlyphs">export</text>
+<text x="116.60" y="118.04" fill="#A626A4" textLength="42" lengthAdjust="spacingAndGlyphs">async</text>
+<text x="167" y="118.04" fill="#A626A4" textLength="67.20" lengthAdjust="spacingAndGlyphs">function</text>
+<text x="242.60" y="118.04" fill="#4078F2" textLength="100.80" lengthAdjust="spacingAndGlyphs">tokenizeCode</text>
+<text x="343.40" y="118.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="12" y="140.04" fill="#9d9d9f">36</text>
+<text x="74.60" y="140.04" fill="#383A42" textLength="33.60" lengthAdjust="spacingAndGlyphs">code</text>
+<text x="108.20" y="140.04" fill="#0184BC" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="125" y="140.04" fill="#0184BC" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
+<text x="175.40" y="140.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
+<text x="12" y="162.04" fill="#9d9d9f">37</text>
+<text x="74.60" y="162.04" fill="#383A42" textLength="33.60" lengthAdjust="spacingAndGlyphs">lang</text>
+<text x="108.20" y="162.04" fill="#0184BC" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="125" y="162.04" fill="#0184BC" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
+<text x="175.40" y="162.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
+<text x="12" y="184.04" fill="#9d9d9f">38</text>
+<text x="74.60" y="184.04" fill="#383A42" textLength="42" lengthAdjust="spacingAndGlyphs">theme</text>
+<text x="116.60" y="184.04" fill="#0184BC" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="133.40" y="184.04" fill="#C18401" textLength="42" lengthAdjust="spacingAndGlyphs">Theme</text>
+<text x="183.80" y="184.04" fill="#0184BC" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
+<text x="200.60" y="184.04" fill="#986801" textLength="50.40" lengthAdjust="spacingAndGlyphs">THEMES</text>
+<text x="251" y="184.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">.</text>
+<text x="259.40" y="184.04" fill="#E45649" textLength="33.60" lengthAdjust="spacingAndGlyphs">dark</text>
+<text x="293" y="184.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
+<text x="12" y="206.04" fill="#9d9d9f">39</text>
+<text x="57.80" y="206.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">)</text>
+<text x="66.20" y="206.04" fill="#0184BC" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="83" y="206.04" fill="#C18401" textLength="58.80" lengthAdjust="spacingAndGlyphs">Promise</text>
+<text x="141.80" y="206.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">&lt;</text>
+<text x="150.20" y="206.04" fill="#C18401" textLength="109.20" lengthAdjust="spacingAndGlyphs">TokenizedLine</text>
+<text x="259.40" y="206.04" fill="#383A42" textLength="42" lengthAdjust="spacingAndGlyphs">[]&gt; {</text>
+<text x="12" y="228.04" fill="#9d9d9f">40</text>
+<text x="74.60" y="228.04" fill="#A0A1A7" textLength="579.60" lengthAdjust="spacingAndGlyphs">// If the language is not supported by Shiki, fall back to plain text</text>
+<text x="12" y="250.04" fill="#9d9d9f">41</text>
+<text x="74.60" y="250.04" fill="#A626A4" textLength="16.80" lengthAdjust="spacingAndGlyphs">if</text>
+<text x="99.80" y="250.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="108.20" y="250.04" fill="#0184BC" textLength="8.40" lengthAdjust="spacingAndGlyphs">!</text>
+<text x="116.60" y="250.04" fill="#4078F2" textLength="159.60" lengthAdjust="spacingAndGlyphs">isLanguageSupported</text>
+<text x="276.20" y="250.04" fill="#383A42" textLength="75.60" lengthAdjust="spacingAndGlyphs">(lang)) {</text>
+<text x="12" y="272.04" fill="#9d9d9f">42</text>
+<text x="91.40" y="272.04" fill="#A626A4" textLength="50.40" lengthAdjust="spacingAndGlyphs">return</text>
+<text x="150.20" y="272.04" fill="#4078F2" textLength="109.20" lengthAdjust="spacingAndGlyphs">plainTokenize</text>
+<text x="259.40" y="272.04" fill="#383A42" textLength="109.20" lengthAdjust="spacingAndGlyphs">(code, theme.</text>
+<text x="368.60" y="272.04" fill="#E45649" textLength="100.80" lengthAdjust="spacingAndGlyphs">defaultColor</text>
+<text x="469.40" y="272.04" fill="#383A42" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
+<text x="12" y="294.04" fill="#9d9d9f">43</text>
+<text x="74.60" y="294.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
+<text x="12" y="316.04" fill="#9d9d9f">44</text>
+<text x="12" y="338.04" fill="#9d9d9f">45</text>
+<text x="74.60" y="338.04" fill="#A626A4" textLength="25.20" lengthAdjust="spacingAndGlyphs">try</text>
+<text x="108.20" y="338.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">{</text>
+<text x="12" y="360.04" fill="#9d9d9f">46</text>
+<text x="91.40" y="360.04" fill="#A626A4" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
+<text x="141.80" y="360.04" fill="#986801" textLength="92.40" lengthAdjust="spacingAndGlyphs">highlighter</text>
+<text x="242.60" y="360.04" fill="#0184BC" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
+<text x="259.40" y="360.04" fill="#A626A4" textLength="42" lengthAdjust="spacingAndGlyphs">await</text>
+<text x="309.80" y="360.04" fill="#4078F2" textLength="117.60" lengthAdjust="spacingAndGlyphs">getHighlighter</text>
+<text x="427.40" y="360.04" fill="#383A42" textLength="109.20" lengthAdjust="spacingAndGlyphs">(lang, theme.</text>
+<text x="536.60" y="360.04" fill="#E45649" textLength="84" lengthAdjust="spacingAndGlyphs">shikiTheme</text>
+<text x="620.60" y="360.04" fill="#383A42" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
+<text x="12" y="382.04" fill="#9d9d9f">47</text>
+<text x="12" y="404.04" fill="#9d9d9f">48</text>
+<text x="91.40" y="404.04" fill="#A626A4" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
+<text x="141.80" y="404.04" fill="#986801" textLength="50.40" lengthAdjust="spacingAndGlyphs">result</text>
+<text x="200.60" y="404.04" fill="#0184BC" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
+<text x="217.40" y="404.04" fill="#383A42" textLength="100.80" lengthAdjust="spacingAndGlyphs">highlighter.</text>
+<text x="318.20" y="404.04" fill="#4078F2" textLength="134.40" lengthAdjust="spacingAndGlyphs">codeToTokensBase</text>
+<text x="452.60" y="404.04" fill="#383A42" textLength="67.20" lengthAdjust="spacingAndGlyphs">(code, {</text>
+<text x="12" y="426.04" fill="#9d9d9f">49</text>
+<text x="108.20" y="426.04" fill="#E45649" textLength="33.60" lengthAdjust="spacingAndGlyphs">lang</text>
+<text x="141.80" y="426.04" fill="#0184BC" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="158.60" y="426.04" fill="#383A42" textLength="58.80" lengthAdjust="spacingAndGlyphs">lang as</text>
+<text x="225.80" y="426.04" fill="#0184BC" textLength="25.20" lengthAdjust="spacingAndGlyphs">any</text>
+<text x="251" y="426.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
+<text x="12" y="448.04" fill="#9d9d9f">50</text>
+<text x="108.20" y="448.04" fill="#E45649" textLength="42" lengthAdjust="spacingAndGlyphs">theme</text>
+<text x="150.20" y="448.04" fill="#0184BC" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="167" y="448.04" fill="#383A42" textLength="50.40" lengthAdjust="spacingAndGlyphs">theme.</text>
+<text x="217.40" y="448.04" fill="#E45649" textLength="84" lengthAdjust="spacingAndGlyphs">shikiTheme</text>
+<text x="309.80" y="448.04" fill="#383A42" textLength="16.80" lengthAdjust="spacingAndGlyphs">as</text>
+<text x="335" y="448.04" fill="#0184BC" textLength="25.20" lengthAdjust="spacingAndGlyphs">any</text>
+<text x="360.20" y="448.04" fill="#383A42" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
+<text x="12" y="470.04" fill="#9d9d9f">51</text>
+<text x="91.40" y="470.04" fill="#383A42" textLength="25.20" lengthAdjust="spacingAndGlyphs">});</text>
+<text x="12" y="492.04" fill="#9d9d9f">52</text>
+<text x="12" y="514.04" fill="#9d9d9f">53</text>
+<text x="91.40" y="514.04" fill="#A626A4" textLength="50.40" lengthAdjust="spacingAndGlyphs">return</text>
+<text x="150.20" y="514.04" fill="#383A42" textLength="58.80" lengthAdjust="spacingAndGlyphs">result.</text>
+<text x="209" y="514.04" fill="#4078F2" textLength="25.20" lengthAdjust="spacingAndGlyphs">map</text>
+<text x="234.20" y="514.04" fill="#383A42" textLength="42" lengthAdjust="spacingAndGlyphs">(line</text>
+<text x="284.60" y="514.04" fill="#A626A4" textLength="16.80" lengthAdjust="spacingAndGlyphs">=&gt;</text>
+<text x="12" y="536.04" fill="#9d9d9f">54</text>
+<text x="108.20" y="536.04" fill="#383A42" textLength="42" lengthAdjust="spacingAndGlyphs">line.</text>
+<text x="150.20" y="536.04" fill="#4078F2" textLength="25.20" lengthAdjust="spacingAndGlyphs">map</text>
+<text x="175.40" y="536.04" fill="#383A42" textLength="50.40" lengthAdjust="spacingAndGlyphs">(token</text>
+<text x="234.20" y="536.04" fill="#A626A4" textLength="16.80" lengthAdjust="spacingAndGlyphs">=&gt;</text>
+<text x="259.40" y="536.04" fill="#383A42" textLength="16.80" lengthAdjust="spacingAndGlyphs">({</text>
 </svg>

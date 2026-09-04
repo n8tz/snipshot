@@ -9,6 +9,15 @@ import {
 // JetBrains Mono advance width is 600/1000 em — no canvas needed to measure.
 const CHAR_WIDTH = FONT_SIZE * 0.6;
 
+/**
+ * Distance from the vertical centre of a row down to the alphabetic baseline,
+ * for JetBrains Mono (ascender 1020, descender -300, per 1000 em): the
+ * "central" baseline sits (1020 - 300) / 2 = 360 units above the alphabetic
+ * one. Text is placed on the alphabetic baseline explicitly rather than with
+ * `dominant-baseline="central"`, which the Office renderer ignores.
+ */
+const BASELINE_SHIFT = FONT_SIZE * 0.36;
+
 const FONT_FAMILY = "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
 
 function esc(text: string): string {
@@ -16,7 +25,53 @@ function esc(text: string): string {
 }
 
 function fmt(n: number): string {
-  return Number.isInteger(n) ? `${n}` : n.toFixed(2);
+  const rounded = Math.round(n * 100) / 100;
+  return Number.isInteger(rounded) ? `${rounded}` : rounded.toFixed(2);
+}
+
+/**
+ * `fill` attribute(s) for a theme color. The themes express translucent
+ * colors as `rgba()`, which browsers accept but Word, Excel and PowerPoint do
+ * not (SVG 1.1 has no rgba; Office drops the fill entirely, so highlighted
+ * rows come out blank). Those become a hex fill plus `fill-opacity`, which
+ * every renderer understands.
+ */
+function fillAttrs(color: string): string {
+  const match = color.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+)\s*)?\)$/i);
+  if (!match) return `fill="${color}"`;
+  const hex = [match[1], match[2], match[3]]
+    .map(c => Number(c).toString(16).padStart(2, '0'))
+    .join('');
+  const alpha = match[4];
+  return alpha === undefined || Number(alpha) >= 1
+    ? `fill="#${hex}"`
+    : `fill="#${hex}" fill-opacity="${Number(alpha)}"`;
+}
+
+/**
+ * One `<text>` element per run of text, each at its own absolute x, so
+ * alignment never depends on `xml:space="preserve"`: Office ignores it and
+ * collapses consecutive spaces, so a run stops wherever two or more spaces
+ * meet (a single space inside a run is safe). Leading and trailing spaces
+ * only advance the cursor. [y] is the alphabetic baseline. With [exact], each
+ * run also carries `textLength` so a fallback font keeps the monospace grid.
+ */
+function textRuns(x: number, y: number, color: string, text: string, exact: boolean): string[] {
+  const out: string[] = [];
+  const runs = text.matchAll(/\S(?:\S| (?=\S))*/g);
+  for (const run of runs) {
+    const runX = x + run.index * CHAR_WIDTH;
+    const length = exact
+      ? ` textLength="${fmt(run[0].length * CHAR_WIDTH)}" lengthAdjust="spacingAndGlyphs"`
+      : '';
+    out.push(`<text x="${fmt(runX)}" y="${fmt(y)}" fill="${color}"${length}>${esc(run[0])}</text>`);
+  }
+  return out;
+}
+
+/** Text whose right edge sits at [rightX]: monospace, so the start is computable. */
+function textRightAligned(rightX: number, y: number, color: string, text: string): string[] {
+  return textRuns(rightX - text.length * CHAR_WIDTH, y, color, text, false);
 }
 
 export interface SvgRenderInput {
@@ -38,6 +93,11 @@ export interface SvgRenderInput {
  * scalable vector file. The font is not embedded; text uses a monospace
  * fallback stack with per-token `textLength` so alignment stays exact even
  * when JetBrains Mono is not installed.
+ *
+ * The output sticks to the SVG 1.1 subset that the Microsoft Office renderer
+ * honours: hex colors with `fill-opacity` rather than `rgba()`, explicit
+ * baselines and x positions rather than `dominant-baseline` / `text-anchor`,
+ * and no run of spaces inside a `<text>` (see the helpers above).
  */
 export function renderSvg(input: SvgRenderInput): string {
   const { tokenizedLines, startLine, endLine, relativePath, highlights, maxWidth, folds } = input;
@@ -94,15 +154,15 @@ export function renderSvg(input: SvgRenderInput): string {
   parts.push(
     `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${totalHeight}" ` +
     `viewBox="0 0 ${totalWidth} ${totalHeight}" font-family="${FONT_FAMILY}" ` +
-    `font-size="${FONT_SIZE}" xml:space="preserve">`
+    `font-size="${FONT_SIZE}">`
   );
 
   // Background
-  parts.push(`<rect width="${totalWidth}" height="${totalHeight}" fill="${theme.bg}"/>`);
+  parts.push(`<rect width="${totalWidth}" height="${totalHeight}" ${fillAttrs(theme.bg)}/>`);
 
   // Header
-  parts.push(`<rect width="${totalWidth}" height="${HEADER_HEIGHT}" fill="${theme.headerBg}"/>`);
-  parts.push(`<rect y="${HEADER_HEIGHT - 1}" width="${totalWidth}" height="1" fill="${theme.headerBorder}"/>`);
+  parts.push(`<rect width="${totalWidth}" height="${HEADER_HEIGHT}" ${fillAttrs(theme.headerBg)}/>`);
+  parts.push(`<rect y="${HEADER_HEIGHT - 1}" width="${totalWidth}" height="1" ${fillAttrs(theme.headerBorder)}/>`);
 
   // Header text (truncate if too long)
   const maxHeaderChars = Math.floor((totalWidth - PADDING_X * 2) / charWidth);
@@ -110,19 +170,17 @@ export function renderSvg(input: SvgRenderInput): string {
   if (headerText.length > maxHeaderChars) {
     headerText = '...' + headerText.substring(headerText.length - Math.max(0, maxHeaderChars - 3));
   }
-  parts.push(
-    `<text x="${PADDING_X}" y="${HEADER_HEIGHT / 2}" fill="${theme.headerTextColor}" ` +
-    `dominant-baseline="central">${esc(headerText)}</text>`
-  );
+  parts.push(...textRuns(PADDING_X, HEADER_HEIGHT / 2 + BASELINE_SHIFT, theme.headerTextColor, headerText, false));
 
   // Gutter separator
   parts.push(
     `<rect x="${fmt(gutterWidth)}" y="${HEADER_HEIGHT}" width="${GUTTER_SEPARATOR_WIDTH}" ` +
-    `height="${totalHeight - HEADER_HEIGHT}" fill="${theme.gutterSepColor}"/>`
+    `height="${totalHeight - HEADER_HEIGHT}" ${fillAttrs(theme.gutterSepColor)}/>`
   );
 
   const codeStartY = HEADER_HEIGHT;
   const codeStartX = gutterWidth + GUTTER_SEPARATOR_WIDTH + PADDING_X;
+  const gutterTextRight = gutterWidth - GUTTER_PADDING;
 
   // Map source line index → visual row indices
   const lineToVisualRows = new Map<number, number[]>();
@@ -166,9 +224,9 @@ export function renderSvg(input: SvgRenderInput): string {
       } else {
         for (const vrIdx of vRowIndices) {
           const y = codeStartY + vrIdx * LINE_HEIGHT;
-          parts.push(`<rect y="${y}" width="${totalWidth}" height="${LINE_HEIGHT}" fill="${colors.bg}"/>`);
+          parts.push(`<rect y="${y}" width="${totalWidth}" height="${LINE_HEIGHT}" ${fillAttrs(colors.bg)}/>`);
           if (vrIdx === vRowIndices[0]) {
-            parts.push(`<rect y="${y}" width="3" height="${LINE_HEIGHT}" fill="${colors.border}"/>`);
+            parts.push(`<rect y="${y}" width="3" height="${LINE_HEIGHT}" ${fillAttrs(colors.border)}/>`);
           }
         }
       }
@@ -179,58 +237,38 @@ export function renderSvg(input: SvgRenderInput): string {
   for (let r = 0; r < visualRows.length; r++) {
     const vRow = visualRows[r];
     const y = codeStartY + r * LINE_HEIGHT;
-    const textY = y + LINE_HEIGHT / 2;
+    const baseline = y + LINE_HEIGHT / 2 + BASELINE_SHIFT;
 
     // Fold indicator row
     if (vRow.isFold) {
-      parts.push(`<rect y="${y}" width="${totalWidth}" height="${LINE_HEIGHT}" fill="${theme.foldBg}"/>`);
+      parts.push(`<rect y="${y}" width="${totalWidth}" height="${LINE_HEIGHT}" ${fillAttrs(theme.foldBg)}/>`);
       const foldX = fmt(gutterWidth + GUTTER_SEPARATOR_WIDTH);
       const foldW = fmt(totalWidth - gutterWidth - GUTTER_SEPARATOR_WIDTH);
-      parts.push(`<rect x="${foldX}" y="${y}" width="${foldW}" height="1" fill="${theme.foldBorderColor}"/>`);
-      parts.push(`<rect x="${foldX}" y="${y + LINE_HEIGHT - 1}" width="${foldW}" height="1" fill="${theme.foldBorderColor}"/>`);
-      parts.push(
-        `<text x="${fmt(gutterWidth - GUTTER_PADDING)}" y="${textY}" fill="${theme.foldTextColor}" ` +
-        `text-anchor="end" dominant-baseline="central">⋮</text>`
-      );
-      parts.push(
-        `<text x="${fmt(codeStartX)}" y="${textY}" fill="${theme.foldTextColor}" ` +
-        `dominant-baseline="central">•••  ${vRow.foldCount} lines folded  •••</text>`
-      );
+      parts.push(`<rect x="${foldX}" y="${y}" width="${foldW}" height="1" ${fillAttrs(theme.foldBorderColor)}/>`);
+      parts.push(`<rect x="${foldX}" y="${y + LINE_HEIGHT - 1}" width="${foldW}" height="1" ${fillAttrs(theme.foldBorderColor)}/>`);
+      parts.push(...textRightAligned(gutterTextRight, baseline, theme.foldTextColor, '⋮'));
+      parts.push(...textRuns(codeStartX, baseline, theme.foldTextColor, `•••  ${vRow.foldCount} lines folded  •••`, false));
       continue;
     }
 
     // Line number (first visual row of each source line only)
     if (vRow.isFirstRow) {
-      parts.push(
-        `<text x="${fmt(gutterWidth - GUTTER_PADDING)}" y="${textY}" fill="${theme.lineNumColor}" ` +
-        `text-anchor="end" dominant-baseline="central">${vRow.sourceLineNum}</text>`
-      );
+      parts.push(...textRightAligned(gutterTextRight, baseline, theme.lineNumColor, `${vRow.sourceLineNum}`));
     }
 
     let x = codeStartX;
 
     if (!vRow.isFirstRow) {
       x += wrapIndentWidth;
-      parts.push(
-        `<text x="${fmt(codeStartX + wrapIndentWidth)}" y="${textY}" fill="${theme.wrapIndicatorColor}" ` +
-        `dominant-baseline="central">↳</text>`
-      );
+      parts.push(...textRuns(codeStartX + wrapIndentWidth, baseline, theme.wrapIndicatorColor, '↳', false));
       x += wrapIndicatorWidth;
     }
 
     for (const token of vRow.tokens) {
-      const width = charWidth * token.text.length;
-      // Draw only the trimmed core: leading/trailing spaces advance the cursor
-      // but must not take part in textLength, or renderers stretch the glyphs.
-      const core = token.text.trim();
-      if (core.length > 0) {
-        const lead = token.text.length - token.text.trimStart().length;
-        parts.push(
-          `<text x="${fmt(x + lead * charWidth)}" y="${textY}" fill="${token.color}" dominant-baseline="central" ` +
-          `textLength="${fmt(core.length * charWidth)}" lengthAdjust="spacingAndGlyphs">${esc(core)}</text>`
-        );
-      }
-      x += width;
+      // Spaces advance the cursor; only the non-space runs are drawn, each at
+      // its own x, so neither xml:space nor textLength has to account for them.
+      parts.push(...textRuns(x, baseline, token.color, token.text, true));
+      x += charWidth * token.text.length;
     }
   }
 

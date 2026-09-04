@@ -1,247 +1,251 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="774" viewBox="0 0 800 774" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" xml:space="preserve">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="774" viewBox="0 0 800 774" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14">
 <rect width="800" height="774" fill="#282c34"/>
 <rect width="800" height="36" fill="#21252b"/>
 <rect y="35" width="800" height="1" fill="#181a1f"/>
-<text x="16" y="18" fill="#9da5b4" dominant-baseline="central">src/parser.ts</text>
+<text x="16" y="23.04" fill="#9da5b4">src/parser.ts</text>
 <rect x="40.80" y="36" width="1" height="738" fill="#3b4048"/>
-<rect y="366" width="800" height="22" fill="rgba(60, 255, 60, 0.12)"/>
+<rect y="366" width="800" height="22" fill="#3cff3c" fill-opacity="0.12"/>
 <rect y="366" width="3" height="22" fill="#44ff44"/>
-<text x="28.80" y="47" fill="#636d83" text-anchor="end" dominant-baseline="central">1</text>
-<text x="57.80" y="47" fill="#C678DD" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">import</text>
-<text x="116.60" y="47" fill="#C678DD" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">type</text>
-<text x="158.60" y="47" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">{</text>
-<text x="175.40" y="47" fill="#E06C75" dominant-baseline="central" textLength="75.60" lengthAdjust="spacingAndGlyphs">LineRange</text>
-<text x="251.00" y="47" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
-<text x="267.80" y="47" fill="#E06C75" dominant-baseline="central" textLength="109.20" lengthAdjust="spacingAndGlyphs">HighlightSpec</text>
-<text x="385.40" y="47" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
-<text x="402.20" y="47" fill="#C678DD" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">from</text>
-<text x="444.20" y="47" fill="#98C379" dominant-baseline="central" textLength="100.80" lengthAdjust="spacingAndGlyphs">'./types.js'</text>
-<text x="545" y="47" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">;</text>
-<text x="28.80" y="69" fill="#636d83" text-anchor="end" dominant-baseline="central">2</text>
-<text x="28.80" y="91" fill="#636d83" text-anchor="end" dominant-baseline="central">3</text>
-<text x="57.80" y="91" fill="#C678DD" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">export</text>
-<text x="116.60" y="91" fill="#C678DD" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">function</text>
-<text x="192.20" y="91" fill="#61AFEF" dominant-baseline="central" textLength="117.60" lengthAdjust="spacingAndGlyphs">parseLineRange</text>
-<text x="309.80" y="91" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="318.20" y="91" fill="#E06C75" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
-<text x="360.20" y="91" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="377" y="91" fill="#E5C07B" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
-<text x="427.40" y="91" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">):</text>
-<text x="452.60" y="91" fill="#E5C07B" dominant-baseline="central" textLength="75.60" lengthAdjust="spacingAndGlyphs">LineRange</text>
-<text x="536.60" y="91" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">{</text>
-<text x="28.80" y="113" fill="#636d83" text-anchor="end" dominant-baseline="central">4</text>
-<text x="74.60" y="113" fill="#C678DD" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
-<text x="125" y="113" fill="#E5C07B" dominant-baseline="central" textLength="92.40" lengthAdjust="spacingAndGlyphs">singleMatch</text>
-<text x="225.80" y="113" fill="#56B6C2" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
-<text x="242.60" y="113" fill="#E5C07B" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
-<text x="284.60" y="113" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">.</text>
-<text x="293" y="113" fill="#61AFEF" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">match</text>
-<text x="335" y="113" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="343.40" y="113" fill="#E06C75" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">/</text>
-<text x="351.80" y="113" fill="#C678DD" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">^</text>
-<text x="360.20" y="113" fill="#E06C75" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">(\d</text>
-<text x="385.40" y="113" fill="#D19A66" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">+</text>
-<text x="393.80" y="113" fill="#E06C75" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">)</text>
-<text x="402.20" y="113" fill="#C678DD" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">$</text>
-<text x="410.60" y="113" fill="#E06C75" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">/</text>
-<text x="419.00" y="113" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
-<text x="28.80" y="135" fill="#636d83" text-anchor="end" dominant-baseline="central">5</text>
-<text x="74.60" y="135" fill="#C678DD" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">if</text>
-<text x="99.80" y="135" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="108.20" y="135" fill="#E06C75" dominant-baseline="central" textLength="92.40" lengthAdjust="spacingAndGlyphs">singleMatch</text>
-<text x="200.60" y="135" fill="#ABB2BF" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">) {</text>
-<text x="28.80" y="157" fill="#636d83" text-anchor="end" dominant-baseline="central">6</text>
-<text x="91.40" y="157" fill="#C678DD" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
-<text x="141.80" y="157" fill="#E5C07B" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">line</text>
-<text x="183.80" y="157" fill="#56B6C2" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
-<text x="200.60" y="157" fill="#61AFEF" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">parseInt</text>
-<text x="267.80" y="157" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="276.20" y="157" fill="#E06C75" dominant-baseline="central" textLength="92.40" lengthAdjust="spacingAndGlyphs">singleMatch</text>
-<text x="368.60" y="157" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">[</text>
-<text x="377" y="157" fill="#D19A66" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">1</text>
-<text x="385.40" y="157" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">],</text>
-<text x="410.60" y="157" fill="#D19A66" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">10</text>
-<text x="427.40" y="157" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
-<text x="28.80" y="179" fill="#636d83" text-anchor="end" dominant-baseline="central">7</text>
-<text x="91.40" y="179" fill="#C678DD" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">return</text>
-<text x="150.20" y="179" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">{</text>
-<text x="167" y="179" fill="#E06C75" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">start</text>
-<text x="209" y="179" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="225.80" y="179" fill="#E06C75" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">line</text>
-<text x="259.40" y="179" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
-<text x="276.20" y="179" fill="#E06C75" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">end</text>
-<text x="301.40" y="179" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="318.20" y="179" fill="#E06C75" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">line</text>
-<text x="360.20" y="179" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">};</text>
-<text x="28.80" y="201" fill="#636d83" text-anchor="end" dominant-baseline="central">8</text>
-<text x="74.60" y="201" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
+<text x="20.40" y="52.04" fill="#636d83">1</text>
+<text x="57.80" y="52.04" fill="#C678DD" textLength="50.40" lengthAdjust="spacingAndGlyphs">import</text>
+<text x="116.60" y="52.04" fill="#C678DD" textLength="33.60" lengthAdjust="spacingAndGlyphs">type</text>
+<text x="158.60" y="52.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">{</text>
+<text x="175.40" y="52.04" fill="#E06C75" textLength="75.60" lengthAdjust="spacingAndGlyphs">LineRange</text>
+<text x="251" y="52.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
+<text x="267.80" y="52.04" fill="#E06C75" textLength="109.20" lengthAdjust="spacingAndGlyphs">HighlightSpec</text>
+<text x="385.40" y="52.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
+<text x="402.20" y="52.04" fill="#C678DD" textLength="33.60" lengthAdjust="spacingAndGlyphs">from</text>
+<text x="444.20" y="52.04" fill="#98C379" textLength="100.80" lengthAdjust="spacingAndGlyphs">'./types.js'</text>
+<text x="545" y="52.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">;</text>
+<text x="20.40" y="74.04" fill="#636d83">2</text>
+<text x="20.40" y="96.04" fill="#636d83">3</text>
+<text x="57.80" y="96.04" fill="#C678DD" textLength="50.40" lengthAdjust="spacingAndGlyphs">export</text>
+<text x="116.60" y="96.04" fill="#C678DD" textLength="67.20" lengthAdjust="spacingAndGlyphs">function</text>
+<text x="192.20" y="96.04" fill="#61AFEF" textLength="117.60" lengthAdjust="spacingAndGlyphs">parseLineRange</text>
+<text x="309.80" y="96.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="318.20" y="96.04" fill="#E06C75" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
+<text x="360.20" y="96.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="377" y="96.04" fill="#E5C07B" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
+<text x="427.40" y="96.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">):</text>
+<text x="452.60" y="96.04" fill="#E5C07B" textLength="75.60" lengthAdjust="spacingAndGlyphs">LineRange</text>
+<text x="536.60" y="96.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">{</text>
+<text x="20.40" y="118.04" fill="#636d83">4</text>
+<text x="74.60" y="118.04" fill="#C678DD" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
+<text x="125" y="118.04" fill="#E5C07B" textLength="92.40" lengthAdjust="spacingAndGlyphs">singleMatch</text>
+<text x="225.80" y="118.04" fill="#56B6C2" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
+<text x="242.60" y="118.04" fill="#E5C07B" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
+<text x="284.60" y="118.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">.</text>
+<text x="293" y="118.04" fill="#61AFEF" textLength="42" lengthAdjust="spacingAndGlyphs">match</text>
+<text x="335" y="118.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="343.40" y="118.04" fill="#E06C75" textLength="8.40" lengthAdjust="spacingAndGlyphs">/</text>
+<text x="351.80" y="118.04" fill="#C678DD" textLength="8.40" lengthAdjust="spacingAndGlyphs">^</text>
+<text x="360.20" y="118.04" fill="#E06C75" textLength="25.20" lengthAdjust="spacingAndGlyphs">(\d</text>
+<text x="385.40" y="118.04" fill="#D19A66" textLength="8.40" lengthAdjust="spacingAndGlyphs">+</text>
+<text x="393.80" y="118.04" fill="#E06C75" textLength="8.40" lengthAdjust="spacingAndGlyphs">)</text>
+<text x="402.20" y="118.04" fill="#C678DD" textLength="8.40" lengthAdjust="spacingAndGlyphs">$</text>
+<text x="410.60" y="118.04" fill="#E06C75" textLength="8.40" lengthAdjust="spacingAndGlyphs">/</text>
+<text x="419" y="118.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
+<text x="20.40" y="140.04" fill="#636d83">5</text>
+<text x="74.60" y="140.04" fill="#C678DD" textLength="16.80" lengthAdjust="spacingAndGlyphs">if</text>
+<text x="99.80" y="140.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="108.20" y="140.04" fill="#E06C75" textLength="92.40" lengthAdjust="spacingAndGlyphs">singleMatch</text>
+<text x="200.60" y="140.04" fill="#ABB2BF" textLength="25.20" lengthAdjust="spacingAndGlyphs">) {</text>
+<text x="20.40" y="162.04" fill="#636d83">6</text>
+<text x="91.40" y="162.04" fill="#C678DD" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
+<text x="141.80" y="162.04" fill="#E5C07B" textLength="33.60" lengthAdjust="spacingAndGlyphs">line</text>
+<text x="183.80" y="162.04" fill="#56B6C2" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
+<text x="200.60" y="162.04" fill="#61AFEF" textLength="67.20" lengthAdjust="spacingAndGlyphs">parseInt</text>
+<text x="267.80" y="162.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="276.20" y="162.04" fill="#E06C75" textLength="92.40" lengthAdjust="spacingAndGlyphs">singleMatch</text>
+<text x="368.60" y="162.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">[</text>
+<text x="377" y="162.04" fill="#D19A66" textLength="8.40" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="385.40" y="162.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">],</text>
+<text x="410.60" y="162.04" fill="#D19A66" textLength="16.80" lengthAdjust="spacingAndGlyphs">10</text>
+<text x="427.40" y="162.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
+<text x="20.40" y="184.04" fill="#636d83">7</text>
+<text x="91.40" y="184.04" fill="#C678DD" textLength="50.40" lengthAdjust="spacingAndGlyphs">return</text>
+<text x="150.20" y="184.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">{</text>
+<text x="167" y="184.04" fill="#E06C75" textLength="42" lengthAdjust="spacingAndGlyphs">start</text>
+<text x="209" y="184.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="225.80" y="184.04" fill="#E06C75" textLength="33.60" lengthAdjust="spacingAndGlyphs">line</text>
+<text x="259.40" y="184.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
+<text x="276.20" y="184.04" fill="#E06C75" textLength="25.20" lengthAdjust="spacingAndGlyphs">end</text>
+<text x="301.40" y="184.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="318.20" y="184.04" fill="#E06C75" textLength="33.60" lengthAdjust="spacingAndGlyphs">line</text>
+<text x="360.20" y="184.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">};</text>
+<text x="20.40" y="206.04" fill="#636d83">8</text>
+<text x="74.60" y="206.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
 <rect y="212" width="800" height="22" fill="#2c313a"/>
 <rect x="41.80" y="212" width="758.20" height="1" fill="#3b4048"/>
 <rect x="41.80" y="233" width="758.20" height="1" fill="#3b4048"/>
-<text x="28.80" y="223" fill="#5c6370" text-anchor="end" dominant-baseline="central">⋮</text>
-<text x="57.80" y="223" fill="#5c6370" dominant-baseline="central">•••  27 lines folded  •••</text>
-<text x="28.80" y="245" fill="#636d83" text-anchor="end" dominant-baseline="central">36</text>
-<text x="66.20" y="245" fill="#7F848E" dominant-baseline="central" textLength="537.60" lengthAdjust="spacingAndGlyphs">* Parse a single highlight spec. To parse a comma-separated list</text>
-<text x="28.80" y="267" fill="#636d83" text-anchor="end" dominant-baseline="central">37</text>
-<text x="66.20" y="267" fill="#7F848E" dominant-baseline="central" textLength="277.20" lengthAdjust="spacingAndGlyphs">* (e.g. "13,15-18,19:10-20"), use</text>
-<text x="351.80" y="267" fill="#E5C07B" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">{</text>
-<text x="360.20" y="267" fill="#C678DD" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">@link</text>
-<text x="410.60" y="267" fill="#E06C75" dominant-baseline="central" textLength="159.60" lengthAdjust="spacingAndGlyphs">parseHighlightSpecs</text>
-<text x="570.20" y="267" fill="#E5C07B" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
-<text x="578.60" y="267" fill="#7F848E" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">.</text>
-<text x="28.80" y="289" fill="#636d83" text-anchor="end" dominant-baseline="central">38</text>
-<text x="66.20" y="289" fill="#7F848E" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">*/</text>
-<text x="28.80" y="311" fill="#636d83" text-anchor="end" dominant-baseline="central">39</text>
-<text x="57.80" y="311" fill="#C678DD" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">export</text>
-<text x="116.60" y="311" fill="#C678DD" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">function</text>
-<text x="192.20" y="311" fill="#61AFEF" dominant-baseline="central" textLength="151.20" lengthAdjust="spacingAndGlyphs">parseHighlightSpec</text>
-<text x="343.40" y="311" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="351.80" y="311" fill="#E06C75" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
-<text x="393.80" y="311" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="410.60" y="311" fill="#E5C07B" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
-<text x="461" y="311" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
-<text x="477.80" y="311" fill="#E06C75" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">color</text>
-<text x="519.80" y="311" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="536.60" y="311" fill="#98C379" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">'red'</text>
-<text x="587.00" y="311" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">|</text>
-<text x="603.80" y="311" fill="#98C379" dominant-baseline="central" textLength="58.80" lengthAdjust="spacingAndGlyphs">'green'</text>
-<text x="662.60" y="311" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">):</text>
-<text x="687.80" y="311" fill="#E5C07B" dominant-baseline="central" textLength="92.40" lengthAdjust="spacingAndGlyphs">HighlightSp</text>
-<text x="91.40" y="333" fill="#4b5263" dominant-baseline="central">↳</text>
-<text x="108.20" y="333" fill="#E5C07B" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">ec</text>
-<text x="133.40" y="333" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">{</text>
-<text x="28.80" y="355" fill="#636d83" text-anchor="end" dominant-baseline="central">40</text>
-<text x="74.60" y="355" fill="#7F848E" dominant-baseline="central" textLength="386.40" lengthAdjust="spacingAndGlyphs">// Column range (boxed characters): "47:12-38"</text>
-<text x="28.80" y="377" fill="#636d83" text-anchor="end" dominant-baseline="central">41</text>
-<text x="74.60" y="377" fill="#C678DD" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
-<text x="125" y="377" fill="#E5C07B" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">colMatch</text>
-<text x="200.60" y="377" fill="#56B6C2" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
-<text x="217.40" y="377" fill="#E5C07B" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
-<text x="259.40" y="377" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">.</text>
-<text x="267.80" y="377" fill="#61AFEF" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">match</text>
-<text x="309.80" y="377" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="318.20" y="377" fill="#E06C75" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">/</text>
-<text x="326.60" y="377" fill="#C678DD" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">^</text>
-<text x="335.00" y="377" fill="#E06C75" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">(\d</text>
-<text x="360.20" y="377" fill="#D19A66" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">+</text>
-<text x="368.60" y="377" fill="#E06C75" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">):(\d</text>
-<text x="410.60" y="377" fill="#D19A66" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">+</text>
-<text x="419.00" y="377" fill="#E06C75" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">)-(\d</text>
-<text x="461.00" y="377" fill="#D19A66" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">+</text>
-<text x="469.40" y="377" fill="#E06C75" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">)</text>
-<text x="477.80" y="377" fill="#C678DD" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">$</text>
-<text x="486.20" y="377" fill="#E06C75" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">/</text>
-<text x="494.60" y="377" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
-<text x="28.80" y="399" fill="#636d83" text-anchor="end" dominant-baseline="central">42</text>
-<text x="74.60" y="399" fill="#C678DD" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">if</text>
-<text x="99.80" y="399" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="108.20" y="399" fill="#E06C75" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">colMatch</text>
-<text x="175.40" y="399" fill="#ABB2BF" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">) {</text>
-<text x="28.80" y="421" fill="#636d83" text-anchor="end" dominant-baseline="central">43</text>
-<text x="91.40" y="421" fill="#C678DD" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
-<text x="141.80" y="421" fill="#E5C07B" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">line</text>
-<text x="183.80" y="421" fill="#56B6C2" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
-<text x="200.60" y="421" fill="#61AFEF" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">parseInt</text>
-<text x="267.80" y="421" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="276.20" y="421" fill="#E06C75" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">colMatch</text>
-<text x="343.40" y="421" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">[</text>
-<text x="351.80" y="421" fill="#D19A66" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">1</text>
-<text x="360.20" y="421" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">],</text>
-<text x="385.40" y="421" fill="#D19A66" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">10</text>
-<text x="402.20" y="421" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
-<text x="28.80" y="443" fill="#636d83" text-anchor="end" dominant-baseline="central">44</text>
-<text x="91.40" y="443" fill="#C678DD" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
-<text x="141.80" y="443" fill="#E5C07B" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">colStart</text>
-<text x="217.40" y="443" fill="#56B6C2" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
-<text x="234.20" y="443" fill="#61AFEF" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">parseInt</text>
-<text x="301.40" y="443" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="309.80" y="443" fill="#E06C75" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">colMatch</text>
-<text x="377" y="443" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">[</text>
-<text x="385.40" y="443" fill="#D19A66" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">2</text>
-<text x="393.80" y="443" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">],</text>
-<text x="419.00" y="443" fill="#D19A66" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">10</text>
-<text x="435.80" y="443" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
-<text x="28.80" y="465" fill="#636d83" text-anchor="end" dominant-baseline="central">45</text>
-<text x="91.40" y="465" fill="#C678DD" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
-<text x="141.80" y="465" fill="#E5C07B" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">colEnd</text>
-<text x="200.60" y="465" fill="#56B6C2" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
-<text x="217.40" y="465" fill="#61AFEF" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">parseInt</text>
-<text x="284.60" y="465" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="293" y="465" fill="#E06C75" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">colMatch</text>
-<text x="360.20" y="465" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">[</text>
-<text x="368.60" y="465" fill="#D19A66" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">3</text>
-<text x="377.00" y="465" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">],</text>
-<text x="402.20" y="465" fill="#D19A66" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">10</text>
-<text x="419.00" y="465" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
+<text x="20.40" y="228.04" fill="#5c6370">⋮</text>
+<text x="57.80" y="228.04" fill="#5c6370">•••</text>
+<text x="99.80" y="228.04" fill="#5c6370">27 lines folded</text>
+<text x="242.60" y="228.04" fill="#5c6370">•••</text>
+<text x="12" y="250.04" fill="#636d83">36</text>
+<text x="66.20" y="250.04" fill="#7F848E" textLength="537.60" lengthAdjust="spacingAndGlyphs">* Parse a single highlight spec. To parse a comma-separated list</text>
+<text x="12" y="272.04" fill="#636d83">37</text>
+<text x="66.20" y="272.04" fill="#7F848E" textLength="277.20" lengthAdjust="spacingAndGlyphs">* (e.g. "13,15-18,19:10-20"), use</text>
+<text x="351.80" y="272.04" fill="#E5C07B" textLength="8.40" lengthAdjust="spacingAndGlyphs">{</text>
+<text x="360.20" y="272.04" fill="#C678DD" textLength="42" lengthAdjust="spacingAndGlyphs">@link</text>
+<text x="410.60" y="272.04" fill="#E06C75" textLength="159.60" lengthAdjust="spacingAndGlyphs">parseHighlightSpecs</text>
+<text x="570.20" y="272.04" fill="#E5C07B" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
+<text x="578.60" y="272.04" fill="#7F848E" textLength="8.40" lengthAdjust="spacingAndGlyphs">.</text>
+<text x="12" y="294.04" fill="#636d83">38</text>
+<text x="66.20" y="294.04" fill="#7F848E" textLength="16.80" lengthAdjust="spacingAndGlyphs">*/</text>
+<text x="12" y="316.04" fill="#636d83">39</text>
+<text x="57.80" y="316.04" fill="#C678DD" textLength="50.40" lengthAdjust="spacingAndGlyphs">export</text>
+<text x="116.60" y="316.04" fill="#C678DD" textLength="67.20" lengthAdjust="spacingAndGlyphs">function</text>
+<text x="192.20" y="316.04" fill="#61AFEF" textLength="151.20" lengthAdjust="spacingAndGlyphs">parseHighlightSpec</text>
+<text x="343.40" y="316.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="351.80" y="316.04" fill="#E06C75" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
+<text x="393.80" y="316.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="410.60" y="316.04" fill="#E5C07B" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
+<text x="461" y="316.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">,</text>
+<text x="477.80" y="316.04" fill="#E06C75" textLength="42" lengthAdjust="spacingAndGlyphs">color</text>
+<text x="519.80" y="316.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="536.60" y="316.04" fill="#98C379" textLength="42" lengthAdjust="spacingAndGlyphs">'red'</text>
+<text x="587" y="316.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">|</text>
+<text x="603.80" y="316.04" fill="#98C379" textLength="58.80" lengthAdjust="spacingAndGlyphs">'green'</text>
+<text x="662.60" y="316.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">):</text>
+<text x="687.80" y="316.04" fill="#E5C07B" textLength="92.40" lengthAdjust="spacingAndGlyphs">HighlightSp</text>
+<text x="91.40" y="338.04" fill="#4b5263">↳</text>
+<text x="108.20" y="338.04" fill="#E5C07B" textLength="16.80" lengthAdjust="spacingAndGlyphs">ec</text>
+<text x="133.40" y="338.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">{</text>
+<text x="12" y="360.04" fill="#636d83">40</text>
+<text x="74.60" y="360.04" fill="#7F848E" textLength="386.40" lengthAdjust="spacingAndGlyphs">// Column range (boxed characters): "47:12-38"</text>
+<text x="12" y="382.04" fill="#636d83">41</text>
+<text x="74.60" y="382.04" fill="#C678DD" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
+<text x="125" y="382.04" fill="#E5C07B" textLength="67.20" lengthAdjust="spacingAndGlyphs">colMatch</text>
+<text x="200.60" y="382.04" fill="#56B6C2" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
+<text x="217.40" y="382.04" fill="#E5C07B" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
+<text x="259.40" y="382.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">.</text>
+<text x="267.80" y="382.04" fill="#61AFEF" textLength="42" lengthAdjust="spacingAndGlyphs">match</text>
+<text x="309.80" y="382.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="318.20" y="382.04" fill="#E06C75" textLength="8.40" lengthAdjust="spacingAndGlyphs">/</text>
+<text x="326.60" y="382.04" fill="#C678DD" textLength="8.40" lengthAdjust="spacingAndGlyphs">^</text>
+<text x="335" y="382.04" fill="#E06C75" textLength="25.20" lengthAdjust="spacingAndGlyphs">(\d</text>
+<text x="360.20" y="382.04" fill="#D19A66" textLength="8.40" lengthAdjust="spacingAndGlyphs">+</text>
+<text x="368.60" y="382.04" fill="#E06C75" textLength="42" lengthAdjust="spacingAndGlyphs">):(\d</text>
+<text x="410.60" y="382.04" fill="#D19A66" textLength="8.40" lengthAdjust="spacingAndGlyphs">+</text>
+<text x="419" y="382.04" fill="#E06C75" textLength="42" lengthAdjust="spacingAndGlyphs">)-(\d</text>
+<text x="461" y="382.04" fill="#D19A66" textLength="8.40" lengthAdjust="spacingAndGlyphs">+</text>
+<text x="469.40" y="382.04" fill="#E06C75" textLength="8.40" lengthAdjust="spacingAndGlyphs">)</text>
+<text x="477.80" y="382.04" fill="#C678DD" textLength="8.40" lengthAdjust="spacingAndGlyphs">$</text>
+<text x="486.20" y="382.04" fill="#E06C75" textLength="8.40" lengthAdjust="spacingAndGlyphs">/</text>
+<text x="494.60" y="382.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
+<text x="12" y="404.04" fill="#636d83">42</text>
+<text x="74.60" y="404.04" fill="#C678DD" textLength="16.80" lengthAdjust="spacingAndGlyphs">if</text>
+<text x="99.80" y="404.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="108.20" y="404.04" fill="#E06C75" textLength="67.20" lengthAdjust="spacingAndGlyphs">colMatch</text>
+<text x="175.40" y="404.04" fill="#ABB2BF" textLength="25.20" lengthAdjust="spacingAndGlyphs">) {</text>
+<text x="12" y="426.04" fill="#636d83">43</text>
+<text x="91.40" y="426.04" fill="#C678DD" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
+<text x="141.80" y="426.04" fill="#E5C07B" textLength="33.60" lengthAdjust="spacingAndGlyphs">line</text>
+<text x="183.80" y="426.04" fill="#56B6C2" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
+<text x="200.60" y="426.04" fill="#61AFEF" textLength="67.20" lengthAdjust="spacingAndGlyphs">parseInt</text>
+<text x="267.80" y="426.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="276.20" y="426.04" fill="#E06C75" textLength="67.20" lengthAdjust="spacingAndGlyphs">colMatch</text>
+<text x="343.40" y="426.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">[</text>
+<text x="351.80" y="426.04" fill="#D19A66" textLength="8.40" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="360.20" y="426.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">],</text>
+<text x="385.40" y="426.04" fill="#D19A66" textLength="16.80" lengthAdjust="spacingAndGlyphs">10</text>
+<text x="402.20" y="426.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
+<text x="12" y="448.04" fill="#636d83">44</text>
+<text x="91.40" y="448.04" fill="#C678DD" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
+<text x="141.80" y="448.04" fill="#E5C07B" textLength="67.20" lengthAdjust="spacingAndGlyphs">colStart</text>
+<text x="217.40" y="448.04" fill="#56B6C2" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
+<text x="234.20" y="448.04" fill="#61AFEF" textLength="67.20" lengthAdjust="spacingAndGlyphs">parseInt</text>
+<text x="301.40" y="448.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="309.80" y="448.04" fill="#E06C75" textLength="67.20" lengthAdjust="spacingAndGlyphs">colMatch</text>
+<text x="377" y="448.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">[</text>
+<text x="385.40" y="448.04" fill="#D19A66" textLength="8.40" lengthAdjust="spacingAndGlyphs">2</text>
+<text x="393.80" y="448.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">],</text>
+<text x="419" y="448.04" fill="#D19A66" textLength="16.80" lengthAdjust="spacingAndGlyphs">10</text>
+<text x="435.80" y="448.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
+<text x="12" y="470.04" fill="#636d83">45</text>
+<text x="91.40" y="470.04" fill="#C678DD" textLength="42" lengthAdjust="spacingAndGlyphs">const</text>
+<text x="141.80" y="470.04" fill="#E5C07B" textLength="50.40" lengthAdjust="spacingAndGlyphs">colEnd</text>
+<text x="200.60" y="470.04" fill="#56B6C2" textLength="8.40" lengthAdjust="spacingAndGlyphs">=</text>
+<text x="217.40" y="470.04" fill="#61AFEF" textLength="67.20" lengthAdjust="spacingAndGlyphs">parseInt</text>
+<text x="284.60" y="470.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="293" y="470.04" fill="#E06C75" textLength="67.20" lengthAdjust="spacingAndGlyphs">colMatch</text>
+<text x="360.20" y="470.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">[</text>
+<text x="368.60" y="470.04" fill="#D19A66" textLength="8.40" lengthAdjust="spacingAndGlyphs">3</text>
+<text x="377" y="470.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">],</text>
+<text x="402.20" y="470.04" fill="#D19A66" textLength="16.80" lengthAdjust="spacingAndGlyphs">10</text>
+<text x="419" y="470.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
 <rect y="476" width="800" height="22" fill="#2c313a"/>
 <rect x="41.80" y="476" width="758.20" height="1" fill="#3b4048"/>
 <rect x="41.80" y="497" width="758.20" height="1" fill="#3b4048"/>
-<text x="28.80" y="487" fill="#5c6370" text-anchor="end" dominant-baseline="central">⋮</text>
-<text x="57.80" y="487" fill="#5c6370" dominant-baseline="central">•••  35 lines folded  •••</text>
-<text x="28.80" y="509" fill="#636d83" text-anchor="end" dominant-baseline="central">81</text>
-<text x="57.80" y="509" fill="#7F848E" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">/**</text>
-<text x="28.80" y="531" fill="#636d83" text-anchor="end" dominant-baseline="central">82</text>
-<text x="66.20" y="531" fill="#7F848E" dominant-baseline="central" textLength="529.20" lengthAdjust="spacingAndGlyphs">* Parse a comma-separated list of line ranges (used by --fold).</text>
-<text x="28.80" y="553" fill="#636d83" text-anchor="end" dominant-baseline="central">83</text>
-<text x="66.20" y="553" fill="#7F848E" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">*/</text>
-<text x="28.80" y="575" fill="#636d83" text-anchor="end" dominant-baseline="central">84</text>
-<text x="57.80" y="575" fill="#C678DD" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">export</text>
-<text x="116.60" y="575" fill="#C678DD" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">function</text>
-<text x="192.20" y="575" fill="#61AFEF" dominant-baseline="central" textLength="126" lengthAdjust="spacingAndGlyphs">parseLineRanges</text>
-<text x="318.20" y="575" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="326.60" y="575" fill="#E06C75" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
-<text x="368.60" y="575" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="385.40" y="575" fill="#E5C07B" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
-<text x="435.80" y="575" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">):</text>
-<text x="461.00" y="575" fill="#E5C07B" dominant-baseline="central" textLength="75.60" lengthAdjust="spacingAndGlyphs">LineRange</text>
-<text x="536.60" y="575" fill="#ABB2BF" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">[] {</text>
-<text x="28.80" y="597" fill="#636d83" text-anchor="end" dominant-baseline="central">85</text>
-<text x="74.60" y="597" fill="#C678DD" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">return</text>
-<text x="133.40" y="597" fill="#61AFEF" dominant-baseline="central" textLength="109.20" lengthAdjust="spacingAndGlyphs">splitSpecList</text>
-<text x="242.60" y="597" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="251.00" y="597" fill="#E06C75" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
-<text x="293" y="597" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">).</text>
-<text x="309.80" y="597" fill="#61AFEF" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">map</text>
-<text x="335" y="597" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="343.40" y="597" fill="#E06C75" dominant-baseline="central" textLength="117.60" lengthAdjust="spacingAndGlyphs">parseLineRange</text>
-<text x="461" y="597" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
-<text x="28.80" y="619" fill="#636d83" text-anchor="end" dominant-baseline="central">86</text>
-<text x="57.80" y="619" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
-<text x="28.80" y="641" fill="#636d83" text-anchor="end" dominant-baseline="central">87</text>
-<text x="28.80" y="663" fill="#636d83" text-anchor="end" dominant-baseline="central">88</text>
-<text x="57.80" y="663" fill="#7F848E" dominant-baseline="central" textLength="697.20" lengthAdjust="spacingAndGlyphs">/** Split a comma-separated spec list, trimming whitespace and dropping empties. */</text>
-<text x="28.80" y="685" fill="#636d83" text-anchor="end" dominant-baseline="central">89</text>
-<text x="57.80" y="685" fill="#C678DD" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">export</text>
-<text x="116.60" y="685" fill="#C678DD" dominant-baseline="central" textLength="67.20" lengthAdjust="spacingAndGlyphs">function</text>
-<text x="192.20" y="685" fill="#61AFEF" dominant-baseline="central" textLength="109.20" lengthAdjust="spacingAndGlyphs">splitSpecList</text>
-<text x="301.40" y="685" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="309.80" y="685" fill="#E06C75" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
-<text x="351.80" y="685" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
-<text x="368.60" y="685" fill="#E5C07B" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
-<text x="419" y="685" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">):</text>
-<text x="444.20" y="685" fill="#E5C07B" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
-<text x="494.60" y="685" fill="#ABB2BF" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">[] {</text>
-<text x="28.80" y="707" fill="#636d83" text-anchor="end" dominant-baseline="central">90</text>
-<text x="74.60" y="707" fill="#C678DD" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">return</text>
-<text x="133.40" y="707" fill="#E5C07B" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
-<text x="175.40" y="707" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">.</text>
-<text x="183.80" y="707" fill="#61AFEF" dominant-baseline="central" textLength="42" lengthAdjust="spacingAndGlyphs">split</text>
-<text x="225.80" y="707" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="234.20" y="707" fill="#98C379" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">','</text>
-<text x="259.40" y="707" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">).</text>
-<text x="276.20" y="707" fill="#61AFEF" dominant-baseline="central" textLength="25.20" lengthAdjust="spacingAndGlyphs">map</text>
-<text x="301.40" y="707" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="309.80" y="707" fill="#E06C75" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">s</text>
-<text x="326.60" y="707" fill="#C678DD" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">=&gt;</text>
-<text x="351.80" y="707" fill="#E5C07B" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">s</text>
-<text x="360.20" y="707" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">.</text>
-<text x="368.60" y="707" fill="#61AFEF" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">trim</text>
-<text x="402.20" y="707" fill="#ABB2BF" dominant-baseline="central" textLength="33.60" lengthAdjust="spacingAndGlyphs">()).</text>
-<text x="435.80" y="707" fill="#61AFEF" dominant-baseline="central" textLength="50.40" lengthAdjust="spacingAndGlyphs">filter</text>
-<text x="486.20" y="707" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
-<text x="494.60" y="707" fill="#E06C75" dominant-baseline="central" textLength="58.80" lengthAdjust="spacingAndGlyphs">Boolean</text>
-<text x="553.40" y="707" fill="#ABB2BF" dominant-baseline="central" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
-<text x="28.80" y="729" fill="#636d83" text-anchor="end" dominant-baseline="central">91</text>
-<text x="57.80" y="729" fill="#ABB2BF" dominant-baseline="central" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
-<text x="28.80" y="751" fill="#636d83" text-anchor="end" dominant-baseline="central">92</text>
+<text x="20.40" y="492.04" fill="#5c6370">⋮</text>
+<text x="57.80" y="492.04" fill="#5c6370">•••</text>
+<text x="99.80" y="492.04" fill="#5c6370">35 lines folded</text>
+<text x="242.60" y="492.04" fill="#5c6370">•••</text>
+<text x="12" y="514.04" fill="#636d83">81</text>
+<text x="57.80" y="514.04" fill="#7F848E" textLength="25.20" lengthAdjust="spacingAndGlyphs">/**</text>
+<text x="12" y="536.04" fill="#636d83">82</text>
+<text x="66.20" y="536.04" fill="#7F848E" textLength="529.20" lengthAdjust="spacingAndGlyphs">* Parse a comma-separated list of line ranges (used by --fold).</text>
+<text x="12" y="558.04" fill="#636d83">83</text>
+<text x="66.20" y="558.04" fill="#7F848E" textLength="16.80" lengthAdjust="spacingAndGlyphs">*/</text>
+<text x="12" y="580.04" fill="#636d83">84</text>
+<text x="57.80" y="580.04" fill="#C678DD" textLength="50.40" lengthAdjust="spacingAndGlyphs">export</text>
+<text x="116.60" y="580.04" fill="#C678DD" textLength="67.20" lengthAdjust="spacingAndGlyphs">function</text>
+<text x="192.20" y="580.04" fill="#61AFEF" textLength="126" lengthAdjust="spacingAndGlyphs">parseLineRanges</text>
+<text x="318.20" y="580.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="326.60" y="580.04" fill="#E06C75" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
+<text x="368.60" y="580.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="385.40" y="580.04" fill="#E5C07B" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
+<text x="435.80" y="580.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">):</text>
+<text x="461" y="580.04" fill="#E5C07B" textLength="75.60" lengthAdjust="spacingAndGlyphs">LineRange</text>
+<text x="536.60" y="580.04" fill="#ABB2BF" textLength="33.60" lengthAdjust="spacingAndGlyphs">[] {</text>
+<text x="12" y="602.04" fill="#636d83">85</text>
+<text x="74.60" y="602.04" fill="#C678DD" textLength="50.40" lengthAdjust="spacingAndGlyphs">return</text>
+<text x="133.40" y="602.04" fill="#61AFEF" textLength="109.20" lengthAdjust="spacingAndGlyphs">splitSpecList</text>
+<text x="242.60" y="602.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="251" y="602.04" fill="#E06C75" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
+<text x="293" y="602.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">).</text>
+<text x="309.80" y="602.04" fill="#61AFEF" textLength="25.20" lengthAdjust="spacingAndGlyphs">map</text>
+<text x="335" y="602.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="343.40" y="602.04" fill="#E06C75" textLength="117.60" lengthAdjust="spacingAndGlyphs">parseLineRange</text>
+<text x="461" y="602.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
+<text x="12" y="624.04" fill="#636d83">86</text>
+<text x="57.80" y="624.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
+<text x="12" y="646.04" fill="#636d83">87</text>
+<text x="12" y="668.04" fill="#636d83">88</text>
+<text x="57.80" y="668.04" fill="#7F848E" textLength="697.20" lengthAdjust="spacingAndGlyphs">/** Split a comma-separated spec list, trimming whitespace and dropping empties. */</text>
+<text x="12" y="690.04" fill="#636d83">89</text>
+<text x="57.80" y="690.04" fill="#C678DD" textLength="50.40" lengthAdjust="spacingAndGlyphs">export</text>
+<text x="116.60" y="690.04" fill="#C678DD" textLength="67.20" lengthAdjust="spacingAndGlyphs">function</text>
+<text x="192.20" y="690.04" fill="#61AFEF" textLength="109.20" lengthAdjust="spacingAndGlyphs">splitSpecList</text>
+<text x="301.40" y="690.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="309.80" y="690.04" fill="#E06C75" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
+<text x="351.80" y="690.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">:</text>
+<text x="368.60" y="690.04" fill="#E5C07B" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
+<text x="419" y="690.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">):</text>
+<text x="444.20" y="690.04" fill="#E5C07B" textLength="50.40" lengthAdjust="spacingAndGlyphs">string</text>
+<text x="494.60" y="690.04" fill="#ABB2BF" textLength="33.60" lengthAdjust="spacingAndGlyphs">[] {</text>
+<text x="12" y="712.04" fill="#636d83">90</text>
+<text x="74.60" y="712.04" fill="#C678DD" textLength="50.40" lengthAdjust="spacingAndGlyphs">return</text>
+<text x="133.40" y="712.04" fill="#E5C07B" textLength="42" lengthAdjust="spacingAndGlyphs">input</text>
+<text x="175.40" y="712.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">.</text>
+<text x="183.80" y="712.04" fill="#61AFEF" textLength="42" lengthAdjust="spacingAndGlyphs">split</text>
+<text x="225.80" y="712.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="234.20" y="712.04" fill="#98C379" textLength="25.20" lengthAdjust="spacingAndGlyphs">','</text>
+<text x="259.40" y="712.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">).</text>
+<text x="276.20" y="712.04" fill="#61AFEF" textLength="25.20" lengthAdjust="spacingAndGlyphs">map</text>
+<text x="301.40" y="712.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="309.80" y="712.04" fill="#E06C75" textLength="8.40" lengthAdjust="spacingAndGlyphs">s</text>
+<text x="326.60" y="712.04" fill="#C678DD" textLength="16.80" lengthAdjust="spacingAndGlyphs">=&gt;</text>
+<text x="351.80" y="712.04" fill="#E5C07B" textLength="8.40" lengthAdjust="spacingAndGlyphs">s</text>
+<text x="360.20" y="712.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">.</text>
+<text x="368.60" y="712.04" fill="#61AFEF" textLength="33.60" lengthAdjust="spacingAndGlyphs">trim</text>
+<text x="402.20" y="712.04" fill="#ABB2BF" textLength="33.60" lengthAdjust="spacingAndGlyphs">()).</text>
+<text x="435.80" y="712.04" fill="#61AFEF" textLength="50.40" lengthAdjust="spacingAndGlyphs">filter</text>
+<text x="486.20" y="712.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">(</text>
+<text x="494.60" y="712.04" fill="#E06C75" textLength="58.80" lengthAdjust="spacingAndGlyphs">Boolean</text>
+<text x="553.40" y="712.04" fill="#ABB2BF" textLength="16.80" lengthAdjust="spacingAndGlyphs">);</text>
+<text x="12" y="734.04" fill="#636d83">91</text>
+<text x="57.80" y="734.04" fill="#ABB2BF" textLength="8.40" lengthAdjust="spacingAndGlyphs">}</text>
+<text x="12" y="756.04" fill="#636d83">92</text>
 </svg>

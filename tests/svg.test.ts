@@ -57,7 +57,8 @@ describe('renderSvg', () => {
       highlights: [{ color: 'red', lineStart: 2, lineEnd: 2 }],
     });
 
-    expect(out).toContain(`fill="${THEMES.dark.highlight.red.bg}"`);
+    // rgba(255, 60, 60, 0.12) — spelled the SVG 1.1 way, see the Office block below.
+    expect(out).toContain('fill="#ff3c3c" fill-opacity="0.12"');
     expect(out).toContain(`fill="${THEMES.dark.highlight.red.border}"`);
   });
 
@@ -139,5 +140,102 @@ describe('generateCodeShotSvg', () => {
     const content = readFileSync(result, 'utf-8');
     expect(content).toContain('<svg');
     expect(content).toContain('sample.ts');
+  });
+});
+
+// Word, Excel and PowerPoint render SVG with their own engine, which ignores a
+// handful of constructs browsers accept: the rgba() color syntax (the fill is
+// dropped), dominant-baseline / text-anchor (text lands on the alphabetic
+// baseline, left-anchored) and xml:space (runs of spaces collapse). The SVG
+// therefore relies on none of them.
+describe('renderSvg — Office (Word/PowerPoint) compatibility', () => {
+  const tokens: TokenizedLine[] = [
+    [{ text: 'const s = ', color: '#abb2bf' }, { text: "'a  b'", color: '#98c379' }],
+    [{ text: 'x', color: '#abb2bf' }],
+  ];
+
+  it('never uses the rgba() color syntax: highlights carry a hex fill plus fill-opacity', () => {
+    const out = renderSvg({
+      tokenizedLines: tokens,
+      startLine: 1,
+      endLine: 2,
+      relativePath: 'x.ts',
+      highlights: [{ color: 'red', lineStart: 1, lineEnd: 1 }, { color: 'green', lineStart: 2, lineEnd: 2 }],
+    });
+
+    expect(out).not.toContain('rgba(');
+    // dark red: rgba(255, 60, 60, 0.12)
+    expect(out).toContain('fill="#ff3c3c" fill-opacity="0.12"');
+    // dark green: rgba(60, 255, 60, 0.12)
+    expect(out).toContain('fill="#3cff3c" fill-opacity="0.12"');
+    // The left bar keeps its opaque border color.
+    expect(out).toContain(`fill="${THEMES.dark.highlight.red.border}"`);
+  });
+
+  it('places text on an explicit baseline instead of dominant-baseline', () => {
+    const out = renderSvg({
+      tokenizedLines: tokens,
+      startLine: 1,
+      endLine: 2,
+      relativePath: 'x.ts',
+      highlights: [],
+    });
+
+    expect(out).not.toContain('dominant-baseline');
+    // Row 0 starts at the header bottom (36): its centre is 47, and the
+    // central baseline of JetBrains Mono sits 0.36em (5.04px) below that.
+    expect(out).toContain('y="52.04"');
+    // Header: centre 18 + 5.04.
+    expect(out).toContain('y="23.04"');
+  });
+
+  it('positions right-aligned gutter text by x instead of text-anchor', () => {
+    const out = renderSvg({
+      tokenizedLines: tokens,
+      startLine: 1,
+      endLine: 2,
+      relativePath: 'x.ts',
+      highlights: [],
+      folds: [{ start: 2, end: 2 }],
+    });
+
+    expect(out).not.toContain('text-anchor');
+    // Gutter: 1 digit → width 8.4 + 2*12 = 32.4; right edge minus padding is
+    // 20.4; a one-character number starts 8.4 earlier.
+    expect(out).toContain('<text x="12" y="52.04"');
+    expect(out).toContain('>1</text>');
+  });
+
+  it('splits tokens on runs of spaces so nothing depends on xml:space', () => {
+    const out = renderSvg({
+      tokenizedLines: tokens,
+      startLine: 1,
+      endLine: 2,
+      relativePath: 'x.ts',
+      highlights: [],
+    });
+
+    // "'a  b'" is drawn as "'a" and "b'" two columns apart, never as one run.
+    expect(out).not.toMatch(/>[^<]*  [^<]*</);
+    // Code starts at gutter (32.4) + separator (1) + padding (16) = 49.4; the
+    // string token follows 10 characters of 8.4px; "b'" sits 4 columns later.
+    expect(out).toContain(`<text x="133.40" y="52.04" fill="#98c379" textLength="16.80" lengthAdjust="spacingAndGlyphs">'a</text>`);
+    expect(out).toContain(`<text x="167" y="52.04" fill="#98c379" textLength="16.80" lengthAdjust="spacingAndGlyphs">b'</text>`);
+    // A single space inside a run is kept, so "x =" stays one element.
+    expect(out).toContain('>const s =</text>');
+  });
+
+  it('keeps the fold label readable without preserved whitespace', () => {
+    const out = renderSvg({
+      tokenizedLines: tokens,
+      startLine: 1,
+      endLine: 2,
+      relativePath: 'x.ts',
+      highlights: [],
+      folds: [{ start: 1, end: 2 }],
+    });
+
+    expect(out).toContain('2 lines folded');
+    expect(out).not.toMatch(/>[^<]*  [^<]*</);
   });
 });
