@@ -32,7 +32,7 @@ const program = new Command();
 
 program
   .name('snipshot')
-  .description('Generate a PNG screenshot of a code snippet, with syntax highlighting,\nline numbers, optional red/green annotations and folded regions.\nCan also output the same snippet as SVG (--svg) or ANSI-colored text (--ansi).')
+  .description('Generate a PNG or SVG screenshot of a code snippet, or ANSI-colored terminal\noutput, with syntax highlighting, line numbers, red/green annotations and\nfolded regions. PNG is the default; --svg writes a scalable document and\n--ansi prints to the terminal.')
   .version('1.3.1')
   .argument('<file>', 'source file to screenshot (language auto-detected from its extension)')
   .requiredOption('--lines <ranges>', 'lines to capture: a single line "42", a range "42-56", or several comma-separated ranges "10-14,42-56" (1-based, inclusive; the gaps between ranges are folded)')
