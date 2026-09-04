@@ -32,6 +32,38 @@ To try it in a live editor, open this folder in VS Code and press **F5**: the
 committed launch configuration starts an Extension Development Host with the
 extension loaded.
 
+## Tests
+
+Two layers, both automatic:
+
+```bash
+npm test                # unit tests, plain Node, a second
+npm run test:integration   # a real VS Code, ~a minute after the first download
+```
+
+**Unit tests** (`test/`, `node:test`) cover the pure modules: selection
+geometry, the command line, the marks and how they follow edits, the clipboard
+strategy, the platform facts, the options form, downloading and unpacking. One
+of them activates the compiled extension against a stubbed `vscode` module and
+cross-checks the manifest: every declared command is registered, every menu and
+keybinding points at a declared command, and the settings defaults match the
+code.
+
+**Integration tests** (`integration/`, Mocha through `@vscode/test-cli`) download
+a VS Code into `.vscode-test/`, open a throwaway copy of `integration/fixtures/`
+as the workspace and run the suite *inside* the Extension Development Host, with
+the full API. The CLI they drive is `integration/snipshot-shim.cjs`, which logs
+its arguments and then runs the real `dist/index.js` from the repository root
+(build it first: `npm run build` at the root). That is how they check, for every
+action, the exact command line the extension sends, and that the PNG or SVG
+really lands where the destination says. The clipboard shot is read back through
+`xclip` where one exists; elsewhere the kept-as-file fallback is checked instead.
+
+They need a display: `xvfb-run -a npm run test:integration` on a headless Linux
+(CI does that, with `xclip` installed), WSLg or a desktop otherwise. What they
+cannot reach is the inside of the options webview, which is why the form is a
+pure module with its own unit tests.
+
 ## Toolchain
 
 TypeScript 6 compiling to CommonJS (`module: node20`), `@types/vscode` pinned to

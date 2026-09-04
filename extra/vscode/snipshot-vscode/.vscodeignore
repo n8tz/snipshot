@@ -5,6 +5,10 @@ tsconfig.json
 DEVELOPMENT.md
 src/**
 test/**
+integration/**
+out/integration/**
+.vscode-test/**
+.vscode-test.mjs
 out/test/**
 out/**/*.map
 node_modules/**

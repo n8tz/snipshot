@@ -50,7 +50,7 @@ async function deliver(request: SnipshotRequest, rendered: string): Promise<void
   // is kept as a file instead of being lost.
   const kept = await keepAsFile(request, rendered);
   if (kept) {
-    await notifySaved(
+    notifySaved(
       kept,
       `The clipboard is out of reach (${failure}): saved to ${path.basename(kept)} instead. Set snipshot.destination to choose where these go.`,
       true,

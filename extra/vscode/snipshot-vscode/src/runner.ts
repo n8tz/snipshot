@@ -46,16 +46,17 @@ export async function runSnipshot(executable: string, request: SnipshotRequest):
  * Runs [request] behind a progress notification. On success [onSuccess] gets
  * the file that was written; failures surface as an error notification
  * carrying the CLI's own message, which already explains how to recover
- * (narrow the range, fold, raise the limit).
+ * (narrow the range, fold, raise the limit). Resolves once the shot is
+ * delivered: notifications are not waited for.
  */
 export async function run(
   context: vscode.ExtensionContext,
   request: SnipshotRequest,
-  onSuccess: (file: string) => Promise<void> = file => notifySaved(file),
+  onSuccess: (file: string) => Promise<void> | void = file => notifySaved(file),
 ): Promise<void> {
   const executable = resolveExecutable(context);
   if (!executable) {
-    await notifyMissingExecutable();
+    notifyMissingExecutable();
     return;
   }
   const outcome = await vscode.window.withProgress(
@@ -69,22 +70,29 @@ export async function run(
   await onSuccess(outcome.file);
 }
 
-export async function notifySaved(file: string, message = `Snipshot saved to ${path.basename(file)}`, warning = false): Promise<void> {
+/**
+ * "Saved" notification with Open / Show in files. The message's buttons are
+ * handled whenever the user clicks them; nothing waits on that.
+ */
+export function notifySaved(file: string, message = `Snipshot saved to ${path.basename(file)}`, warning = false): void {
   const uri = vscode.Uri.file(file);
   if (readSettings().openAfterSave) void vscode.commands.executeCommand('vscode.open', uri);
   const actions = ['Open', 'Show in files'];
-  const choice = warning
-    ? await vscode.window.showWarningMessage(message, ...actions)
-    : await vscode.window.showInformationMessage(message, ...actions);
-  if (choice === 'Open') void vscode.commands.executeCommand('vscode.open', uri);
-  else if (choice === 'Show in files') void vscode.commands.executeCommand('revealFileInOS', uri);
+  const shown = warning
+    ? vscode.window.showWarningMessage(message, ...actions)
+    : vscode.window.showInformationMessage(message, ...actions);
+  void shown.then(choice => {
+    if (choice === 'Open') void vscode.commands.executeCommand('vscode.open', uri);
+    else if (choice === 'Show in files') void vscode.commands.executeCommand('revealFileInOS', uri);
+  });
 }
 
-export async function notifyMissingExecutable(): Promise<void> {
-  const choice = await vscode.window.showErrorMessage(
+export function notifyMissingExecutable(): void {
+  void vscode.window.showErrorMessage(
     'snipshot was not found. Download the binary, install it with "npm install -g snipshot", or set its path in the Snipshot settings.',
     'Download binary', 'Open settings',
-  );
-  if (choice === 'Download binary') void vscode.commands.executeCommand('snipshot.downloadBinary');
-  else if (choice === 'Open settings') void vscode.commands.executeCommand('workbench.action.openSettings', 'snipshot.executablePath');
+  ).then(choice => {
+    if (choice === 'Download binary') void vscode.commands.executeCommand('snipshot.downloadBinary');
+    else if (choice === 'Open settings') void vscode.commands.executeCommand('workbench.action.openSettings', 'snipshot.executablePath');
+  });
 }

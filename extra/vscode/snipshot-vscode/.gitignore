@@ -1,6 +1,7 @@
 node_modules/
 out/
 *.vsix
+.vscode-test/
 
 # The root .gitignore drops .vscode/; the launch config here is on purpose.
 !.vscode/

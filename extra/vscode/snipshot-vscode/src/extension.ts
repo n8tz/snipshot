@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import { currentStrategy } from './clipboard.js';
+import type { ClipboardStrategy } from './clipboardStrategy.js';
 import { buildRequest, currentHighlightSpec, currentSelectionRange, windowLines } from './context.js';
 import { downloadBinary, probeVersion } from './downloader.js';
 import { Marks } from './marks.js';
@@ -15,7 +17,14 @@ interface Gate {
   save?: boolean;
 }
 
-export function activate(context: vscode.ExtensionContext): void {
+/** What `activate` returns: a window for the integration tests. */
+export interface SnipshotApi {
+  marks: Marks;
+  clipboardStrategy(): ClipboardStrategy;
+  resolveExecutable(): string | undefined;
+}
+
+export function activate(context: vscode.ExtensionContext): SnipshotApi {
   const marks = new Marks();
   context.subscriptions.push(marks);
 
@@ -94,13 +103,19 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(vscode.commands.registerCommand('snipshot.checkBinary', async () => {
     const binary = resolveExecutable(context);
     if (!binary) {
-      await notifyMissingExecutable();
+      notifyMissingExecutable();
       return;
     }
     const version = await probeVersion(binary);
     if (version) void vscode.window.showInformationMessage(`snipshot ${version}: ${binary}`);
     else void vscode.window.showErrorMessage(`${binary} did not answer --version.`);
   }));
+
+  return {
+    marks,
+    clipboardStrategy: currentStrategy,
+    resolveExecutable: () => resolveExecutable(context),
+  };
 }
 
 export function deactivate(): void {}

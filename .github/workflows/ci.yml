@@ -60,8 +60,28 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: extra/vscode/snipshot-vscode/package-lock.json
+          cache-dependency-path: |
+            package-lock.json
+            extra/vscode/snipshot-vscode/package-lock.json
 
       # Goes through the npm script, so a break in it fails here too.
       - name: Build the VS Code extension
         run: npm run build:vscode
+
+      # The integration tests run the extension in a real VS Code, driving the
+      # real CLI from dist/, and read the clipboard back through xclip.
+      - name: Build the CLI
+        run: npm ci && npm run build
+
+      - name: Cache the VS Code build the integration tests run in
+        uses: actions/cache@v4
+        with:
+          path: extra/vscode/snipshot-vscode/.vscode-test
+          key: vscode-test-${{ runner.os }}-${{ hashFiles('extra/vscode/snipshot-vscode/.vscode-test.mjs') }}
+
+      - name: Install a clipboard tool
+        run: sudo apt-get update && sudo apt-get install -y xclip
+
+      - name: Integration tests in a real VS Code
+        working-directory: extra/vscode/snipshot-vscode
+        run: xvfb-run -a npm run test:integration

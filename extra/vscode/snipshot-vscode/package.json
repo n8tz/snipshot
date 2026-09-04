@@ -32,52 +32,177 @@
   "activationEvents": [],
   "contributes": {
     "commands": [
-      { "command": "snipshot.thisRed", "category": "Snipshot", "title": "Snipshot this (red)" },
-      { "command": "snipshot.thisGreen", "category": "Snipshot", "title": "Snipshot this (green)" },
-      { "command": "snipshot.save", "category": "Snipshot", "title": "Snipshot Selection" },
-      { "command": "snipshot.copy", "category": "Snipshot", "title": "Copy Snipshot to Clipboard" },
-      { "command": "snipshot.svg", "category": "Snipshot", "title": "Snipshot Selection as SVG" },
-      { "command": "snipshot.options", "category": "Snipshot", "title": "Snipshot..." },
-      { "command": "snipshot.markRed", "category": "Snipshot", "title": "Mark Selection Red" },
-      { "command": "snipshot.markGreen", "category": "Snipshot", "title": "Mark Selection Green" },
-      { "command": "snipshot.markFold", "category": "Snipshot", "title": "Mark Selection Folded" },
-      { "command": "snipshot.clearMarks", "category": "Snipshot", "title": "Clear Snipshot Marks" },
-      { "command": "snipshot.downloadBinary", "category": "Snipshot", "title": "Download Binary" },
-      { "command": "snipshot.checkBinary", "category": "Snipshot", "title": "Check Binary" }
+      {
+        "command": "snipshot.thisRed",
+        "category": "Snipshot",
+        "title": "Snipshot this (red)"
+      },
+      {
+        "command": "snipshot.thisGreen",
+        "category": "Snipshot",
+        "title": "Snipshot this (green)"
+      },
+      {
+        "command": "snipshot.save",
+        "category": "Snipshot",
+        "title": "Snipshot Selection"
+      },
+      {
+        "command": "snipshot.copy",
+        "category": "Snipshot",
+        "title": "Copy Snipshot to Clipboard"
+      },
+      {
+        "command": "snipshot.svg",
+        "category": "Snipshot",
+        "title": "Snipshot Selection as SVG"
+      },
+      {
+        "command": "snipshot.options",
+        "category": "Snipshot",
+        "title": "Snipshot..."
+      },
+      {
+        "command": "snipshot.markRed",
+        "category": "Snipshot",
+        "title": "Mark Selection Red"
+      },
+      {
+        "command": "snipshot.markGreen",
+        "category": "Snipshot",
+        "title": "Mark Selection Green"
+      },
+      {
+        "command": "snipshot.markFold",
+        "category": "Snipshot",
+        "title": "Mark Selection Folded"
+      },
+      {
+        "command": "snipshot.clearMarks",
+        "category": "Snipshot",
+        "title": "Clear Snipshot Marks"
+      },
+      {
+        "command": "snipshot.downloadBinary",
+        "category": "Snipshot",
+        "title": "Download Binary"
+      },
+      {
+        "command": "snipshot.checkBinary",
+        "category": "Snipshot",
+        "title": "Check Binary"
+      }
     ],
     "submenus": [
-      { "id": "snipshot.menu", "label": "Snipshot" }
+      {
+        "id": "snipshot.menu",
+        "label": "Snipshot"
+      }
     ],
     "menus": {
       "editor/context": [
-        { "submenu": "snipshot.menu", "group": "z_snipshot", "when": "resourceScheme == file" }
+        {
+          "submenu": "snipshot.menu",
+          "group": "z_snipshot",
+          "when": "resourceScheme == file"
+        }
       ],
       "snipshot.menu": [
-        { "command": "snipshot.thisRed", "group": "1_this@1", "when": "editorHasSelection" },
-        { "command": "snipshot.thisGreen", "group": "1_this@2", "when": "editorHasSelection" },
-        { "command": "snipshot.save", "group": "2_shot@1" },
-        { "command": "snipshot.copy", "group": "2_shot@2" },
-        { "command": "snipshot.svg", "group": "2_shot@3" },
-        { "command": "snipshot.options", "group": "2_shot@4" },
-        { "command": "snipshot.markRed", "group": "3_marks@1", "when": "editorHasSelection" },
-        { "command": "snipshot.markGreen", "group": "3_marks@2", "when": "editorHasSelection" },
-        { "command": "snipshot.markFold", "group": "3_marks@3", "when": "editorHasSelection" },
-        { "command": "snipshot.clearMarks", "group": "3_marks@4" }
+        {
+          "command": "snipshot.thisRed",
+          "group": "1_this@1",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "snipshot.thisGreen",
+          "group": "1_this@2",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "snipshot.save",
+          "group": "2_shot@1"
+        },
+        {
+          "command": "snipshot.copy",
+          "group": "2_shot@2"
+        },
+        {
+          "command": "snipshot.svg",
+          "group": "2_shot@3"
+        },
+        {
+          "command": "snipshot.options",
+          "group": "2_shot@4"
+        },
+        {
+          "command": "snipshot.markRed",
+          "group": "3_marks@1",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "snipshot.markGreen",
+          "group": "3_marks@2",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "snipshot.markFold",
+          "group": "3_marks@3",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "snipshot.clearMarks",
+          "group": "3_marks@4"
+        }
       ],
       "commandPalette": [
-        { "command": "snipshot.thisRed", "when": "editorHasSelection" },
-        { "command": "snipshot.thisGreen", "when": "editorHasSelection" },
-        { "command": "snipshot.markRed", "when": "editorHasSelection" },
-        { "command": "snipshot.markGreen", "when": "editorHasSelection" },
-        { "command": "snipshot.markFold", "when": "editorHasSelection" }
+        {
+          "command": "snipshot.thisRed",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "snipshot.thisGreen",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "snipshot.markRed",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "snipshot.markGreen",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "snipshot.markFold",
+          "when": "editorHasSelection"
+        }
       ]
     },
     "keybindings": [
-      { "command": "snipshot.save", "key": "alt+shift+s", "when": "editorTextFocus" },
-      { "command": "snipshot.copy", "key": "alt+shift+c", "when": "editorTextFocus" },
-      { "command": "snipshot.markRed", "key": "alt+shift+r", "when": "editorTextFocus && editorHasSelection" },
-      { "command": "snipshot.markGreen", "key": "alt+shift+g", "when": "editorTextFocus && editorHasSelection" },
-      { "command": "snipshot.markFold", "key": "alt+shift+x", "when": "editorTextFocus && editorHasSelection" }
+      {
+        "command": "snipshot.save",
+        "key": "alt+shift+s",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "snipshot.copy",
+        "key": "alt+shift+c",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "snipshot.markRed",
+        "key": "alt+shift+r",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "snipshot.markGreen",
+        "key": "alt+shift+g",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "snipshot.markFold",
+        "key": "alt+shift+x",
+        "when": "editorTextFocus && editorHasSelection"
+      }
     ],
     "configuration": {
       "title": "Snipshot",
@@ -86,13 +211,19 @@
           "type": "string",
           "default": "",
           "order": 1,
-          "markdownDescription": "Path to the `snipshot` binary. Leave empty to use the binary fetched by **Snipshot: Download Binary**, or the `snipshot` found on your PATH (`npm install -g snipshot`).\n\n[Download binary](command:snipshot.downloadBinary) · [Check](command:snipshot.checkBinary)"
+          "markdownDescription": "Path to the `snipshot` binary. Leave empty to use the binary fetched by **Snipshot: Download Binary**, or the `snipshot` found on your PATH (`npm install -g snipshot`).\n\n[Download binary](command:snipshot.downloadBinary) \u00b7 [Check](command:snipshot.checkBinary)"
         },
         "snipshot.destination": {
           "type": "string",
           "default": "clipboard",
           "order": 2,
-          "enum": ["clipboard", "ask", "projectSnipshot", "projectRoot", "custom"],
+          "enum": [
+            "clipboard",
+            "ask",
+            "projectSnipshot",
+            "projectRoot",
+            "custom"
+          ],
           "enumDescriptions": [
             "Clipboard (PNG): nothing is written to disk. SVG cannot go on the clipboard, so an SVG shot asks for a path instead.",
             "Ask every time: a save dialog, opening on the folder you used last.",
@@ -112,7 +243,10 @@
           "type": "string",
           "default": "png",
           "order": 4,
-          "enum": ["png", "svg"],
+          "enum": [
+            "png",
+            "svg"
+          ],
           "description": "Format of the plain Snipshot actions. \"Snipshot Selection as SVG\" always wins."
         },
         "snipshot.openAfterSave": {
@@ -125,7 +259,11 @@
           "type": "string",
           "default": "auto",
           "order": 6,
-          "enum": ["auto", "dark", "light"],
+          "enum": [
+            "auto",
+            "dark",
+            "light"
+          ],
           "description": "Color theme of the image. \"auto\" follows the VS Code theme."
         },
         "snipshot.contextLines": {
@@ -157,12 +295,18 @@
     "watch": "tsc -w -p .",
     "pretest": "npm run compile",
     "test": "node --test \"out/test/**/*.test.js\"",
-    "package": "vsce package"
+    "package": "vsce package",
+    "pretest:integration": "npm run compile",
+    "test:integration": "vscode-test"
   },
   "devDependencies": {
+    "@types/mocha": "^10.0.10",
     "@types/node": "^18.19.0",
     "@types/vscode": "1.85.0",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.1.0",
     "@vscode/vsce": "^3.9.2",
+    "mocha": "^12.0.0",
     "typescript": "^6.0.2"
   }
 }
