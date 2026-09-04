@@ -33,7 +33,7 @@ const program = new Command();
 program
   .name('snipshot')
   .description('Generate a PNG screenshot of a code snippet, with syntax highlighting,\nline numbers, optional red/green annotations and folded regions.\nCan also output the same snippet as SVG (--svg) or ANSI-colored text (--ansi).')
-  .version('1.3.0')
+  .version('1.3.1')
   .argument('<file>', 'source file to screenshot (language auto-detected from its extension)')
   .requiredOption('--lines <ranges>', 'lines to capture: a single line "42", a range "42-56", or several comma-separated ranges "10-14,42-56" (1-based, inclusive; the gaps between ranges are folded)')
   .option('--highlight-red <specs>', 'draw red highlights; comma-separate and/or repeat (e.g. 13,15-18,19:10-20)', collect, [])

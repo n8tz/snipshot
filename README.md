@@ -312,7 +312,7 @@ cd snipshot
 npm install
 
 npm run build        # compile TypeScript
-npm test             # run tests (58 tests)
+npm test             # run tests (64 tests)
 npm run test:watch   # watch mode
 npm run build:plugin # build the IntelliJ plugin zip
 npm run build:vscode # build the VS Code extension (.vsix)

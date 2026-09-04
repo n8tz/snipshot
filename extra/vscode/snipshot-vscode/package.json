@@ -2,7 +2,7 @@
   "name": "snipshot",
   "displayName": "Snipshot",
   "description": "Right-click a selection, get a syntax-highlighted code screenshot: PNG or SVG with the file path in the header, red/green annotations and folds, rendered by the snipshot CLI.",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "publisher": "9pings",
   "license": "MIT",
   "repository": {
@@ -211,7 +211,7 @@
           "type": "string",
           "default": "",
           "order": 1,
-          "markdownDescription": "Path to the `snipshot` binary. Leave empty to use the binary fetched by **Snipshot: Download Binary**, or the `snipshot` found on your PATH (`npm install -g snipshot`).\n\n[Download binary](command:snipshot.downloadBinary) \u00b7 [Check](command:snipshot.checkBinary)"
+          "markdownDescription": "Path to the `snipshot` binary. Leave empty to use the binary fetched by **Snipshot: Download Binary**, or the `snipshot` found on your PATH (`npm install -g snipshot`).\n\n[Download binary](command:snipshot.downloadBinary) · [Check](command:snipshot.checkBinary)"
         },
         "snipshot.destination": {
           "type": "string",
