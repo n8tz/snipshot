@@ -36,6 +36,7 @@
 - **SVG output** — same layout as a crisp, scalable vector file via `--svg`
 - **Terminal output** — print the snippet as ANSI-colored text (24-bit color) via `--ansi`
 - **IntelliJ plugin** — right-click a selection in any JetBrains IDE ([PLUGIN.md](PLUGIN.md))
+- **VS Code extension** — the same, in VS Code ([VSCODE.md](VSCODE.md))
 - **Offline** — everything runs locally, no network needed
 - **Standalone binaries** for Linux, Windows, and macOS (via Bun compile), built and attached to [Releases](../../releases) automatically
 
@@ -150,7 +151,7 @@ snipshot src/App.java --lines 42-56 --highlight-red 47 --ansi
 
 ### SVG output (`--svg`)
 
-Same layout as the PNG, but scalable and a fraction of the size — these two are real `.svg` files rendered by your browser.
+Same layout as the PNG, but scalable and a fraction of the size — these two are real `.svg` files rendered by your browser. They render the same in Word, PowerPoint and IntelliJ: the SVG sticks to the subset those engines honour (hex colors with `fill-opacity` rather than `rgba()`, explicit baselines and positions).
 
 **Several ranges at once (`--lines 3-5,39-42,84-91`) — the gaps are folded automatically:**
 
@@ -276,6 +277,24 @@ Building it needs a JDK 17 or newer; Gradle and the compile toolchain come from
 the committed wrapper. Development notes live in
 [`extra/intelij/snipshot-plugin`](extra/intelij/snipshot-plugin/README.md).
 
+## VS Code extension
+
+The same thing for VS Code: the same **Snipshot** submenu on right-click, the same
+actions, marks, destinations and settings, wrapping the same CLI. **[Full
+documentation → VSCODE.md](VSCODE.md)**
+
+Install `snipshot-vscode-extension.vsix` from [Releases](../../releases) through
+**Extensions | … | Install from VSIX…** (or `code --install-extension <file>`); it
+works on VS Code 1.85 and newer. **Snipshot: Download Binary** fetches the CLI for
+you. To build it from source:
+
+```bash
+npm run build:vscode    # -> standalone/vscode/snipshot-vscode-extension.vsix
+```
+
+Building it needs Node 22 or newer and nothing else. Development notes live in
+[`extra/vscode/snipshot-vscode`](extra/vscode/snipshot-vscode/DEVELOPMENT.md).
+
 ## How it works
 
 1. Reads the **full source file** (not just the requested lines) to ensure accurate syntax highlighting
@@ -296,6 +315,7 @@ npm run build        # compile TypeScript
 npm test             # run tests (58 tests)
 npm run test:watch   # watch mode
 npm run build:plugin # build the IntelliJ plugin zip
+npm run build:vscode # build the VS Code extension (.vsix)
 ```
 
 ### Releasing
@@ -306,7 +326,7 @@ CI (`.github/workflows/ci.yml`) builds and tests every push and PR on `master`. 
 git tag v1.1.0 && git push origin v1.1.0
 ```
 
-The release workflow (`.github/workflows/release.yml`) then runs the tests, cross-compiles the standalone binaries for all four platforms, and attaches them to a GitHub Release as `.tar.gz` (Linux/macOS, executable bit preserved) and `.zip` (Windows) archives.
+The release workflow (`.github/workflows/release.yml`) then runs the tests, cross-compiles the standalone binaries for all four platforms, builds the IntelliJ plugin zip and the VS Code `.vsix`, and attaches them all to a GitHub Release (`.tar.gz` for Linux/macOS with the executable bit preserved, `.zip` for Windows). Publishing the extension to the Visual Studio Marketplace or Open VSX is opt-in: it happens only when a `VSCE_PAT` or `OVSX_PAT` repository secret exists.
 
 ## License
 
