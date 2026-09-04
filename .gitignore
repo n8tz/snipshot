@@ -10,5 +10,5 @@ standalone/
 *.swp
 *.swo
 
-# snipshots written by the IntelliJ plugin
+# snipshots written by the IntelliJ plugin and the VS Code extension
 .snipshot/

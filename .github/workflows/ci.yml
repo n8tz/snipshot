@@ -48,3 +48,20 @@ jobs:
       # Goes through the npm script, so a break in it fails here too.
       - name: Build the IntelliJ plugin
         run: npm run build:plugin
+
+  # Same reason as the plugin: the extension is built at release time, so a
+  # compile or test break must not wait until then to surface.
+  vscode:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: extra/vscode/snipshot-vscode/package-lock.json
+
+      # Goes through the npm script, so a break in it fails here too.
+      - name: Build the VS Code extension
+        run: npm run build:vscode
